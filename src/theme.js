@@ -193,13 +193,13 @@ export const useMode = () => {
 
 export const button = () => {
   dark: {
-    primary: "#020617"
+    primary: "#e7e7e7"
     secondary: "#475569"
-    accend: "#71717a"
+    accend: "#727272"
   }
   light: {
-    primary: "#fafaf9"
-    secondary: "#171717"
-    accend: "#292524"
+    primary: "#161616"
+    secondary: "#8a8a8a"
+    accend: "#444444"
   }
 }
