@@ -1,12 +1,12 @@
-import { Box } from "@mui/material"
+import { Box, Container } from "@mui/material"
 import Sidebar from "../components/sidebar"
 import { Outlet } from "react-router-dom"
 
 const AdminLayout = () => {
   return (
-    <Box display={"flex"} width={"100%"} height={"100%"} gap={8}>
+    <Box display={"flex"} maxWidth={false} width={"100vw"} height={"100vh"}>
       <Sidebar />
-      <Box padding={10}>
+      <Box padding={2}>
         <Outlet />
       </Box>
     </Box>
