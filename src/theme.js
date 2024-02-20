@@ -5,95 +5,73 @@ import { light } from "@mui/material/styles/createPalette"
 export const tokens = (mode) => ({
   ...(mode === "dark"
     ? {
-        grey: {
-          100: "#d3d4d6",
-          200: "#a7a9ad",
-          300: "#7a7e83",
-          400: "#4e535a",
-          500: "#222831",
-          600: "#1b2027",
-          700: "#14181d",
-          800: "#0e1014",
-          900: "#07080a"
+        primary: {
+          100: "#000105",
+          200: "#010209",
+          300: "#01040e",
+          400: "#020512",
+          500: "#020617",
+          600: "#353845",
+          700: "#676a74",
+          800: "#9a9ba2",
+          900: "#cccdd1"
         },
-        teal: {
-          100: "#cceff0",
-          200: "#99dee1",
-          300: "#66ced3",
-          400: "#33bdc4",
-          500: "#00adb5",
-          600: "#008a91",
-          700: "#00686d",
-          800: "#004548",
-          900: "#002324"
+        secondary: {
+          100: "#dadde1",
+          200: "#b5bbc3",
+          300: "#9199a5",
+          400: "#6c7787",
+          500: "#475569",
+          600: "#394454",
+          700: "#2b333f",
+          800: "#1c222a",
+          900: "#0e1115"
         },
-        peach: {
-          100: "#fff4f4",
-          200: "#ffe9e9",
-          300: "#ffdddd",
-          400: "#ffd2d2",
-          500: "#ffc7c7",
-          600: "#cc9f9f",
-          700: "#997777",
-          800: "#665050",
-          900: "#332828"
-        },
-        white: {
-          100: "#fcfcfc",
-          200: "#f8f8f8",
-          300: "#f5f5f5",
-          400: "#f1f1f1",
-          500: "#eeeeee",
-          600: "#bebebe",
-          700: "#8f8f8f",
-          800: "#5f5f5f",
-          900: "#303030"
+        accent: {
+          100: "#e3e3e4",
+          200: "#c6c6ca",
+          300: "#aaaaaf",
+          400: "#8d8d95",
+          500: "#71717a",
+          600: "#5a5a62",
+          700: "#444449",
+          800: "#2d2d31",
+          900: "#171718"
         }
       }
     : {
-        grey: {
-          100: "#07080a",
-          200: "#0e1014",
-          300: "#14181d",
-          400: "#1b2027",
-          500: "#222831",
-          600: "#4e535a",
-          700: "#7a7e83",
-          800: "#a7a9ad",
-          900: "#d3d4d6"
+        primary: {
+          100: "#fefefe",
+          200: "#fdfdfd",
+          300: "#fcfcfb",
+          400: "#fbfbfa",
+          500: "#fafaf9",
+          600: "#c8c8c7",
+          700: "#969695",
+          800: "#646464",
+          900: "#323232"
         },
-        teal: {
-          100: "#002324",
-          200: "#004548",
-          300: "#00686d",
-          400: "#008a91",
-          500: "#00adb5",
-          600: "#33bdc4",
-          700: "#66ced3",
-          800: "#99dee1",
-          900: "#cceff0"
+        secondary: {
+          100: "#d1d1d1",
+          200: "#a2a2a2",
+          300: "#747474",
+          400: "#454545",
+          500: "#171717",
+          600: "#121212",
+          700: "#0e0e0e",
+          800: "#090909",
+          900: "#050505"
         },
-        peach: {
-          100: "#332828",
-          200: "#665050",
-          300: "#997777",
-          400: "#cc9f9f",
-          500: "#ffc7c7",
-          600: "#ffd2d2",
-          700: "#ffdddd",
-          800: "#ffe9e9",
-          900: "#fff4f4"
-        },
-        white: {
-          100: "#303030",
-          200: "#5f5f5f",
-          300: "#8f8f8f",
-          400: "#bebebe",
-          500: "#eeeeee",
-          600: "#f1f1f1",
-          700: "#f5f5f5",
-          800: "#f8f8f8",
-          900: "#fcfcfc"
+        accent: {
+          100: "#d4d3d3",
+          200: "#a9a8a7",
+          300: "#7f7c7c",
+          400: "#545150",
+          500: "#292524",
+          600: "#211e1d",
+          700: "#191616",
+          800: "#100f0e",
+          900: "#080707"
         }
       })
 })
@@ -104,38 +82,36 @@ export const themeSettings = (mode) => {
 
   return {
     pallete: {
-      mode,
+      mode: mode,
       ...(mode === "dark"
         ? {
             primary: {
-              main: colors.teal[500]
+              main: colors.primary[500]
             },
             secondary: {
-              main: colors.peach[500]
+              main: colors.secondary[500]
             },
-            neutral: {
-              dark: colors.grey[700],
-              main: colors.grey[500],
-              light: colors.grey[100]
+            accent: {
+              main: colors.accent[500]
             },
-            background: {
-              default: colors.teal[500]
+            text: {
+              primary: colors.primary[500],
+              secondary: colors.secondary[500]
             }
           }
         : {
             primary: {
-              main: colors.teal[100]
+              main: colors.primary[500]
             },
             secondary: {
-              main: colors.peach[500]
+              main: colors.secondary[500]
             },
-            neutral: {
-              dark: colors.grey[700],
-              main: colors.grey[500],
-              light: colors.grey[100]
+            accent: {
+              main: colors.accent[500]
             },
-            background: {
-              default: "#fcfcfc"
+            text: {
+              primary: colors.primary[500],
+              secondary: colors.secondary[500]
             }
           })
     },
