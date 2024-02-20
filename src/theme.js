@@ -1,5 +1,6 @@
 import { createContext, useMemo, useState } from "react"
 import { createTheme } from "@mui/material/styles"
+import { light } from "@mui/material/styles/createPalette"
 
 export const tokens = (mode) => ({
   ...(mode === "dark"
@@ -119,16 +120,6 @@ export const themeSettings = (mode) => {
             },
             background: {
               default: colors.teal[500]
-            },
-            button: {
-              dark: "#16a34a",
-              main: "#0284c7",
-              light: "#2563eb"
-            },
-            buttonHover: {
-              dark: "#14532d",
-              main: "#0c4a6e",
-              light: "#1e3a8a"
             }
           }
         : {
@@ -198,4 +189,17 @@ export const useMode = () => {
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode])
 
   return [theme, colorMode]
+}
+
+export const button = () => {
+  dark: {
+    primary: "#020617"
+    secondary: "#475569"
+    accend: "#71717a"
+  }
+  light: {
+    primary: "#fafaf9"
+    secondary: "#171717"
+    accend: "#292524"
+  }
 }
