@@ -1,7 +1,13 @@
+import { Button } from "@mui/material"
+import { useState } from "react"
 
 const TestPage = () => {
   return (
-    <div>TestPage</div>
+    <div>
+      <div>
+        <Button variant="outlined">ClickMe</Button>
+      </div>
+    </div>
   )
 }
 
