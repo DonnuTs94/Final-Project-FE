@@ -12,6 +12,10 @@ const Router = createBrowserRouter([
   {
     path: "/admin",
     Component: AdminLayout
+  },
+  {
+    path: "/test",
+    Component: TestPage
   }
 ])
 

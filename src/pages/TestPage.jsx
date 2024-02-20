@@ -1,8 +1,6 @@
-
+import Buttons from "../components/Button/ButtonTest"
 const TestPage = () => {
-  return (
-    <div>TestPage</div>
-  )
+  return <Buttons title={"Tombol"} />
 }
 
 export default TestPage

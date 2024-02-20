@@ -119,6 +119,16 @@ export const themeSettings = (mode) => {
             },
             background: {
               default: colors.teal[500]
+            },
+            button: {
+              dark: "#16a34a",
+              main: "#0284c7",
+              light: "#2563eb"
+            },
+            buttonHover: {
+              dark: "#14532d",
+              main: "#0c4a6e",
+              light: "#1e3a8a"
             }
           }
         : {
