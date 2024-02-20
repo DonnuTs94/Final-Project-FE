@@ -1,8 +1,6 @@
 import { Button, Input } from "@mui/material"
 import { useState } from "react"
 import ModalParent from "../components/Modal"
-import CreateProductForm from "../components/CreateProductForm"
-import ModalTest from "../components/ModalTest"
 
 const TestPage = () => {
   const [open, setOpen] = useState(false)
