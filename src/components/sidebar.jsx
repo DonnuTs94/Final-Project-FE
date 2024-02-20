@@ -28,8 +28,9 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
       onClick={() => setSelected(title)}
       icon={icon}
     >
-      <Typography>{title}</Typography>
-      <Link to={to} />
+      <Link to={to} >
+        <Typography>{title}</Typography>
+      </Link>
     </MenuItem>
   )
 }
@@ -107,21 +108,21 @@ const ProSidebar = () => {
               </Typography>
               <Item
                 title="Category"
-                to="/team"
+                to="/admin/categories"
                 icon={<PeopleOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}
               />
               <Item
                 title="Products"
-                to="/contacts"
+                to="/admin/products"
                 icon={<ContactsOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}
               />
               <Item
                 title="Order"
-                to="/invoices"
+                to="/admin/orders"
                 icon={<ReceiptOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}
@@ -129,7 +130,7 @@ const ProSidebar = () => {
 
               <Item
                 title="Users"
-                to="/form"
+                to="/admin/users"
                 icon={<PersonOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}
