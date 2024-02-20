@@ -1,5 +1,13 @@
+import Navbar from "../components/Navbar"
+import Homepage from "../pages/App/Homepage"
+
 const AppLayout = () => {
-  return <div>AppLayout</div>
+  return (
+    <>
+      <Navbar />
+      <Homepage />
+    </>
+  )
 }
 
 export default AppLayout
