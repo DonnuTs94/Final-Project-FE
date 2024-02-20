@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { axiosInstance } from "../../configs/api/api"
 import {
+  Box,
+  Button,
   Paper,
   Table,
   TableBody,
@@ -10,48 +12,66 @@ import {
   TablePagination,
   TableRow
 } from "@mui/material"
+import { columns } from "../../configs/constant/productColumns"
+import ConfirmDialogDelete from "../../components/admin/ConfirmDialogDelete"
+import CreateProductModal from "../../components/admin/CreateProductModal"
 
 const ProductsPage = () => {
   const [product, setProduct] = useState([])
-  const [currentPage, setCurrentPage] = useState([])
+  const [page, setPage] = useState(0)
+  const [productId, setProductId] = useState("")
+  const [rowsPerPage, setRowsPerPage] = useState(10)
+  const [openDialogDelete, setOpenDialogDelete] = useState(false)
+  // const [openDialogEdit, setOpenDialogEdit] = useState(false)
+  const [openProductModal, setOpenProductModal] = useState(false)
 
-  const getAllProductData = async () => {
-    const response = await axiosInstance.get("/product")
-    setProduct(response.data.data)
-    setCurrentPage(response.data)
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage)
   }
 
-  console.log(currentPage)
+  const handleOpenModal = () => {
+    setOpenProductModal(true)
+  }
+
+  const handleCloseModal = () => {
+    setOpenProductModal(false)
+  }
+
+  const handleOpenDialogDelete = (id) => {
+    setOpenDialogDelete(true)
+    setProductId(id)
+  }
+  const handleCloseDialogDelete = () => {
+    setOpenDialogDelete(false)
+  }
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value)
+    setPage(0)
+  }
+
+  const handleEdit = () => {}
+  const handleDelete = async () => {
+    await axiosInstance.delete(`/product/softDelete/${productId}`)
+    getAllProductData()
+  }
+
+  const getAllProductData = async () => {
+    try {
+      const response = await axiosInstance.get("/product/table")
+      setProduct(response.data.data)
+    } catch (error) {
+      console.error("Error fetching product data:", error)
+    }
+  }
 
   useEffect(() => {
     getAllProductData()
   }, [])
 
-  const columns = [
-    { id: "name", label: "Product", minWidth: 170, align: "left" },
-    { id: "price", label: "Price", minWidth: 170, align: "left" },
-    {
-      id: "quantity",
-      label: "Quantity",
-      minWidth: 170,
-      align: "left"
-    },
-    {
-      id: "description",
-      label: "Description",
-      minWidth: 170,
-      align: "left"
-    },
-    {
-      id: "category",
-      label: "Category",
-      minWidth: 170,
-      align: "left"
-    }
-  ]
-
   return (
     <>
+      <Button onClick={() => handleOpenModal()}>Add Product</Button>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
@@ -65,30 +85,55 @@ const ProductsPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {product.map((row) => {
-                return (
-                  <TableRow hover key={row.code}>
-                    {/* {product.map((item) => {
-                      const value = row[item.id]
-                      return (
-                        <TableCell key={item.id}>
-                          {item.format && typeof value === "number" ? item.format(value) : value}
-                        </TableCell>
-                      )
-                    })} */}
+              {product
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => (
+                  <TableRow hover key={index}>
+                    <TableCell>{index + 1}</TableCell>
                     <TableCell>{row.name}</TableCell>
                     <TableCell>{row.price}</TableCell>
                     <TableCell>{row.quantity}</TableCell>
                     <TableCell>{row.description}</TableCell>
-                    <TableCell>{row.categoryId}</TableCell>
+                    <TableCell>{row.Category.name}</TableCell>
+                    <TableCell align="left">
+                      <Box display={"flex"} gap={2}>
+                        <Button variant="contained" onClick={() => handleEdit(row.id)}>
+                          Edit
+                        </Button>{" "}
+                        <Button
+                          variant="contained"
+                          color="error"
+                          onClick={() => handleOpenDialogDelete(row.id)}
+                        >
+                          Delete
+                        </Button>
+                      </Box>
+                    </TableCell>
+                    <TableCell align="left"></TableCell>
                   </TableRow>
-                )
-              })}
+                ))}
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination component="div" page={currentPage} rowsPerPage={false} />
+        <TablePagination
+          component="div"
+          rowsPerPageOptions={[10, 20, 40]}
+          rowsPerPage={rowsPerPage}
+          count={product.length}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </Paper>
+
+      <ConfirmDialogDelete
+        open={openDialogDelete}
+        close={handleCloseDialogDelete}
+        handleDelete={handleDelete}
+        productId={productId}
+      />
+
+      <CreateProductModal open={openProductModal} close={handleCloseModal} />
     </>
   )
 }
