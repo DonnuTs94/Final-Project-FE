@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogActions, DialogTitle } from "@mui/material"
 
-const ConfirmDialogDelete = ({ open, close, handleDelete, productId }) => {
+const ConfirmDialogDelete = ({ open, close, handleDelete, productId, dialog }) => {
   return (
     <>
       <Dialog
@@ -10,7 +10,8 @@ const ConfirmDialogDelete = ({ open, close, handleDelete, productId }) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Are you sure want to delete this product?"}
+          {/* {"Are you sure want to delete this product?"} */}
+          {dialog}
         </DialogTitle>
         <DialogActions>
           <Button

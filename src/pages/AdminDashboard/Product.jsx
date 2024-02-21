@@ -10,12 +10,16 @@ import {
   TableContainer,
   TableHead,
   TablePagination,
-  TableRow
+  TableRow,
+  Typography
 } from "@mui/material"
 import { columns } from "../../configs/constant/productColumns"
 import ConfirmDialogDelete from "../../components/admin/ConfirmDialogDelete"
 import CreateProductModal from "../../components/admin/CreateProductModal"
 import DetailProductModal from "../../components/admin/DetailProductModal"
+import EditIcon from "@mui/icons-material/Edit"
+import DeleteIcon from "@mui/icons-material/Delete"
+import AddIcon from "@mui/icons-material/Add"
 
 const ProductsPage = () => {
   const [product, setProduct] = useState([])
@@ -83,14 +87,25 @@ const ProductsPage = () => {
 
   return (
     <>
-      <Paper sx={{ width: "80vw", height: "85vh", overflow: "hidden" }}>
-        <Button
-          sx={{ color: "black", bgcolor: "blueviolet" }}
-          variant="contained"
-          onClick={() => handleOpenModal()}
+      <Paper sx={{ width: "80vw", height: "100vh", overflow: "auto" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "16px"
+          }}
         >
-          Add Product
-        </Button>
+          <Typography variant="h2">Product</Typography>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            color="primary"
+            onClick={() => handleOpenModal()}
+          >
+            Add Product
+          </Button>
+        </Box>
         <TableContainer>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
@@ -127,21 +142,27 @@ const ProductsPage = () => {
                       {row.description}
                     </TableCell>
                     <TableCell>{row.Category?.name}</TableCell>
-                    <TableCell align="left">
+                    <TableCell>
                       <Box display={"flex"} gap={2}>
-                        <Button variant="contained" onClick={() => handleEdit(row.id)}>
-                          Edit
-                        </Button>{" "}
                         <Button
-                          variant="contained"
+                          color="warning"
+                          size="large"
+                          onClick={() => handleEdit(row.id)}
+                          style={{ marginRight: "8px" }}
+                          startIcon={<EditIcon />}
+                        >
+                          Edit
+                        </Button>
+                        <Button
                           color="error"
+                          size="large"
                           onClick={() => handleOpenDialogDelete(row.id)}
+                          startIcon={<DeleteIcon />}
                         >
                           Delete
                         </Button>
                       </Box>
                     </TableCell>
-                    <TableCell align="left"></TableCell>
                   </TableRow>
                 ))}
             </TableBody>
@@ -163,6 +184,7 @@ const ProductsPage = () => {
         close={handleCloseDialogDelete}
         handleDelete={handleDelete}
         productId={productId}
+        dialog={"Are you sure want to delete this product?"}
       />
 
       <CreateProductModal

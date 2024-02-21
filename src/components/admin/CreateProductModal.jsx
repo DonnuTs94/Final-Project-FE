@@ -95,7 +95,7 @@ const CreateProductModal = ({ open, close, reRender }) => {
           flexDirection={"column"}
           sx={{
             position: "absolute",
-            top: "35%",
+            top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: 700,
@@ -103,119 +103,119 @@ const CreateProductModal = ({ open, close, reRender }) => {
             // border: "1spx solid #000",
             display: "flex",
             flexDirection: "column",
-            borderRadius: "5px",
-            minHeight: 200
+            borderRadius: "10px",
+            height: "50vh"
           }}
-          overflow={"scroll"}
+          overflow={"auto"}
           position="relative"
         >
-          <Box ml={2}>
+          <Box mx={3}>
             <Box mt={3} mb={3}>
               <Typography variant="h1">Create Product</Typography>
             </Box>
             <form onSubmit={handleSubmit}>
-              <Typography variant="h3" marginBottom={1}>
-                Product Name
-              </Typography>
-              <TextField
-                id="name"
-                name="name"
-                label="Product Name"
-                sx={{ width: "95%", marginBottom: "20px" }}
-                value={formData.name}
-                onChange={handleChange}
-              />
-              <Typography variant="h3">Description</Typography>
-              <TextField
-                id="description"
-                name="description"
-                label="Description"
-                sx={{ width: "95%", marginBottom: "20px" }}
-                value={formData.description}
-                onChange={handleChange}
-              />
+              <Box display={"flex"} flexDirection={"column"} margin={"auto"} mt={7}>
+                <TextField
+                  id="name"
+                  name="name"
+                  label="Product Name"
+                  sx={{ width: "100%", marginBottom: "20px" }}
+                  value={formData.name}
+                  onChange={handleChange}
+                />
+                <TextField
+                  id="description"
+                  name="description"
+                  label="Description"
+                  sx={{ width: "100%", marginBottom: "20px" }}
+                  value={formData.description}
+                  onChange={handleChange}
+                />
 
-              <Typography variant="h3">Quantity</Typography>
-              <TextField
-                id="quantity"
-                name="quantity"
-                label="Quantity"
-                sx={{ width: "95%", marginBottom: "20px" }}
-                value={formData.quantity}
-                onChange={handleChange}
-              />
+                <TextField
+                  id="quantity"
+                  name="quantity"
+                  label="Quantity"
+                  sx={{ width: "100%", marginBottom: "20px" }}
+                  value={formData.quantity}
+                  onChange={handleChange}
+                  type="number"
+                />
 
-              <Typography variant="h3">Price</Typography>
-              <TextField
-                id="price"
-                name="price"
-                label="Price"
-                sx={{ width: "95%", marginBottom: "20px" }}
-                value={formData.price}
-                onChange={handleChange}
-              />
-              <Typography variant="h3" sx={{ marginBottom: "20px" }}>
-                Category
-              </Typography>
+                <TextField
+                  id="price"
+                  name="price"
+                  label="Price"
+                  sx={{ width: "100%", marginBottom: "20px" }}
+                  value={formData.price}
+                  onChange={handleChange}
+                  type="number"
+                />
 
-              <SelectCategory
-                category={category}
-                categoryData={formData.categoryId}
-                handleCategory={handleCategoryChange}
-              />
-              <Box display="flex" gap={2} alignItems="center">
-                <Button
-                  component="label"
-                  role={undefined}
-                  variant="contained"
-                  tabIndex={-1}
-                  startIcon={<UploadIcon />}
-                  type="file"
-                >
-                  Upload file
-                  <Input
+                <SelectCategory
+                  category={category}
+                  categoryData={formData.categoryId}
+                  handleCategory={handleCategoryChange}
+                />
+                <Box display="flex" gap={2} alignItems="center">
+                  <Button
+                    component="label"
+                    variant="contained"
+                    startIcon={<UploadIcon />}
                     type="file"
-                    inputProps={{ multiple: true }}
-                    sx={{ display: "none" }}
-                    onChange={handleFileChange}
-                    ref={inputFileRef}
-                    required
-                  />
+                    sx={{
+                      marginTop: "20px",
+                      width: "100%"
+                    }}
+                  >
+                    Upload file
+                    <Input
+                      type="file"
+                      inputProps={{ multiple: true }}
+                      sx={{ display: "none" }}
+                      onChange={handleFileChange}
+                      ref={inputFileRef}
+                      required
+                    />
+                  </Button>
+                </Box>
+                <Box
+                  sx={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(2, 1fr)",
+                    gap: "20px",
+                    marginTop: "20px"
+                  }}
+                >
+                  {Array.from(
+                    formData.images.map((image, i) => (
+                      <Box key={i} position={"relative"} mb={"10px"}>
+                        <Box
+                          component="img"
+                          sx={{ height: "300px", width: "400px" }}
+                          src={URL.createObjectURL(image)}
+                        />
+                        <IconButton
+                          sx={{ position: "absolute", top: "0", right: "0", color: "red" }}
+                          onClick={() => {
+                            const updatedImages = [...formData.images]
+                            updatedImages.splice(i, 1)
+                            setFormData((prevFormData) => ({
+                              ...prevFormData,
+                              images: updatedImages
+                            }))
+                          }}
+                        >
+                          <ClearIcon />
+                        </IconButton>
+                      </Box>
+                    ))
+                  )}
+                </Box>
+                <Button sx={{ marginBottom: "20px" }} variant="contained" type="submit">
+                  Submit
                 </Button>
               </Box>
-              <Box sx={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "20px" }}>
-                {Array.from(
-                  formData.images.map((image, i) => (
-                    <Box key={i} position={"relative"}>
-                      <Box
-                        component="img"
-                        sx={{ height: "300px", width: "400px" }}
-                        src={URL.createObjectURL(image)}
-                      />
-                      <IconButton
-                        sx={{ position: "absolute", top: "0", right: "0", color: "red" }}
-                        onClick={() => {
-                          const updatedImages = [...formData.images]
-                          updatedImages.splice(i, 1)
-                          setFormData((prevFormData) => ({
-                            ...prevFormData,
-                            images: updatedImages
-                          }))
-                        }}
-                      >
-                        <ClearIcon />
-                      </IconButton>
-                    </Box>
-                  ))
-                )}
-              </Box>
-              <Button
-                sx={{ marginBottom: "20px", bgcolor: "skyblue" }}
-                variant="contained"
-                type="submit"
-              >
-                Submit
-              </Button>
             </form>
           </Box>
         </Box>

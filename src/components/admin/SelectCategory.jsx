@@ -11,7 +11,7 @@ const SelectCategory = ({ category, handleCategory, categoryData }) => {
 
   return (
     <Box sx={{ minWidth: 120 }}>
-      <FormControl sx={{ width: "90%" }}>
+      <FormControl sx={{ width: "100%" }}>
         <InputLabel id="category">Category</InputLabel>
         <Select
           labelId="category"
