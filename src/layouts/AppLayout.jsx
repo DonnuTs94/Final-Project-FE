@@ -5,9 +5,9 @@ const AppLayout = () => {
   return (
     <>
       <Navbar />
-      <div>
+      <main>
         <Outlet />
-      </div>
+      </main>
     </>
   )
 }

@@ -1,7 +1,13 @@
+import { Container, Typography } from "@mui/material"
+
 const Homepage = () => {
   return (
     <>
-      <main>Content</main>
+      <Container sx={{ minHeight: "80vh" }}>
+        <Typography variant="h3" color="accent">
+          Home
+        </Typography>
+      </Container>
     </>
   )
 }
