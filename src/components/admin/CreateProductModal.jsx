@@ -3,7 +3,7 @@ import { axiosInstance } from "../../configs/api/api"
 import { useEffect, useState } from "react"
 import SelectCategory from "./SelectCategory"
 
-const CreateProductModal = ({ open, close }) => {
+const CreateProductModal = ({ open, close, reRender }) => {
   const [category, setCategory] = useState([])
   const [formData, setFormData] = useState({
     name: "",
@@ -14,11 +14,66 @@ const CreateProductModal = ({ open, close }) => {
     images: []
   })
 
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const formDataToSend = new FormData()
+
+      formDataToSend.append("name", formData.name)
+      formDataToSend.append("description", formData.description)
+      formDataToSend.append("price", formData.price)
+      formDataToSend.append("quantity", formData.quantity)
+      formDataToSend.append("categoryId", formData.categoryId)
+
+      formData.images.forEach((file) => {
+        formDataToSend.append("imageUrl", file)
+      })
+
+      await axiosInstance.post("product/", formDataToSend)
+      close()
+      reRender()
+      setFormData({
+        name: "",
+        description: "",
+        quantity: "",
+        price: "",
+        categoryId: "",
+        images: []
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   const getCategory = async () => {
     const response = await axiosInstance.get("categories")
     setCategory(response.data.data)
   }
-  console.log(category)
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+
+    setFormData((prevFromData) => ({
+      ...prevFromData,
+      [name]: value
+    }))
+  }
+
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files)
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      images: files
+    }))
+  }
+
+  const handleCategoryChange = (categoryId) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      categoryId: categoryId
+    }))
+  }
 
   useEffect(() => {
     getCategory()
@@ -53,42 +108,63 @@ const CreateProductModal = ({ open, close }) => {
             <Box mt={3} mb={3}>
               <Typography variant="h1">Create Product</Typography>
             </Box>
-            <Typography variant="h3" marginBottom={1}>
-              Product Name
-            </Typography>
-            <TextField
-              id="name"
-              name="name"
-              label="Product Name"
-              sx={{ width: "90%", marginBottom: "20px" }}
-            />
-            <Typography variant="h3">Description</Typography>
-            <TextField
-              id="name"
-              name="name"
-              label="Product Name"
-              sx={{ width: "90%", marginBottom: "20px" }}
-            />
+            <form onSubmit={handleSubmit}>
+              <Typography variant="h3" marginBottom={1}>
+                Product Name
+              </Typography>
+              <TextField
+                id="name"
+                name="name"
+                label="Product Name"
+                sx={{ width: "95%", marginBottom: "20px" }}
+                value={formData.name}
+                onChange={handleChange}
+              />
+              <Typography variant="h3">Description</Typography>
+              <TextField
+                id="description"
+                name="description"
+                label="Description"
+                sx={{ width: "95%", marginBottom: "20px" }}
+                value={formData.description}
+                onChange={handleChange}
+              />
 
-            <Typography variant="h3">Quantity</Typography>
-            <TextField
-              id="name"
-              name="name"
-              label="Product Name"
-              sx={{ width: "90%", marginBottom: "20px" }}
-            />
+              <Typography variant="h3">Quantity</Typography>
+              <TextField
+                id="quantity"
+                name="quantity"
+                label="Quantity"
+                sx={{ width: "95%", marginBottom: "20px" }}
+                value={formData.quantity}
+                onChange={handleChange}
+              />
 
-            <Typography variant="h3">Price</Typography>
-            <TextField
-              id="name"
-              name="name"
-              label="Product Name"
-              sx={{ width: "90%", marginBottom: "20px" }}
-            />
+              <Typography variant="h3">Price</Typography>
+              <TextField
+                id="price"
+                name="price"
+                label="Price"
+                sx={{ width: "95%", marginBottom: "20px" }}
+                value={formData.price}
+                onChange={handleChange}
+              />
 
-            <SelectCategory category={category} />
-            <Input type="file" inputProps={{ multiple: true }} sx={{ marginTop: "20px" }} />
-            <Button sx={{ marginBottom: "20px" }}>Submit</Button>
+              <SelectCategory
+                category={category}
+                categoryData={formData.categoryId}
+                handleCategory={handleCategoryChange}
+              />
+              <Input
+                type="file"
+                inputProps={{ multiple: true }}
+                sx={{ marginTop: "20px" }}
+                onChange={handleFileChange}
+              />
+              <Button sx={{ marginBottom: "20px" }} type="submit">
+                Submit
+              </Button>
+            </form>
           </Box>
         </Box>
       </Modal>

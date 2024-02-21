@@ -133,7 +133,11 @@ const ProductsPage = () => {
         productId={productId}
       />
 
-      <CreateProductModal open={openProductModal} close={handleCloseModal} />
+      <CreateProductModal
+        open={openProductModal}
+        close={handleCloseModal}
+        reRender={getAllProductData}
+      />
     </>
   )
 }

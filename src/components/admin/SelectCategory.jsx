@@ -3,13 +3,10 @@ import InputLabel from "@mui/material/InputLabel"
 import MenuItem from "@mui/material/MenuItem"
 import FormControl from "@mui/material/FormControl"
 import Select from "@mui/material/Select"
-import { useState } from "react"
 
-const SelectCategory = ({ category, handleChange }) => {
-  const [categoryData, setCategoryData] = useState("")
-
+const SelectCategory = ({ category, handleCategory, categoryData }) => {
   const handleChange = (event) => {
-    setCategoryData(event.target.value)
+    handleCategory(event.target.value)
   }
 
   return (
@@ -20,7 +17,7 @@ const SelectCategory = ({ category, handleChange }) => {
           labelId="category"
           id="category"
           value={categoryData}
-          label="Age"
+          label="Category"
           onChange={handleChange}
         >
           {category.map((item, i) => (
