@@ -33,7 +33,6 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
         body: JSON.stringify({ email, password })
       })
       if (response.ok) {
-        // Successful login
         console.log("Login successful")
         // You may want to handle redirecting or updating the UI here
       } else {
