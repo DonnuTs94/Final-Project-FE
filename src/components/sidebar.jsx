@@ -32,7 +32,7 @@ const ProSidebar = () => {
     <Paper
       sx={{
         "& .pro-sidebar-inner": {
-          background: "inherit"
+          background: `${colors.primary[400]} !important`
         },
         "& .pro-icon-wrapper": {
           backgroundColor: "transparent !important"
@@ -61,7 +61,8 @@ const ProSidebar = () => {
             onClick={() => setIsCollapsed(!isCollapsed)}
             icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
             style={{
-              margin: "10px 0 20px 0"
+              margin: "10px 0 20px 0",
+              color: colors.primary[100]
             }}
           >
             {!isCollapsed && (
