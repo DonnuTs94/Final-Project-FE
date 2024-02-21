@@ -11,15 +11,13 @@ const ModalParent = ({ title, onClose, onOpen, children }) => {
           transform: "translate(-50%, -50%)",
           width: 700,
           bgcolor: "background.paper",
-          border: "1spx solid #000",
           display: "flex",
           flexDirection: "column",
           borderRadius: "5px",
-          minHeight: 200
+          height: 400
         }}
       >
-        <Typography variant="h2" sx={{ mt: "30px", pl: "30px", bgcolor: "#BFEA7C" }}>
-          {" "}
+        <Typography variant="h2" sx={{ mt: "10px", pl: "20px", bgcolor: "#fff" }}>
           {title}
         </Typography>
         <Box pl={"30px"} mt={"20px"}>
