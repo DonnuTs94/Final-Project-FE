@@ -1,5 +1,6 @@
 import { createContext, useMemo, useState } from "react"
 import { createTheme } from "@mui/material/styles"
+import { deepOrange, purple } from "@mui/material/colors"
 
 export const tokens = (mode) => ({
   ...(mode === "dark"
@@ -91,7 +92,7 @@ export const themeSettings = (mode) => {
               main: colors.secondary[500]
             },
             accent: {
-              main: colors.accent[500]
+              main: colors.accent[900]
             },
             background: {
               default: "#222222",
@@ -100,13 +101,13 @@ export const themeSettings = (mode) => {
           }
         : {
             primary: {
-              main: colors.primary[500]
+              main: "#171717"
             },
             secondary: {
-              main: colors.secondary[500]
+              main: deepOrange[100]
             },
             accent: {
-              main: colors.accent[500]
+              main: purple[900]
             },
             background: {
               default: "#f1f1f1",
@@ -142,6 +143,17 @@ export const themeSettings = (mode) => {
         fontSize: 14
       }
     }
+    // component: {
+    //   MuiTextField: {
+    //     styleOverrides: {
+    //       root: {
+    //         "& label.Mui-focused": {
+    //           color: mode === "dark" ? "#e1e1e1" : "#222222"
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
   }
 }
 
