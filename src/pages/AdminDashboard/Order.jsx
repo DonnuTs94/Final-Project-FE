@@ -37,7 +37,6 @@ const OrderPage = () => {
         }
       })
       setOrders(response.data.data)
-      console.log(orders)
     } catch (err) {
       setLoading(false)
     }
