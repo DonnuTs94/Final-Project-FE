@@ -80,7 +80,7 @@ export const themeSettings = (mode) => {
   const colors = tokens(mode)
 
   return {
-    pallete: {
+    palette: {
       mode: mode,
       ...(mode === "dark"
         ? {
@@ -93,9 +93,9 @@ export const themeSettings = (mode) => {
             accent: {
               main: colors.accent[500]
             },
-            text: {
-              primary: colors.primary[500],
-              secondary: colors.secondary[500]
+            background: {
+              default: "#222222",
+              paper: "#444444"
             }
           }
         : {
@@ -108,9 +108,9 @@ export const themeSettings = (mode) => {
             accent: {
               main: colors.accent[500]
             },
-            text: {
-              primary: colors.primary[500],
-              secondary: colors.secondary[500]
+            background: {
+              default: "#f1f1f1",
+              paper: "#ffffff"
             }
           })
     },
@@ -152,7 +152,7 @@ export const ColorModeContext = createContext({
 
 // cutom hook useMode
 export const useMode = () => {
-  const [mode, setMode] = useState("dark")
+  const [mode, setMode] = useState("light")
 
   const colorMode = useMemo(
     () => ({
