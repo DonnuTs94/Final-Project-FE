@@ -17,37 +17,75 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
   const [open, setOpen] = useState(false)
   const [tabValue, setTabValue] = useState(0)
 
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const isOpen = () => setOpen(true)
   const onClose = () => setOpen(false)
 
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
+  const [emailRegister, setEmailRegister] = useState("")
+  const [passwordRegister, setPasswordRegister] = useState("")
+  const [address, setAddress] = useState("")
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue)
   }
 
-  const handleLogin = async () => {
-    const email = document.getElementById("email").value
-    const password = document.getElementById("password").value
+  const handleLogin = async (event) => {
+    const tokenAdmin =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksInJvbGVJZCI6MTMsImlhdCI6MTcwODMzNDMwNSwiZXhwIjoxNzEwOTI2MzA1fQ.G505TR_v9a7NoKRy9rYVpBA8T4KEUylFci3PmrngZC4"
+    event.preventDefault()
 
     try {
-      const response = await axiosInstance.post("/user/register", {
-        body: JSON.stringify({ email, password })
+      const response = await axiosInstance.post("/auth/login", {
+        headers: {
+          Authorization: `Bearer ${tokenAdmin}`,
+          "Content-Type": "application/json"
+        },
+        email: email,
+        password: password
       })
-      if (response.ok) {
-        console.log("Login successful")
-        // You may want to handle redirecting or updating the UI here
-      } else {
-        // Handle failed login
+      if (!response) {
         console.error("Login failed")
+      } else {
+        console.log("Login success")
+        localStorage.setItem("email", email)
+        localStorage.setItem("password", password)
+        window.location.href = "/"
       }
+      setEmail(response)
+      setPassword(response)
     } catch (err) {
       console.error("Error during login:", err)
     }
-    console.log("Login button clicked")
   }
 
-  const handleRegister = () => {
-    // Handle register logic here
-    console.log("Register button clicked")
+  const handleRegister = async () => {
+    try {
+      const response = await axiosInstance.post("/user/register", {
+        firstName: firstName,
+        lastName: lastName,
+        email: emailRegister,
+        password: passwordRegister,
+        address: address
+      })
+      if (!response) {
+        console.error("Register Failed")
+      } else {
+        console.log("Register success")
+        window.location.href = "/"
+      }
+      setAlertMessage("User successfull created", response)
+      setAlertStatus("success")
+      // setOpen(true)
+      setFirstName("")
+      setLastName("")
+      setEmailRegister("")
+      setPasswordRegister("")
+      setAddress("")
+    } catch (err) {
+      console.error("Error during register:", err)
+    }
   }
 
   return (
@@ -77,34 +115,37 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
             </Tabs>
 
             {tabValue === 0 && (
-              <Box>
+              <Box sx={{ width: "100%" }}>
+                {/* Login */}
                 <Typography variant="h5"></Typography>
                 {/* <TextField label="Email" type="email" fullWidth margin="normal" /> */}
                 <TextField
                   id="standard-basic"
+                  onChange={(e) => setEmail(e.target.value)}
                   label="Email"
                   variant="standard"
                   type="email"
                   fullWidth
                   margin="normal"
+                  sx={{ m: 1, width: "80%" }}
                 />
 
                 <FormControl sx={{ m: 1 }} variant="standard">
                   <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
                   <Input
                     id="standard-adornment-password"
+                    onChange={(e) => setPassword(e.target.value)}
                     fullWidth
-                    margin="normal"
                     type={showPassword ? "text" : "password"}
                     endAdornment={
-                      <InputAdornment>
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
+                      // <InputAdornment>
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                      // </InputAdornment>
                     }
                   />
                 </FormControl>
@@ -116,6 +157,7 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
 
             {tabValue === 1 && (
               <Box>
+                {/* Register */}
                 <Typography variant="h5"></Typography>
                 {/* <Input placeholder="FirstName" fullWidth margin="normal" /> */}
                 <Input
@@ -131,6 +173,7 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
                     }
                   }}
                   type="text"
+                  onChange={(e) => setFirstName(e.target.value)}
                   placeholder="Firstname"
                 />
                 <Input
@@ -146,6 +189,7 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
                     }
                   }}
                   type="text"
+                  onChange={(e) => setLastName(e.target.value)}
                   placeholder="Lastname"
                 />
                 <Input
@@ -161,6 +205,7 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
                     }
                   }}
                   type="text"
+                  onChange={(e) => setEmailRegister(e.target.value)}
                   placeholder="Email"
                 />
                 <Input
@@ -176,6 +221,7 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
                     }
                   }}
                   type="password"
+                  onChange={(e) => setPasswordRegister(e.target.value)}
                   placeholder="Password"
                 />
                 <Input
@@ -191,6 +237,7 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
                     }
                   }}
                   type="text"
+                  onChange={(e) => setAddress(e.target.value)}
                   placeholder="Address"
                 />
                 <Buttons onClick={handleRegister} sx={{ m: "1", top: "30%" }}>
