@@ -7,8 +7,10 @@ import Visibility from "@mui/icons-material/Visibility"
 import VisibilityOff from "@mui/icons-material/VisibilityOff"
 import InputLabel from "@mui/material/InputLabel"
 import InputAdornment from "@mui/material/InputAdornment"
+import Buttons from "../components/Button/ButtonTest"
+import FormControl from "@mui/material/FormControl"
 
-const TestPage = () => {
+const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
   const [showPassword, setShowPassword] = useState(false)
   const handleClickShowPassword = () => setShowPassword((show) => !show)
 
@@ -27,7 +29,6 @@ const TestPage = () => {
     const password = document.getElementById("password").value
 
     try {
-      // Replace the following URL with your actual login endpoint
       const response = await axiosInstance.post("/user/register", {
         body: JSON.stringify({ email, password })
       })
@@ -53,11 +54,14 @@ const TestPage = () => {
   return (
     <div>
       <div>
-        <Button variant="outlined" onClick={isOpen}>
-          ClickMey
-        </Button>
+        <Buttons onClick={isOpen}>Login</Buttons>
 
-        <ModalParent onOpen={open} onClose={onClose} title={"CokShop"}>
+        <ModalParent
+          onOpen={open}
+          onClose={onClose}
+          openModalLogin={openModalLogin}
+          onCloseModalLogin={onCloseModalLogin}
+        >
           <Box
             sx={{
               width: 300,
@@ -86,25 +90,25 @@ const TestPage = () => {
                   margin="normal"
                 />
 
-                {/* <FormControl sx={{ m: 1 }} variant="standard"> */}
-                <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
-                <Input
-                  id="standard-adornment-password"
-                  fullWidth
-                  margin="normal"
-                  type={showPassword ? "text" : "password"}
-                  endAdornment={
-                    <InputAdornment>
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                />
-                {/* </FormControl> */}
+                <FormControl sx={{ m: 1 }} variant="standard">
+                  <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+                  <Input
+                    id="standard-adornment-password"
+                    fullWidth
+                    margin="normal"
+                    type={showPassword ? "text" : "password"}
+                    endAdornment={
+                      <InputAdornment>
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
                 <Button variant="contained" onClick={handleLogin} sx={{ m: "1", top: "30%" }}>
                   Login
                 </Button>
@@ -190,13 +194,15 @@ const TestPage = () => {
                   type="text"
                   placeholder="Address"
                 />
-                <Button variant="contained" onClick={handleRegister} sx={{ m: "1", top: "30%" }}>
+                <Buttons onClick={handleRegister} sx={{ m: "1", top: "30%" }}>
                   Register
-                </Button>
+                </Buttons>
               </Box>
             )}
           </Box>
         </ModalParent>
+
+        {/* <Buttons>asjdnsa</Buttons> */}
       </div>
     </div>
   )
