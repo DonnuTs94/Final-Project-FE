@@ -32,7 +32,7 @@ const ProSidebar = () => {
     <Paper
       sx={{
         "& .pro-sidebar-inner": {
-          background: `${colors.primary[400]} !important`
+          background: "inherit"
         },
         "& .pro-icon-wrapper": {
           backgroundColor: "transparent !important"
@@ -41,10 +41,10 @@ const ProSidebar = () => {
           padding: "5px 35px 5px 20px !important"
         },
         "& .pro-inner-item:hover": {
-          color: "#868dfb !important"
+          color: theme.palette.mode === "dark" ? "#ffffff" : "#868dfb !important"
         },
         "& .pro-menu-item.active": {
-          color: "#6870fa !important"
+          color: theme.palette.mode === "dark" ? "#ffffff" : "#6870fa !important"
         }
       }}
     >
@@ -52,7 +52,7 @@ const ProSidebar = () => {
         collapsed={isCollapsed}
         style={{
           height: "100%",
-          backgroundColor: theme.palette.mode === "dark" ? "#444444" : "#ffffff"
+          backgroundColor: theme.palette.background.default
         }}
       >
         <Menu iconShape="square">
@@ -61,8 +61,7 @@ const ProSidebar = () => {
             onClick={() => setIsCollapsed(!isCollapsed)}
             icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
             style={{
-              margin: "10px 0 20px 0",
-              color: colors.primary[100]
+              margin: "10px 0 20px 0"
             }}
           >
             {!isCollapsed && (
