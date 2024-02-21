@@ -18,7 +18,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
     <MenuItem
       active={selected === title}
       style={{
-        color: colors.grey[100]
+        color: colors.primary[900]
       }}
       onClick={() => setSelected(title)}
       icon={icon}
@@ -40,7 +40,7 @@ const ProSidebar = () => {
     <Box
       sx={{
         "& .pro-sidebar-inner": {
-          background: `${colors.grey[400]} !important`
+          background: `${colors.primary[400]} !important`
         },
         "& .pro-icon-wrapper": {
           backgroundColor: "transparent !important"
@@ -64,12 +64,12 @@ const ProSidebar = () => {
             icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
             style={{
               margin: "10px 0 20px 0",
-              color: colors.grey[100]
+              color: colors.primary[100]
             }}
           >
             {!isCollapsed && (
               <Box display="flex" justifyContent="space-between" alignItems="center" ml="15px">
-                <Typography variant="h3" color={colors.grey[100]}>
+                <Typography variant="h3" color={colors.primary[900]}>
                   ADMIN
                 </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
@@ -98,7 +98,7 @@ const ProSidebar = () => {
                 setSelected={setSelected}
               />
 
-              <Typography variant="h6" color={colors.grey[300]} sx={{ m: "15px 0 5px 20px" }}>
+              <Typography variant="h6" color={colors.primary[700]} sx={{ m: "15px 0 5px 20px" }}>
                 Data
               </Typography>
               <Item
@@ -133,7 +133,7 @@ const ProSidebar = () => {
             </Box>
             <Box sx={{ marginTop: "auto" }}>
               {" "}
-              <Typography variant="h6" color={colors.grey[300]} sx={{ m: "15px 0 5px 20px" }}>
+              <Typography variant="h6" color={colors.primary[700]} sx={{ m: "15px 0 5px 20px" }}>
                 Logout
               </Typography>
               <Item
