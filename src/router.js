@@ -6,12 +6,16 @@ import CategoryPage from "./pages/AdminDashboard/Categories"
 import ProductPage from "./pages/AdminDashboard/Product"
 import OrderPage from "./pages/AdminDashboard/Order"
 import UsersPage from "./pages/AdminDashboard/User"
+import Homepage from "./pages/App/Homepage"
 
 const Router = createBrowserRouter([
   {
     path: "/",
     Component: AppLayout,
-    children: [{ path: "test", Component: TestPage }]
+    children: [
+      { path: "/", Component: Homepage },
+      { path: "test", Component: TestPage }
+    ]
   },
   {
     path: "/admin",
