@@ -1,8 +1,8 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar"
-import { Box, IconButton, Typography, useTheme } from "@mui/material"
+import { Box, IconButton, Paper, Typography, useTheme } from "@mui/material"
 import { Link } from "react-router-dom"
-import { tokens } from "../theme"
+import { ColorModeContext } from "../theme"
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined"
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined"
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined"
@@ -10,19 +10,11 @@ import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined"
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined"
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined"
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined"
+import { DarkModeOutlined, LightModeOutlined } from "@mui/icons-material"
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
-  const theme = useTheme()
-  const colors = tokens(theme.palette.mode)
   return (
-    <MenuItem
-      active={selected === title}
-      style={{
-        color: colors.primary[900]
-      }}
-      onClick={() => setSelected(title)}
-      icon={icon}
-    >
+    <MenuItem active={selected === title} onClick={() => setSelected(title)} icon={icon}>
       <Link to={to}>
         <Typography>{title}</Typography>
       </Link>
@@ -32,12 +24,12 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 
 const ProSidebar = () => {
   const theme = useTheme()
-  const colors = tokens(theme.palette.mode)
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [selected, setSelected] = useState("Dashboard")
+  const colorMode = useContext(ColorModeContext)
 
   return (
-    <Box
+    <Paper
       sx={{
         "& .pro-sidebar-inner": {
           background: `${colors.primary[400]} !important`
@@ -56,7 +48,13 @@ const ProSidebar = () => {
         }
       }}
     >
-      <Sidebar collapsed={isCollapsed}>
+      <Sidebar
+        collapsed={isCollapsed}
+        style={{
+          height: "100%",
+          backgroundColor: theme.palette.mode === "dark" ? "#444444" : "#ffffff"
+        }}
+      >
         <Menu iconShape="square">
           {/* LOGO AND MENU ICON */}
           <MenuItem
@@ -69,9 +67,7 @@ const ProSidebar = () => {
           >
             {!isCollapsed && (
               <Box display="flex" justifyContent="space-between" alignItems="center" ml="15px">
-                <Typography variant="h3" color={colors.primary[900]}>
-                  ADMIN
-                </Typography>
+                <Typography variant="h3">ADMIN</Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
                 </IconButton>
@@ -81,24 +77,23 @@ const ProSidebar = () => {
 
           {/* MENU ITEMS */}
           <Box
-            paddingLeft={isCollapsed ? undefined : "10%"}
             sx={{
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
-              height: "100%" // tambahkan tinggi 100%
+              height: "80vh"
             }}
           >
             <Box>
               <Item
                 title="Dashboard"
-                to="/"
+                to="/admin"
                 icon={<HomeOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}
               />
 
-              <Typography variant="h6" color={colors.primary[700]} sx={{ m: "15px 0 5px 20px" }}>
+              <Typography variant="h6" sx={{ m: "15px 0 5px 20px" }}>
                 Data
               </Typography>
               <Item
@@ -131,9 +126,9 @@ const ProSidebar = () => {
                 setSelected={setSelected}
               />
             </Box>
-            <Box sx={{ marginTop: "auto" }}>
+            <Box sx={{ marginTop: "auto", display: "flex", flexDirection: "column" }}>
               {" "}
-              <Typography variant="h6" color={colors.primary[700]} sx={{ m: "15px 0 5px 20px" }}>
+              <Typography variant="h6" sx={{ m: "15px 0 5px 20px" }}>
                 Logout
               </Typography>
               <Item
@@ -143,11 +138,18 @@ const ProSidebar = () => {
                 selected={selected}
                 setSelected={setSelected}
               />
+              <IconButton sx={{ alignSelf: "center" }} onClick={colorMode.toggleColorMode}>
+                {theme.palette.mode === "dark" ? (
+                  <LightModeOutlined sx={{ color: "orange" }} />
+                ) : (
+                  <DarkModeOutlined sx={{ color: "indigo" }} />
+                )}
+              </IconButton>
             </Box>
           </Box>
         </Menu>
       </Sidebar>
-    </Box>
+    </Paper>
   )
 }
 
