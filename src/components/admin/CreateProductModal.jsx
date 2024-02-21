@@ -106,6 +106,7 @@ const CreateProductModal = ({ open, close, reRender }) => {
             borderRadius: "5px",
             minHeight: 200
           }}
+          overflow={"scroll"}
           position="relative"
         >
           <Box ml={2}>
@@ -162,23 +163,25 @@ const CreateProductModal = ({ open, close, reRender }) => {
                 categoryData={formData.categoryId}
                 handleCategory={handleCategoryChange}
               />
-              <Input
-                type="file"
-                inputProps={{ multiple: true }}
-                // sx={{ display: "none" }}
-                onChange={handleFileChange}
-                ref={inputFileRef}
-                required
-              />
               <Box display="flex" gap={2} alignItems="center">
-                <IconButton
-                  component="span"
-                  sx={{ height: "50px" }}
-                  onClick={() => inputFileRef.current.click()}
+                <Button
+                  component="label"
+                  role={undefined}
+                  variant="contained"
+                  tabIndex={-1}
+                  startIcon={<UploadIcon />}
+                  type="file"
                 >
-                  <UploadIcon sx={{ color: "skyblue" }} />
-                  <Typography color="black">Upload your file</Typography>
-                </IconButton>
+                  Upload file
+                  <Input
+                    type="file"
+                    inputProps={{ multiple: true }}
+                    sx={{ display: "none" }}
+                    onChange={handleFileChange}
+                    ref={inputFileRef}
+                    required
+                  />
+                </Button>
               </Box>
               <Box sx={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "20px" }}>
                 {Array.from(

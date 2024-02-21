@@ -15,15 +15,18 @@ import {
 import { columns } from "../../configs/constant/productColumns"
 import ConfirmDialogDelete from "../../components/admin/ConfirmDialogDelete"
 import CreateProductModal from "../../components/admin/CreateProductModal"
+import DetailProductModal from "../../components/admin/DetailProductModal"
 
 const ProductsPage = () => {
   const [product, setProduct] = useState([])
   const [page, setPage] = useState(0)
   const [productId, setProductId] = useState("")
+  const [productDetailId, setProductDetailId] = useState("")
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [openDialogDelete, setOpenDialogDelete] = useState(false)
   // const [openDialogEdit, setOpenDialogEdit] = useState(false)
   const [openProductModal, setOpenProductModal] = useState(false)
+  const [openDetailProduct, setOpenDetailProduct] = useState(false)
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -35,6 +38,15 @@ const ProductsPage = () => {
 
   const handleCloseModal = () => {
     setOpenProductModal(false)
+  }
+
+  const handleOpenProductDetail = (id) => {
+    setOpenDetailProduct(true)
+    setProductDetailId(id)
+  }
+
+  const handleCloseProductDetail = () => {
+    setOpenDetailProduct(false)
   }
 
   const handleOpenDialogDelete = (id) => {
@@ -71,14 +83,14 @@ const ProductsPage = () => {
 
   return (
     <>
-      <Button
-        sx={{ color: "black", bgcolor: "blueviolet" }}
-        variant="contained"
-        onClick={() => handleOpenModal()}
-      >
-        Add Product
-      </Button>
       <Paper sx={{ width: "80vw", height: "85vh", overflow: "hidden" }}>
+        <Button
+          sx={{ color: "black", bgcolor: "blueviolet" }}
+          variant="contained"
+          onClick={() => handleOpenModal()}
+        >
+          Add Product
+        </Button>
         <TableContainer>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
@@ -96,10 +108,24 @@ const ProductsPage = () => {
                 .map((row, index) => (
                   <TableRow hover key={index}>
                     <TableCell>{index + 1}</TableCell>
-                    <TableCell>{row.name}</TableCell>
+                    <TableCell
+                      onClick={() => handleOpenProductDetail(row.id)}
+                      sx={{ cursor: "pointer" }}
+                    >
+                      {row.name}
+                    </TableCell>
                     <TableCell>{row.price}</TableCell>
                     <TableCell>{row.quantity}</TableCell>
-                    <TableCell>{row.description}</TableCell>
+                    <TableCell
+                      sx={{
+                        maxWidth: "200px",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap"
+                      }}
+                    >
+                      {row.description}
+                    </TableCell>
                     <TableCell>{row.Category?.name}</TableCell>
                     <TableCell align="left">
                       <Box display={"flex"} gap={2}>
@@ -143,6 +169,12 @@ const ProductsPage = () => {
         open={openProductModal}
         close={handleCloseModal}
         reRender={getAllProductData}
+      />
+
+      <DetailProductModal
+        open={openDetailProduct}
+        close={handleCloseProductDetail}
+        productId={productDetailId}
       />
     </>
   )
