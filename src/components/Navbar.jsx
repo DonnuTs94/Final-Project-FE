@@ -10,7 +10,7 @@ import { useContext } from "react"
 
 const Navbar = () => {
   const theme = useTheme()
-  const colors = tokens(theme.pallete.mode)
+  const colors = tokens(theme.palette.mode)
   const colorMode = useContext(ColorModeContext)
   return (
     <header>
@@ -34,18 +34,18 @@ const Navbar = () => {
               <Search fontSize="small" />
             </IconButton>
           </Box>
-          <Box>
+          <Box display="flex" gap={2}>
             <IconButton>
               <ShoppingCartOutlined sx={{ color: colors.primary[900] }} />
             </IconButton>
             <IconButton onClick={colorMode.toggleColorMode}>
-              {theme.pallete.mode === "dark" ? (
+              {theme.palette.mode === "dark" ? (
                 <LightModeOutlined sx={{ color: "orange" }} />
               ) : (
                 <DarkModeOutlined sx={{ color: "indigo" }} />
               )}
             </IconButton>
-            <Button variant="contained" sx={{ bgcolor: colors.secondary[400] }}>
+            <Button variant="contained" color="secondary" sx={{ borderRadius: "8px" }}>
               Login
             </Button>
           </Box>
