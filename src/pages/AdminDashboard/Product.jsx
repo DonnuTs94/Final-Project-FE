@@ -71,9 +71,15 @@ const ProductsPage = () => {
 
   return (
     <>
-      <Button onClick={() => handleOpenModal()}>Add Product</Button>
-      <Paper sx={{ width: "100%", overflow: "hidden" }}>
-        <TableContainer sx={{ maxHeight: 440 }}>
+      <Button
+        sx={{ color: "black", bgcolor: "blueviolet" }}
+        variant="contained"
+        onClick={() => handleOpenModal()}
+      >
+        Add Product
+      </Button>
+      <Paper sx={{ width: "80vw", height: "85vh", overflow: "hidden" }}>
+        <TableContainer>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
@@ -94,7 +100,7 @@ const ProductsPage = () => {
                     <TableCell>{row.price}</TableCell>
                     <TableCell>{row.quantity}</TableCell>
                     <TableCell>{row.description}</TableCell>
-                    <TableCell>{row.Category.name}</TableCell>
+                    <TableCell>{row.Category?.name}</TableCell>
                     <TableCell align="left">
                       <Box display={"flex"} gap={2}>
                         <Button variant="contained" onClick={() => handleEdit(row.id)}>

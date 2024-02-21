@@ -1,7 +1,9 @@
-import { Box, Button, Input, Modal, TextField, Typography } from "@mui/material"
+import { Box, Button, IconButton, Input, Modal, TextField, Typography } from "@mui/material"
 import { axiosInstance } from "../../configs/api/api"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import SelectCategory from "./SelectCategory"
+import UploadIcon from "@mui/icons-material/Upload"
+import ClearIcon from "@mui/icons-material/Clear"
 
 const CreateProductModal = ({ open, close, reRender }) => {
   const [category, setCategory] = useState([])
@@ -13,6 +15,8 @@ const CreateProductModal = ({ open, close, reRender }) => {
     categoryId: "",
     images: []
   })
+
+  const inputFileRef = useRef()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -149,6 +153,9 @@ const CreateProductModal = ({ open, close, reRender }) => {
                 value={formData.price}
                 onChange={handleChange}
               />
+              <Typography variant="h3" sx={{ marginBottom: "20px" }}>
+                Category
+              </Typography>
 
               <SelectCategory
                 category={category}
@@ -158,10 +165,52 @@ const CreateProductModal = ({ open, close, reRender }) => {
               <Input
                 type="file"
                 inputProps={{ multiple: true }}
-                sx={{ marginTop: "20px" }}
+                // sx={{ display: "none" }}
                 onChange={handleFileChange}
+                ref={inputFileRef}
+                required
               />
-              <Button sx={{ marginBottom: "20px" }} type="submit">
+              <Box display="flex" gap={2} alignItems="center">
+                <IconButton
+                  component="span"
+                  sx={{ height: "50px" }}
+                  onClick={() => inputFileRef.current.click()}
+                >
+                  <UploadIcon sx={{ color: "skyblue" }} />
+                  <Typography color="black">Upload your file</Typography>
+                </IconButton>
+              </Box>
+              <Box sx={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "20px" }}>
+                {Array.from(
+                  formData.images.map((image, i) => (
+                    <Box key={i} position={"relative"}>
+                      <Box
+                        component="img"
+                        sx={{ height: "300px", width: "400px" }}
+                        src={URL.createObjectURL(image)}
+                      />
+                      <IconButton
+                        sx={{ position: "absolute", top: "0", right: "0", color: "red" }}
+                        onClick={() => {
+                          const updatedImages = [...formData.images]
+                          updatedImages.splice(i, 1)
+                          setFormData((prevFormData) => ({
+                            ...prevFormData,
+                            images: updatedImages
+                          }))
+                        }}
+                      >
+                        <ClearIcon />
+                      </IconButton>
+                    </Box>
+                  ))
+                )}
+              </Box>
+              <Button
+                sx={{ marginBottom: "20px", bgcolor: "skyblue" }}
+                variant="contained"
+                type="submit"
+              >
                 Submit
               </Button>
             </form>
