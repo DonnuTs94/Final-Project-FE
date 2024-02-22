@@ -95,7 +95,7 @@ const ProductsPage = () => {
       const priceNumber = Number(editProduct.price)
       const qtrNumber = Number(editProduct.quantity)
 
-      await axiosInstance.put(`/product/${editingProductId}/product`, {
+      await axiosInstance.put(`/product/${editingProductId}`, {
         quantity: qtrNumber,
         price: priceNumber
       })
