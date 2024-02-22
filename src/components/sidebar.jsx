@@ -22,7 +22,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
   )
 }
 
-const ProSidebar = () => {
+const SidebarPro = () => {
   const theme = useTheme()
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [selected, setSelected] = useState("Dashboard")
@@ -152,4 +152,4 @@ const ProSidebar = () => {
   )
 }
 
-export default ProSidebar
+export default SidebarPro
