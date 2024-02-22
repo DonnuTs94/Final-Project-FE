@@ -32,29 +32,26 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
   }
 
   const handleLogin = async (event) => {
-    const tokenAdmin =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksInJvbGVJZCI6MTMsImlhdCI6MTcwODMzNDMwNSwiZXhwIjoxNzEwOTI2MzA1fQ.G505TR_v9a7NoKRy9rYVpBA8T4KEUylFci3PmrngZC4"
     event.preventDefault()
 
     try {
       const response = await axiosInstance.post("/auth/login", {
-        headers: {
-          Authorization: `Bearer ${tokenAdmin}`,
-          "Content-Type": "application/json"
-        },
         email: email,
         password: password
       })
-      if (!response) {
-        console.error("Login failed")
-      } else {
-        console.log("Login success")
-        localStorage.setItem("email", email)
-        localStorage.setItem("password", password)
-        window.location.href = "/"
-      }
-      setEmail(response)
-      setPassword(response)
+      localStorage.setItem("auth_token", response.data.token)
+      console.log(response.data.token)
+      
+      // if (!response) {
+      //   console.error("Login failed")
+      // } else {
+      //   console.log("Login success")
+      //   localStorage.setItem("email", email)
+      //   localStorage.setItem("password", password)
+      //   window.location.href = "/"
+      // }
+      // setEmail(response)
+      // setPassword(response)
     } catch (err) {
       console.error("Error during login:", err)
     }
