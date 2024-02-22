@@ -10,16 +10,19 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography
+  Typography,
+  useTheme
 } from "@mui/material"
 import { useState, useEffect } from "react"
 import { axiosInstance } from "../../configs/api/api"
-import { VisibilityOffOutlined } from "@mui/icons-material"
+import { VisibilityOutlined } from "@mui/icons-material"
+import { currFormatter } from "../../helper/formatter"
 
 // const tokenAdmin =
 //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksInJvbGVJZCI6MTMsImlhdCI6MTcwODMzNDMwNSwiZXhwIjoxNzEwOTI2MzA1fQ.G505TR_v9a7NoKRy9rYVpBA8T4KEUylFci3PmrngZC4"
 
 const OrderPage = () => {
+  const theme = useTheme()
   const [orders, setOrders] = useState([])
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
@@ -42,27 +45,11 @@ const OrderPage = () => {
         //   "Content-Type": "application/json"
         // }
       })
-      setOrders(response.data.data)
+      setOrders(response.data.orders)
     } catch (err) {
       setLoading(false)
     }
     setLoading(false)
-  }
-
-  const getOrderDetailById = async (orderId) => {
-    setLoadingDetail(true)
-    try {
-      const response = await axiosInstance.get(`orders/admin/${Number(orderId)}`, {
-        headers: {
-          Authorization: `Bearer ${tokenAdmin}`,
-          "Content-Type": "application/json"
-        }
-      })
-      setOrderDetail(response.data.order)
-      setLoadingDetail(false)
-    } catch (err) {
-      setLoadingDetail(false)
-    }
   }
 
   const handleChangePage = (newPage) => {
@@ -74,9 +61,11 @@ const OrderPage = () => {
     setPage(0)
   }
 
-  const openModal = async (orderId) => {
+  const openModal = (orderId) => {
     setOpen(true)
-    await getOrderDetailById(orderId)
+    const orderDetailById = orders.filter((order) => order.id === orderId)
+    setOrderDetail(orderDetailById[0])
+    setLoadingDetail(false)
   }
 
   const columns = [
@@ -100,12 +89,20 @@ const OrderPage = () => {
         <Typography>Loading...</Typography>
       ) : (
         <Paper sx={{ width: "80vw", height: "85vh", overflow: "hidden" }}>
-          <TableContainer sx={{ height: "100%" }}>
+          <TableContainer sx={{ height: "90%" }}>
             <Table stickyHeader aria-label="a dense table">
               <TableHead>
                 <TableRow>
                   {columns.map((item) => (
-                    <TableCell key={item.id} align={item.align} style={{ minWidth: item.minWidth }}>
+                    <TableCell
+                      key={item.id}
+                      align={item.align}
+                      style={{
+                        minWidth: item.minWidth,
+                        fontWeight: "bold",
+                        backgroundColor: theme.palette.secondary.main
+                      }}
+                    >
                       {item.label}
                     </TableCell>
                   ))}
@@ -122,30 +119,19 @@ const OrderPage = () => {
                       </TableCell>
                       <TableCell>{order.userId}</TableCell>
                       <TableCell>{order.destination}</TableCell>
+                      <TableCell>{currFormatter(order.totalOrder * 16000)}</TableCell>
+                      <TableCell>{currFormatter(order.totalOngkir)}</TableCell>
                       <TableCell>
-                        {Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(
-                          order.totalOrder * 16000
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(
-                          order.totalOngkir
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(
-                          order.grandTotal
-                        )}
+                        {currFormatter(order.totalOrder * 16000 + order.totalOngkir)}
                       </TableCell>
                       <TableCell>{order.status}</TableCell>
                       <TableCell>
                         <Button
                           variant="contained"
-                          color="success"
+                          color="secondary"
                           onClick={() => openModal(order.id)}
                         >
-                          <VisibilityOffOutlined />
-                          Detail
+                          <VisibilityOutlined fontSize="small" />
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -183,7 +169,7 @@ const OrderPage = () => {
             borderRadius: "8px"
           }}
         >
-          <Typography variant="h4" color="primary">
+          <Typography variant="h3" marginBottom={3}>
             Order Details
           </Typography>
           {loadingDetail ? (
@@ -191,14 +177,16 @@ const OrderPage = () => {
           ) : (
             <>
               <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  gap: 2
-                }}
+                display="flex"
+                justifyContent="space-around"
+                alignItems="center"
+                marginBottom={2}
               >
+                <Typography variant="h5">Order Information</Typography>
+                <Typography variant="h5">User Details</Typography>
+              </Box>
+              <Box display="flex" gap={4} paddingX={3}>
                 <Box color="primary">
-                  <Typography variant="h5">Order Information</Typography>
                   <Typography>Order ID: {orderDetail.id} </Typography>
                   <Typography>Invoice Number: {orderDetail.id} </Typography>
                   <Typography>Order Date: {orderDetail.date} </Typography>
@@ -206,8 +194,10 @@ const OrderPage = () => {
                   <Typography>Order Status: {orderDetail.status} </Typography>
                 </Box>
                 <Box>
-                  <Typography variant="h5">User Details</Typography>
-                  <Typography>{orderDetail.userId}</Typography>
+                  <Typography>User ID: {orderDetail.userId}</Typography>
+                  <Typography>First Name: {orderDetail.User?.firstName}</Typography>
+                  <Typography>Last Name: {orderDetail.User?.lastName}</Typography>
+                  <Typography>User Address: {orderDetail.User?.address}</Typography>
                 </Box>
               </Box>
               <Box>
@@ -223,31 +213,33 @@ const OrderPage = () => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {orderDetail.orderItem.map((item, index) => {
+                      {orderDetail.orderItem?.map((item, index) => {
                         return (
                           <TableRow key={item.id}>
                             <TableCell>{index + 1}</TableCell>
                             <TableCell>{item.productId}</TableCell>
                             <TableCell>{item.quantity}</TableCell>
-                            <TableCell>{item.price}</TableCell>
-                            <TableCell>{item.total}</TableCell>
+                            <TableCell>{currFormatter(item.price * 16000)}</TableCell>
+                            <TableCell>{currFormatter(item.total * 16000)}</TableCell>
                           </TableRow>
                         )
                       })}
                       <TableRow>
                         <TableCell colSpan={2}></TableCell>
                         <TableCell colSpan={2}>Subtotal</TableCell>
-                        <TableCell>{orderDetail.totalOrder}</TableCell>
+                        <TableCell>{currFormatter(orderDetail.totalOrder * 16000)}</TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell colSpan={2}></TableCell>
                         <TableCell colSpan={2}>Ongkir</TableCell>
-                        <TableCell>{orderDetail.totalOngkir}</TableCell>
+                        <TableCell>{currFormatter(orderDetail.totalOngkir)}</TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell colSpan={2}></TableCell>
                         <TableCell colSpan={2}>Grand Total</TableCell>
-                        <TableCell>{orderDetail.grandTotal}</TableCell>
+                        <TableCell>
+                          {currFormatter(orderDetail.totalOrder * 16000 + orderDetail.totalOngkir)}
+                        </TableCell>
                       </TableRow>
                     </TableBody>
                   </Table>
