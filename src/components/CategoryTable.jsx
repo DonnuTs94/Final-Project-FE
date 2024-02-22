@@ -41,9 +41,6 @@ const CategoryPage = () => {
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false)
   const [categoryToDelete, setCategoryToDelete] = useState(null)
 
-  const tokenAdmin =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZUlkIjoxLCJpYXQiOjE3MDg1MDI4NjIsImV4cCI6MTcwOTM2Njg2Mn0.cbjfb5GEqxpC9CHoeSkOgYaKtb5XREF_lqpZe9VDH1A"
-
   const getAllCategoryData = async () => {
     try {
       const response = await axiosInstance.get("/categories")
@@ -89,9 +86,6 @@ const CategoryPage = () => {
   const handleDelete = async () => {
     try {
       const response = await axiosInstance.delete(`/categories/delete/${categoryToDelete.id}`, {
-        headers: {
-          Authorization: `Bearer ${tokenAdmin}`
-        }
       })
       const updatedRows = rows.filter((row) => row.id !== categoryToDelete.id)
       setRows(updatedRows)
@@ -120,12 +114,7 @@ const CategoryPage = () => {
           {
             name: categoryData
           },
-          {
-            headers: {
-              Authorization: `Bearer ${tokenAdmin}`,
-              "Content-Type": "application/json"
-            }
-          }
+
         )
         const updatedRows = rows.map((row) =>
           row.id === selectedCategory.id ? { ...row, ...categoryData } : row
@@ -142,12 +131,7 @@ const CategoryPage = () => {
           {
             name: categoryData
           },
-          {
-            headers: {
-              Authorization: `Bearer ${tokenAdmin}`,
-              "Content-Type": "application/json"
-            }
-          }
+          
         )
         const newCategory = response.data
         setRows([...rows, newCategory])

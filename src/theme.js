@@ -101,7 +101,7 @@ export const themeSettings = (mode) => {
           }
         : {
             primary: {
-              main: "#171717"
+              main: "#b3b3b3"
             },
             secondary: {
               main: deepOrange[100]
@@ -142,18 +142,16 @@ export const themeSettings = (mode) => {
         fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
         fontSize: 14
       }
+    },
+    component: {
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            textTransform: "none"
+          }
+        }
+      }
     }
-    // component: {
-    //   MuiTextField: {
-    //     styleOverrides: {
-    //       root: {
-    //         "& label.Mui-focused": {
-    //           color: mode === "dark" ? "#e1e1e1" : "#222222"
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
   }
 }
 
@@ -176,4 +174,17 @@ export const useMode = () => {
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode])
 
   return [theme, colorMode]
+}
+
+export const button = () => {
+  dark: {
+    primary: "#e7e7e7"
+    secondary: "#475569"
+    accend: "#727272"
+  }
+  light: {
+    primary: "#161616"
+    secondary: "#8a8a8a"
+    accend: "#444444"
+  }
 }

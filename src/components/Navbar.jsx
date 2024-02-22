@@ -7,8 +7,11 @@ import {
   ShoppingCartOutlined
 } from "@mui/icons-material"
 import { useContext } from "react"
+import Buttons from "../components/Button/ButtonTest"
+import TestPage from "../pages/Auth"
 
 const Navbar = () => {
+  // const test = TestPage(openModalLogin, onCloseModalLogin)
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
   const colorMode = useContext(ColorModeContext)
@@ -45,9 +48,9 @@ const Navbar = () => {
                 <DarkModeOutlined sx={{ color: "indigo" }} />
               )}
             </IconButton>
-            <Button variant="contained" color="secondary" sx={{ borderRadius: "8px" }}>
-              Login
-            </Button>
+            <TestPage>
+              <Buttons onClick="">Login</Buttons>
+            </TestPage>
           </Box>
         </Box>
       </nav>
