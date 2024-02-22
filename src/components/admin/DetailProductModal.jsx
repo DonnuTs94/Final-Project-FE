@@ -154,7 +154,16 @@ const DetailProductModal = ({ open, close, productId }) => {
                       required
                     />
                   </Button>
-                  <Button onClick={handleSubmit} disabled={!image}>
+                  <Button
+                    onClick={handleSubmit}
+                    sx={{
+                      marginTop: "20px",
+                      width: "100%"
+                    }}
+                    color="primary"
+                    variant="contained"
+                    disabled={!image}
+                  >
                     Submit
                   </Button>
                 </Box>

@@ -21,6 +21,8 @@ import DetailProductModal from "../../components/admin/DetailProductModal"
 import EditIcon from "@mui/icons-material/Edit"
 import DeleteIcon from "@mui/icons-material/Delete"
 import AddIcon from "@mui/icons-material/Add"
+import ClearIcon from "@mui/icons-material/Clear"
+import DoneIcon from "@mui/icons-material/Done"
 
 const ProductsPage = () => {
   const [product, setProduct] = useState([])
@@ -29,11 +31,9 @@ const ProductsPage = () => {
   const [productDetailId, setProductDetailId] = useState("")
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [openDialogDelete, setOpenDialogDelete] = useState(false)
-  // const [openDialogEdit, setOpenDialogEdit] = useState(false)
   const [openProductModal, setOpenProductModal] = useState(false)
   const [openDetailProduct, setOpenDetailProduct] = useState(false)
   const [editingProductId, setEditingProductId] = useState(false)
-  // const [editingProductId, setEditingProductId] = useState(false)
   const [editProduct, setEditProduct] = useState(null)
 
   const handleChangePage = (event, newPage) => {
@@ -95,14 +95,12 @@ const ProductsPage = () => {
       const priceNumber = Number(editProduct.price)
       const qtrNumber = Number(editProduct.quantity)
 
-      const response = await axiosInstance.put(`/product/${editingProductId}/product`, {
+      await axiosInstance.put(`/product/${editingProductId}/product`, {
         quantity: qtrNumber,
         price: priceNumber
       })
       setEditingProductId(false)
       getAllProductData()
-
-      console.log(response)
     } catch (err) {
       console.log(err)
     }
@@ -204,28 +202,34 @@ const ProductsPage = () => {
                       <Box display={"flex"} gap={2}>
                         {editingProductId === row.id ? (
                           <>
-                            <Button onClick={() => setEditingProductId(false)}>back</Button>
-                            <Button onClick={handleEdit}>accpt</Button>
+                            <Button onClick={handleEdit} color="warning">
+                              <DoneIcon />
+                            </Button>
+                            <Button onClick={() => setEditingProductId(false)} color="warning">
+                              <ClearIcon />
+                            </Button>
                           </>
                         ) : (
-                          <Button
-                            color="warning"
-                            size="large"
-                            onClick={() => handleOnEditMode(row.id)}
-                            style={{ marginRight: "8px" }}
-                            startIcon={<EditIcon />}
-                          >
-                            Edit
-                          </Button>
+                          <>
+                            <Button
+                              color="warning"
+                              size="large"
+                              onClick={() => handleOnEditMode(row.id)}
+                              style={{ marginRight: "8px" }}
+                              startIcon={<EditIcon />}
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              color="error"
+                              size="large"
+                              onClick={() => handleOpenDialogDelete(row.id)}
+                              startIcon={<DeleteIcon />}
+                            >
+                              Delete
+                            </Button>
+                          </>
                         )}
-                        <Button
-                          color="error"
-                          size="large"
-                          onClick={() => handleOpenDialogDelete(row.id)}
-                          startIcon={<DeleteIcon />}
-                        >
-                          Delete
-                        </Button>
                       </Box>
                     </TableCell>
                   </TableRow>
