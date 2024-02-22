@@ -79,6 +79,10 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
       console.error("Error during register:", err)
     }
   }
+  const handleLogout = () => {
+    localStorage.removeItem("auth_token")
+    window.location.href = "/"
+  }
 
   return (
     <div>
