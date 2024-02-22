@@ -30,6 +30,19 @@ const ProductDetail = () => {
     }
   }
 
+  const addToCart = async () => {
+    try {
+      const response = await axiosInstance.post("/carts/create", {
+        quantity: quantity,
+        productId: product.id
+      })
+
+      console.log(response)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   const getProductDetail = async () => {
     try {
       const response = await axiosInstance.get(`product/${Number(params.id)}`)
@@ -66,11 +79,17 @@ const ProductDetail = () => {
       <Box
         display={"grid"}
         height={"80vh"}
-        sx={{ gridTemplateRows: "auto", gridTemplateColumns: "1fr 1fr " }}
+        sx={{
+          gridTemplateRows: "auto",
+          gridTemplateColumns: { xs: "1fr", md: "1fr 1fr", xl: "1fr 1fr" },
+          px: { xs: 2, md: 20 },
+          gap: 5,
+          mt: "20px"
+        }}
         px={20}
         gap={5}
       >
-        <Box position={"sticky"}>
+        <Box position={"sticky"} sx={{ minWidth: 0 }}>
           <Carousel>
             {product.productImages?.map((item, i) => (
               <Box
@@ -83,10 +102,14 @@ const ProductDetail = () => {
           </Carousel>
         </Box>
         <Box mx={2}>
-          <Typography variant="h2" fontWeight={"bold"}>
+          <Typography variant="h2" fontWeight={"bold"} sx={{ textAlign: { xs: "center" } }}>
             {product.name}
           </Typography>
-          <Typography sx={{ mt: "15px" }} variant="h2" fontWeight={"bold"}>
+          <Typography
+            sx={{ mt: "15px", textAlign: { xs: "center" } }}
+            variant="h2"
+            fontWeight={"bold"}
+          >
             Rp {price}
           </Typography>
           <Box height={200} display={"flex"} mt={10} flexDirection={"column"}>
@@ -111,7 +134,8 @@ const ProductDetail = () => {
                           appearance: "none"
                         },
                         "-moz-appearance": "textfield"
-                      }
+                      },
+                      width: { xs: "100px", md: "100px", xl: "150px" }
                     }}
                     defaultValue={quantity}
                     value={quantity}
@@ -137,7 +161,20 @@ const ProductDetail = () => {
                   {total}
                 </Typography>
               </Box>
-              <Button sx={{ width: "100%", bgcolor: "green", mt: "30px" }}>Add to Cart</Button>
+              <Button
+                sx={{
+                  width: "100%",
+                  bgcolor: "green",
+                  mt: "30px",
+                  "&:hover": {
+                    bgcolor: "darkgreen"
+                  },
+                  color: "white"
+                }}
+                onClick={addToCart}
+              >
+                Add to Cart
+              </Button>
             </Box>
             <Box height={100} width={"100%"}></Box>
           </Box>
