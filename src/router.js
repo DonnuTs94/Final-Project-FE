@@ -1,7 +1,6 @@
 import { createBrowserRouter } from "react-router-dom"
 import AppLayout from "./layouts/AppLayout"
 import AdminLayout from "./layouts/AdminLayout"
-import TestPage from "./pages/TestPage"
 import CategoryPage from "./pages/AdminDashboard/Categories"
 import ProductPage from "./pages/AdminDashboard/Product"
 import OrderPage from "./pages/AdminDashboard/Order"
@@ -12,10 +11,7 @@ const Router = createBrowserRouter([
   {
     path: "/",
     Component: AppLayout,
-    children: [
-      { path: "/", Component: Homepage },
-      { path: "test", Component: TestPage }
-    ]
+    children: [{ path: "/", Component: Homepage }]
   },
   {
     path: "/admin",

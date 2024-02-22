@@ -8,7 +8,7 @@ import {
 } from "@mui/icons-material"
 import { useContext } from "react"
 import Buttons from "../components/Button/ButtonTest"
-import TestPage from "../pages/TestPage"
+import TestPage from "../pages/Auth"
 
 const Navbar = () => {
   // const test = TestPage(openModalLogin, onCloseModalLogin)

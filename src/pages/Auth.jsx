@@ -6,7 +6,6 @@ import { axiosInstance } from "../configs/api/api"
 import Visibility from "@mui/icons-material/Visibility"
 import VisibilityOff from "@mui/icons-material/VisibilityOff"
 import InputLabel from "@mui/material/InputLabel"
-import InputAdornment from "@mui/material/InputAdornment"
 import Buttons from "../components/Button/ButtonTest"
 import FormControl from "@mui/material/FormControl"
 
@@ -39,19 +38,16 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
         email: email,
         password: password
       })
-      localStorage.setItem("auth_token", response.data.token)
-      console.log(response.data.token)
-      
-      // if (!response) {
-      //   console.error("Login failed")
-      // } else {
-      //   console.log("Login success")
-      //   localStorage.setItem("email", email)
-      //   localStorage.setItem("password", password)
-      //   window.location.href = "/"
-      // }
-      // setEmail(response)
-      // setPassword(response)
+
+      if (!response) {
+        console.log("Login failed")
+      } else {
+        localStorage.setItem("auth_token", response.data.token)
+        console.log(response.data.token)
+        window.location.href = "/"
+      }
+      setEmail("")
+      setPassword("")
     } catch (err) {
       console.error("Error during login:", err)
     }
@@ -74,7 +70,6 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
       }
       setAlertMessage("User successfull created", response)
       setAlertStatus("success")
-      // setOpen(true)
       setFirstName("")
       setLastName("")
       setEmailRegister("")
@@ -115,7 +110,6 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
               <Box sx={{ width: "100%" }}>
                 {/* Login */}
                 <Typography variant="h5"></Typography>
-                {/* <TextField label="Email" type="email" fullWidth margin="normal" /> */}
                 <TextField
                   id="standard-basic"
                   onChange={(e) => setEmail(e.target.value)}
@@ -142,7 +136,6 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
                       >
                         {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
-                      // </InputAdornment>
                     }
                   />
                 </FormControl>
@@ -156,7 +149,6 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
               <Box>
                 {/* Register */}
                 <Typography variant="h5"></Typography>
-                {/* <Input placeholder="FirstName" fullWidth margin="normal" /> */}
                 <Input
                   sx={{
                     outline: "none",
@@ -244,8 +236,6 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
             )}
           </Box>
         </ModalParent>
-
-        {/* <Buttons>asjdnsa</Buttons> */}
       </div>
     </div>
   )

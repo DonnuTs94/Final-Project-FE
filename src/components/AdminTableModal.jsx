@@ -29,6 +29,7 @@ const AdminTableModal = ({
     try {
       await handleSave(category)
       handleClose()
+      setCategory("")
     } catch (error) {
       console.error("Error saving category:", error)
     }
