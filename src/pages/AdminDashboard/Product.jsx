@@ -3,6 +3,7 @@ import { axiosInstance } from "../../configs/api/api"
 import {
   Box,
   Button,
+  Input,
   Paper,
   Table,
   TableBody,
@@ -31,6 +32,9 @@ const ProductsPage = () => {
   // const [openDialogEdit, setOpenDialogEdit] = useState(false)
   const [openProductModal, setOpenProductModal] = useState(false)
   const [openDetailProduct, setOpenDetailProduct] = useState(false)
+  const [editingProductId, setEditingProductId] = useState(false)
+  // const [editingProductId, setEditingProductId] = useState(false)
+  const [editProduct, setEditProduct] = useState(null)
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -66,7 +70,6 @@ const ProductsPage = () => {
     setPage(0)
   }
 
-  const handleEdit = () => {}
   const handleDelete = async () => {
     await axiosInstance.delete(`/product/softDelete/${productId}`)
     getAllProductData()
@@ -79,6 +82,40 @@ const ProductsPage = () => {
     } catch (error) {
       console.error("Error fetching product data:", error)
     }
+  }
+
+  const handleOnEditMode = (id) => {
+    const editedProduct = product.find((item) => item.id === id)
+    setEditingProductId(id)
+    setEditProduct(editedProduct)
+  }
+
+  const handleEdit = async () => {
+    try {
+      const priceNumber = Number(editProduct.price)
+      const qtrNumber = Number(editProduct.quantity)
+
+      const response = await axiosInstance.put(`/product/${editingProductId}/product`, {
+        quantity: qtrNumber,
+        price: priceNumber
+      })
+      setEditingProductId(false)
+      getAllProductData()
+
+      console.log(response)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const handlePriceChange = (e) => {
+    const { value } = e.target
+    setEditProduct((prevProduct) => ({ ...prevProduct, price: value }))
+  }
+
+  const handleQuantityChange = (e) => {
+    const { value } = e.target
+    setEditProduct((prevProduct) => ({ ...prevProduct, quantity: value }))
   }
 
   useEffect(() => {
@@ -129,8 +166,29 @@ const ProductsPage = () => {
                     >
                       {row.name}
                     </TableCell>
-                    <TableCell>{row.price}</TableCell>
-                    <TableCell>{row.quantity}</TableCell>
+                    {editingProductId === row.id ? (
+                      <>
+                        <TableCell>
+                          <Input
+                            type="number"
+                            value={editProduct.price}
+                            onChange={(e) => handlePriceChange(e, row.id)}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Input
+                            type="number"
+                            value={editProduct.quantity}
+                            onChange={(e) => handleQuantityChange(e, row.id)}
+                          />
+                        </TableCell>
+                      </>
+                    ) : (
+                      <>
+                        <TableCell>{row.price}</TableCell>
+                        <TableCell>{row.quantity}</TableCell>
+                      </>
+                    )}
                     <TableCell
                       sx={{
                         maxWidth: "200px",
@@ -144,15 +202,22 @@ const ProductsPage = () => {
                     <TableCell>{row.Category?.name}</TableCell>
                     <TableCell>
                       <Box display={"flex"} gap={2}>
-                        <Button
-                          color="warning"
-                          size="large"
-                          onClick={() => handleEdit(row.id)}
-                          style={{ marginRight: "8px" }}
-                          startIcon={<EditIcon />}
-                        >
-                          Edit
-                        </Button>
+                        {editingProductId === row.id ? (
+                          <>
+                            <Button onClick={() => setEditingProductId(false)}>back</Button>
+                            <Button onClick={handleEdit}>accpt</Button>
+                          </>
+                        ) : (
+                          <Button
+                            color="warning"
+                            size="large"
+                            onClick={() => handleOnEditMode(row.id)}
+                            style={{ marginRight: "8px" }}
+                            startIcon={<EditIcon />}
+                          >
+                            Edit
+                          </Button>
+                        )}
                         <Button
                           color="error"
                           size="large"

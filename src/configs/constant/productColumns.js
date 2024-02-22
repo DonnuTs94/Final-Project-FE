@@ -17,13 +17,13 @@ export const columns = [
   {
     id: "categoryId",
     label: "Category",
-    minWidth: 170,
+    minWidth: 120,
     align: "left"
   },
   {
     id: "edit",
     label: "Action",
-    minWidth: 170,
+    minWidth: 200,
     align: "center"
   }
 ]
