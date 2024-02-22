@@ -30,9 +30,11 @@ const ProSidebar = () => {
 
   return (
     <Paper
+      elevation={0}
+      variant="outlined"
       sx={{
         "& .pro-sidebar-inner": {
-          background: "inherit"
+          color: "inherit !important"
         },
         "& .pro-icon-wrapper": {
           backgroundColor: "transparent !important"
@@ -41,21 +43,31 @@ const ProSidebar = () => {
           padding: "5px 35px 5px 20px !important"
         },
         "& .pro-inner-item:hover": {
-          color: theme.palette.mode === "dark" ? "#ffffff" : "#868dfb !important"
+          backgroundColor: theme.palette.mode === "dark" ? "#868dfb" : "#444444 !important"
         },
         "& .pro-menu-item.active": {
-          color: theme.palette.mode === "dark" ? "#ffffff" : "#6870fa !important"
+          backgroundColor: theme.palette.mode === "dark" ? "#6870fa" : "#fffccc !important"
         }
       }}
     >
       <Sidebar
-        collapsed={isCollapsed}
-        style={{
-          height: "100%",
-          backgroundColor: theme.palette.background.default
+        backgroundColor="inherit"
+        rootStyles={{
+          height: "100%"
         }}
+        collapsed={isCollapsed}
       >
-        <Menu iconShape="square">
+        <Menu
+          iconShape="square"
+          menuItemStyles={{
+            button: {
+              [`&:hover`]: {
+                backgroundColor: theme.palette.secondary.main,
+                color: theme.palette.text.default
+              }
+            }
+          }}
+        >
           {/* LOGO AND MENU ICON */}
           <MenuItem
             onClick={() => setIsCollapsed(!isCollapsed)}

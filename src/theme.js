@@ -101,7 +101,7 @@ export const themeSettings = (mode) => {
           }
         : {
             primary: {
-              main: "#171717"
+              main: "#b3b3b3"
             },
             secondary: {
               main: deepOrange[100]
@@ -142,18 +142,16 @@ export const themeSettings = (mode) => {
         fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
         fontSize: 14
       }
+    },
+    component: {
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            textTransform: "none"
+          }
+        }
+      }
     }
-    // component: {
-    //   MuiTextField: {
-    //     styleOverrides: {
-    //       root: {
-    //         "& label.Mui-focused": {
-    //           color: mode === "dark" ? "#e1e1e1" : "#222222"
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
   }
 }
 
