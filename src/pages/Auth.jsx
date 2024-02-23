@@ -63,6 +63,7 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
       setEmail("")
       setPassword("")
       onClose()
+      console.log(response)
       if (response.meta.requestStatus === "fulfilled" && response.payload.data.role === "admin") {
         navigate("/admin")
       } else {

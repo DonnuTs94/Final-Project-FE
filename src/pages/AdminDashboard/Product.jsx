@@ -3,6 +3,7 @@ import { axiosInstance } from "../../configs/api/api"
 import {
   Box,
   Button,
+  CircularProgress,
   Input,
   Paper,
   Table,
@@ -24,9 +25,10 @@ import AddIcon from "@mui/icons-material/Add"
 import ClearIcon from "@mui/icons-material/Clear"
 import DoneIcon from "@mui/icons-material/Done"
 import { toast } from "react-toastify"
+import { useDispatch, useSelector } from "react-redux"
+import { fetchAdminProductData } from "../../configs/store/slicer/adminProductSlicer"
 
 const ProductsPage = () => {
-  const [product, setProduct] = useState([])
   const [page, setPage] = useState(0)
   const [productId, setProductId] = useState("")
   const [productDetailId, setProductDetailId] = useState("")
@@ -36,6 +38,14 @@ const ProductsPage = () => {
   const [openDetailProduct, setOpenDetailProduct] = useState(false)
   const [editingProductId, setEditingProductId] = useState(false)
   const [editProduct, setEditProduct] = useState(null)
+
+  const [saveProgress, setSaveProgress] = useState(false)
+
+  const { error, loading } = useSelector((state) => state.product)
+
+  const productSelector = useSelector((state) => state.product.productData)
+
+  const dispatch = useDispatch()
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -73,20 +83,14 @@ const ProductsPage = () => {
 
   const handleDelete = async () => {
     await axiosInstance.delete(`/product/softDelete/${productId}`)
-    getAllProductData()
-  }
-
-  const getAllProductData = async () => {
-    try {
-      const response = await axiosInstance.get("/product/table")
-      setProduct(response.data.data)
-    } catch (error) {
-      console.error("Error fetching product data:", error)
-    }
+    toast.success("Success delete product", {
+      position: "bottom-center"
+    })
+    setSaveProgress(true)
   }
 
   const handleOnEditMode = (id) => {
-    const editedProduct = product.find((item) => item.id === id)
+    const editedProduct = productSelector.find((item) => item.id === id)
     setEditingProductId(id)
     setEditProduct(editedProduct)
   }
@@ -114,10 +118,10 @@ const ProductsPage = () => {
         price: priceNumber
       })
       setEditingProductId(false)
-      getAllProductData()
       toast.success("Success edit product", {
         position: "bottom-center"
       })
+      setSaveProgress(true)
     } catch (err) {
       console.log(err)
     }
@@ -134,8 +138,21 @@ const ProductsPage = () => {
   }
 
   useEffect(() => {
-    getAllProductData()
-  }, [])
+    dispatch(fetchAdminProductData())
+  }, [dispatch])
+
+  useEffect(() => {
+    if (saveProgress) {
+      dispatch(fetchAdminProductData())
+      setSaveProgress(false)
+    }
+  }, [saveProgress, dispatch])
+
+  if (error) {
+    toast.error(error.message, {
+      position: "bottom-center"
+    })
+  }
 
   return (
     <>
@@ -170,87 +187,97 @@ const ProductsPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {product
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => (
-                  <TableRow hover key={index}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell
-                      onClick={() => handleOpenProductDetail(row.id)}
-                      sx={{ cursor: "pointer" }}
-                    >
-                      {row.name}
-                    </TableCell>
-                    {editingProductId === row.id ? (
-                      <>
-                        <TableCell>
-                          <Input
-                            type="number"
-                            value={editProduct.price}
-                            onChange={(e) => handlePriceChange(e, row.id)}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Input
-                            type="number"
-                            value={editProduct.quantity}
-                            onChange={(e) => handleQuantityChange(e, row.id)}
-                          />
-                        </TableCell>
-                      </>
-                    ) : (
-                      <>
-                        <TableCell>{row.price}</TableCell>
-                        <TableCell>{row.quantity}</TableCell>
-                      </>
-                    )}
-                    <TableCell
-                      sx={{
-                        maxWidth: "200px",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap"
-                      }}
-                    >
-                      {row.description}
-                    </TableCell>
-                    <TableCell>{row.Category?.name}</TableCell>
-                    <TableCell>
-                      <Box display={"flex"} gap={2}>
-                        {editingProductId === row.id ? (
-                          <>
-                            <Button onClick={handleEdit} color="warning">
-                              <DoneIcon />
-                            </Button>
-                            <Button onClick={() => setEditingProductId(false)} color="warning">
-                              <ClearIcon />
-                            </Button>
-                          </>
-                        ) : (
-                          <>
-                            <Button
-                              color="warning"
-                              size="large"
-                              onClick={() => handleOnEditMode(row.id)}
-                              style={{ marginRight: "8px" }}
-                              startIcon={<EditIcon />}
-                            >
-                              Edit
-                            </Button>
-                            <Button
-                              color="error"
-                              size="large"
-                              onClick={() => handleOpenDialogDelete(row.id)}
-                              startIcon={<DeleteIcon />}
-                            >
-                              Delete
-                            </Button>
-                          </>
-                        )}
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                ))}
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={columns.length}>
+                    <CircularProgress color="info" />
+                  </TableCell>
+                </TableRow>
+              ) : (
+                productSelector &&
+                productSelector.length > 0 &&
+                productSelector
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => (
+                    <TableRow hover key={index}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell
+                        onClick={() => handleOpenProductDetail(row.id)}
+                        sx={{ cursor: "pointer" }}
+                      >
+                        {row.name}
+                      </TableCell>
+                      {editingProductId === row.id ? (
+                        <>
+                          <TableCell>
+                            <Input
+                              type="number"
+                              value={editProduct.price}
+                              onChange={(e) => handlePriceChange(e, row.id)}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <Input
+                              type="number"
+                              value={editProduct.quantity}
+                              onChange={(e) => handleQuantityChange(e, row.id)}
+                            />
+                          </TableCell>
+                        </>
+                      ) : (
+                        <>
+                          <TableCell>{row.price}</TableCell>
+                          <TableCell>{row.quantity}</TableCell>
+                        </>
+                      )}
+                      <TableCell
+                        sx={{
+                          maxWidth: "200px",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap"
+                        }}
+                      >
+                        {row.description}
+                      </TableCell>
+                      <TableCell>{row.Category?.name}</TableCell>
+                      <TableCell>
+                        <Box display={"flex"} gap={2}>
+                          {editingProductId === row.id ? (
+                            <>
+                              <Button onClick={handleEdit} color="warning">
+                                <DoneIcon />
+                              </Button>
+                              <Button onClick={() => setEditingProductId(false)} color="warning">
+                                <ClearIcon />
+                              </Button>
+                            </>
+                          ) : (
+                            <>
+                              <Button
+                                color="warning"
+                                size="large"
+                                onClick={() => handleOnEditMode(row.id)}
+                                style={{ marginRight: "8px" }}
+                                startIcon={<EditIcon />}
+                              >
+                                Edit
+                              </Button>
+                              <Button
+                                color="error"
+                                size="large"
+                                onClick={() => handleOpenDialogDelete(row.id)}
+                                startIcon={<DeleteIcon />}
+                              >
+                                Delete
+                              </Button>
+                            </>
+                          )}
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -258,7 +285,7 @@ const ProductsPage = () => {
           component="div"
           rowsPerPageOptions={[10, 20, 40]}
           rowsPerPage={rowsPerPage}
-          count={product.length}
+          count={productSelector?.length}
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
@@ -276,7 +303,7 @@ const ProductsPage = () => {
       <CreateProductModal
         open={openProductModal}
         close={handleCloseModal}
-        reRender={getAllProductData}
+        reRender={productSelector}
       />
 
       <DetailProductModal
