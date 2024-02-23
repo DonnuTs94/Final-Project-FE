@@ -13,8 +13,16 @@ import MapOutlinedIcon from "@mui/icons-material/MapOutlined"
 import { DarkModeOutlined, LightModeOutlined } from "@mui/icons-material"
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
+  const handleLogoutButton = () => {
+    if (title === "Logout") {
+      localStorage.removeItem("auth_token")
+      setSelected(title)
+    }
+
+    setSelected(title)
+  }
   return (
-    <MenuItem active={selected === title} onClick={() => setSelected(title)} icon={icon}>
+    <MenuItem active={selected === title} onClick={() => handleLogoutButton} icon={icon}>
       <Link to={to}>
         <Typography>{title}</Typography>
       </Link>
@@ -144,7 +152,7 @@ const SidebarPro = () => {
               </Typography>
               <Item
                 title="Logout"
-                to="/geography"
+                to="/"
                 icon={<MapOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}
