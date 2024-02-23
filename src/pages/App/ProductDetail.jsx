@@ -6,6 +6,8 @@ import Carousel from "react-material-ui-carousel"
 import { BASE_URL } from "../../configs/constant/baseUrl"
 import RemoveIcon from "@mui/icons-material/Remove"
 import AddIcon from "@mui/icons-material/Add"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 const ProductDetail = () => {
   const [product, setProduct] = useState([])
@@ -32,14 +34,20 @@ const ProductDetail = () => {
 
   const addToCart = async () => {
     try {
-      const response = await axiosInstance.post("/carts/create", {
+      await axiosInstance.post("/carts/create", {
         quantity: quantity,
         productId: product.id
       })
 
-      console.log(response)
+      toast.success("Success add product to cart!", {
+        position: "bottom-center"
+      })
     } catch (err) {
-      console.log(err)
+      if (err.name === "AxiosError" && err.response.data.message === "Unauthorized") {
+        toast.warn("You have to sign in to add product to your cart", {
+          position: "bottom-center"
+        })
+      }
     }
   }
 
@@ -191,6 +199,7 @@ const ProductDetail = () => {
           </Typography>
         </Box>
       </Box>
+      <ToastContainer />
     </>
   )
 }
