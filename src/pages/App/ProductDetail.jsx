@@ -86,26 +86,30 @@ const ProductDetail = () => {
     <>
       <Box
         display={"grid"}
-        height={"80vh"}
+        height={"60vh"}
         sx={{
           gridTemplateRows: "auto",
-          gridTemplateColumns: { xs: "1fr", md: "1fr 1fr", xl: "1fr 1fr" },
-          px: { xs: 2, md: 20 },
+          gridTemplateColumns: { s: "1fr", md: "1fr 1fr", xl: "1fr 1fr" },
           gap: 5,
-          mt: "20px"
+          mt: 5,
+          px: "0",
+          mx: 10
         }}
         px={20}
         gap={5}
       >
-        <Box position={"sticky"} sx={{ minWidth: 0 }}>
+        <Box position={"sticky"} sx={{ minWidth: 0 }} height={"100%"}>
           <Carousel>
             {product.productImages?.map((item, i) => (
-              <Box
-                key={i}
-                component={"img"}
-                sx={{ height: "500px", width: "100%", objectFit: "cover" }}
-                src={BASE_URL + item.imageUrl}
-              />
+              <>
+                <Box
+                  width={"100%"}
+                  key={i}
+                  component={"img"}
+                  sx={{ width: "100%", height: "600px", objectFit: "cover" }}
+                  src={BASE_URL + item.imageUrl}
+                />
+              </>
             ))}
           </Carousel>
         </Box>
