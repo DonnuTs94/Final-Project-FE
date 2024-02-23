@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import SelectCategory from "./SelectCategory"
 import UploadIcon from "@mui/icons-material/Upload"
 import ClearIcon from "@mui/icons-material/Clear"
+import { ToastContainer, toast } from "react-toastify"
 
 const CreateProductModal = ({ open, close, reRender }) => {
   const [category, setCategory] = useState([])
@@ -35,6 +36,9 @@ const CreateProductModal = ({ open, close, reRender }) => {
 
       await axiosInstance.post("product/", formDataToSend)
       close()
+      toast.success("Success create new product!", {
+        position: "bottom-center"
+      })
       reRender()
       setFormData({
         name: "",
@@ -46,6 +50,17 @@ const CreateProductModal = ({ open, close, reRender }) => {
       })
     } catch (err) {
       console.log(err)
+      if (err.response.data.message === "File too large, maximum allowed is 1 mb") {
+        toast.warn("File too large! Maximum allowed is 1mb", {
+          position: "bottom-center"
+        })
+      }
+
+      if (err.response.data.message === "Too many files uploaded. Maximum allowed is 6") {
+        toast.warn("Too many files uploaded. Maximum allowed is 6", {
+          position: "bottom-center"
+        })
+      }
     }
   }
 
@@ -100,7 +115,6 @@ const CreateProductModal = ({ open, close, reRender }) => {
             transform: "translate(-50%, -50%)",
             width: 700,
             bgcolor: "background.paper",
-            // border: "1spx solid #000",
             display: "flex",
             flexDirection: "column",
             borderRadius: "10px",
@@ -126,6 +140,7 @@ const CreateProductModal = ({ open, close, reRender }) => {
                 <TextField
                   id="description"
                   name="description"
+                  required
                   label="Description"
                   sx={{ width: "100%", marginBottom: "20px" }}
                   value={formData.description}
@@ -134,6 +149,7 @@ const CreateProductModal = ({ open, close, reRender }) => {
 
                 <TextField
                   id="quantity"
+                  required
                   name="quantity"
                   label="Quantity"
                   sx={{ width: "100%", marginBottom: "20px" }}
@@ -144,6 +160,7 @@ const CreateProductModal = ({ open, close, reRender }) => {
 
                 <TextField
                   id="price"
+                  required
                   name="price"
                   label="Price"
                   sx={{ width: "100%", marginBottom: "20px" }}
@@ -220,6 +237,7 @@ const CreateProductModal = ({ open, close, reRender }) => {
           </Box>
         </Box>
       </Modal>
+      <ToastContainer />
     </>
   )
 }

@@ -23,6 +23,7 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import AddIcon from "@mui/icons-material/Add"
 import ClearIcon from "@mui/icons-material/Clear"
 import DoneIcon from "@mui/icons-material/Done"
+import { toast } from "react-toastify"
 
 const ProductsPage = () => {
   const [product, setProduct] = useState([])
@@ -95,12 +96,28 @@ const ProductsPage = () => {
       const priceNumber = Number(editProduct.price)
       const qtrNumber = Number(editProduct.quantity)
 
+      if (priceNumber < 1) {
+        toast.warn("Price minimum is 1", {
+          position: "bottom-center"
+        })
+        throw new Error("Price minimum is 1")
+      }
+
+      if (qtrNumber < 0) {
+        toast.warn("Quantity minimum is 0", {
+          position: "bottom-center"
+        })
+        throw new Error("Quantity minimum is 0")
+      }
       await axiosInstance.put(`/product/${editingProductId}`, {
         quantity: qtrNumber,
         price: priceNumber
       })
       setEditingProductId(false)
       getAllProductData()
+      toast.success("Success edit product", {
+        position: "bottom-center"
+      })
     } catch (err) {
       console.log(err)
     }
