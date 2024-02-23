@@ -7,7 +7,6 @@ import { BASE_URL } from "../../configs/constant/baseUrl"
 import RemoveIcon from "@mui/icons-material/Remove"
 import AddIcon from "@mui/icons-material/Add"
 import { ToastContainer, toast } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
 
 const ProductDetail = () => {
   const [product, setProduct] = useState([])

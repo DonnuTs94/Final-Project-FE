@@ -3,7 +3,7 @@ import { axiosInstance } from "../configs/api/api"
 import Buttons from "../components/Button/ButtonTest"
 import { Typography } from "@mui/material"
 import { Link } from "react-router-dom"
-import ProductDetail from "./ProductDetail"
+import ProductDetail from "./ProductDetailTest"
 import ModalParent from "../components/Modal"
 import ActionAreaCard from "../components/Card/CardProductAgain"
 import { CardMedia } from "@mui/material"
@@ -93,7 +93,7 @@ const ProductList = () => {
           Next
         </Buttons>
       </div>
-      {selectedProduct && <ProductDetail product={selectedProduct} />}
+      {selectedProduct && <ProductDetailTest product={selectedProduct} />}
     </div>
   )
 }

@@ -7,6 +7,7 @@ import OrderPage from "./pages/AdminDashboard/Order"
 import UsersPage from "./pages/AdminDashboard/User"
 import Homepage from "./pages/App/Homepage"
 import ProductDetail from "./pages/App/ProductDetail"
+import ProductList from "./pages/ProductList"
 
 const Router = createBrowserRouter([
   {
@@ -14,6 +15,7 @@ const Router = createBrowserRouter([
     Component: AppLayout,
     children: [
       { path: "/", Component: Homepage },
+      { path: "/test", Component: ProductList },
       { path: "/product/:id", Component: ProductDetail }
     ]
   },
