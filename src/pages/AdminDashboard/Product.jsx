@@ -27,6 +27,7 @@ import DoneIcon from "@mui/icons-material/Done"
 import { toast } from "react-toastify"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchAdminProductData } from "../../configs/store/slicer/adminProductSlicer"
+import { useTheme } from "@emotion/react"
 
 const ProductsPage = () => {
   const [page, setPage] = useState(0)
@@ -46,6 +47,7 @@ const ProductsPage = () => {
   const productSelector = useSelector((state) => state.product.productData)
 
   const dispatch = useDispatch()
+  const theme = useTheme()
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -180,7 +182,15 @@ const ProductsPage = () => {
             <TableHead>
               <TableRow>
                 {columns.map((item) => (
-                  <TableCell key={item.id} align={item.align} style={{ minWidth: item.minWidth }}>
+                  <TableCell
+                    key={item.id}
+                    align={item.align}
+                    style={{
+                      minWidth: item.minWidth,
+                      fontWeight: "bold",
+                      backgroundColor: theme.palette.secondary.main
+                    }}
+                  >
                     {item.label}
                   </TableCell>
                 ))}
@@ -303,7 +313,7 @@ const ProductsPage = () => {
       <CreateProductModal
         open={openProductModal}
         close={handleCloseModal}
-        reRender={productSelector}
+        reRender={() => setSaveProgress(true)}
       />
 
       <DetailProductModal
