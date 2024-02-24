@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, InputBase, Typography, useTheme } from "@mui/material"
+import { Box, IconButton, InputBase, Typography, useTheme } from "@mui/material"
 import { ColorModeContext, tokens } from "../theme"
 import {
   DarkModeOutlined,
@@ -7,18 +7,23 @@ import {
   ShoppingCartOutlined
 } from "@mui/icons-material"
 import { useContext } from "react"
-import Buttons from "../components/Button/ButtonTest"
-import TestPage from "../pages/Auth"
+import AuthButton from "../pages/Auth"
+import SearchBar from "./Card/SearchBar"
 
 const Navbar = () => {
-  // const test = TestPage(openModalLogin, onCloseModalLogin)
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
   const colorMode = useContext(ColorModeContext)
   return (
     <header>
       <nav>
-        <Box display="flex" justifyContent="space-between" alignItems="center" p={3}>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          paddingX={5}
+          paddingY={3}
+        >
           <Box>
             <Typography variant="h5">E-Commerce Logo</Typography>
           </Box>
@@ -33,9 +38,11 @@ const Navbar = () => {
               }}
               placeholder="Search"
             />
-            <IconButton>
-              <Search fontSize="small" />
-            </IconButton>
+            <SearchBar>
+              <IconButton>
+                <Search fontSize="small" />
+              </IconButton>
+            </SearchBar>
           </Box>
           <Box display="flex" gap={2}>
             <IconButton>
@@ -48,9 +55,7 @@ const Navbar = () => {
                 <DarkModeOutlined sx={{ color: "indigo" }} />
               )}
             </IconButton>
-            <TestPage>
-              <Buttons onClick="">Login</Buttons>
-            </TestPage>
+            <AuthButton />
           </Box>
         </Box>
       </nav>

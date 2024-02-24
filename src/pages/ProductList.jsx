@@ -7,14 +7,15 @@ import ProductDetail from "./ProductDetailTest"
 import ModalParent from "../components/Modal"
 import ActionAreaCard from "../components/Card/CardProductAgain"
 import { CardMedia } from "@mui/material"
+import { Box } from "@mui/system"
+import { BASE_URL } from "../configs/constant/baseUrl"
+import Grid from "@mui/material/Grid"
 
 const ProductList = () => {
   const [productData, setProductData] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [selectedProduct, setSelectedProduct] = useState(null)
-
-  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     const getAllProduct = async (page) => {
@@ -42,40 +43,27 @@ const ProductList = () => {
   }
 
   return (
-    <div>
-      {/* <CardMedia image={"../components/Card/1.png"}>
-          {productImages.map((product) => (
-            <Link
-              key={product.productImage}
-              // onClick={() => handleProductClick(product)}
-              // to={`/product/${product.id}`}
-            >
-              <div>
-                <Typography>{product.productImage}</Typography>
-              </div>
-              //{" "}
-            </Link>
-          ))}
-        </CardMedia> */}
-      <Typography>Product List</Typography>
+    <Box
+      sx={{
+        display: "grid",
+        gridTemplateColumns: "repeat(5, 1fr)"
+      }}
+    >
       {productData.map((product) => (
-        // <Grid container spacing={3}>
-        <ActionAreaCard>
-          {/* <ProductCard> */}
-          <Link
-            key={product.id}
-            onClick={() => handleProductClick(product)}
-            // to={`/product/${product.id}`}
-          >
-            <div>
+        <ActionAreaCard
+          key={product.id}
+          onClick={() => handleProductClick(product)}
+          image={product.productImages?.[0] && BASE_URL + product.productImages[0].imageUrl}
+          alt={product.name}
+        >
+          <Link key={product.id} onClick={() => handleProductClick(product)}>
+            <Box>
               <Typography>{product.name}</Typography>
-            </div>{" "}
+            </Box>
           </Link>
-          {/* </ProductCard> */}
-          //{" "}
         </ActionAreaCard>
-      ))}{" "}
-      <div>
+      ))}
+      <Box>
         <Buttons
           onClick={() => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))}
           disabled={currentPage === 1}
@@ -92,9 +80,9 @@ const ProductList = () => {
         >
           Next
         </Buttons>
-      </div>
-      {selectedProduct && <ProductDetailTest product={selectedProduct} />}
-    </div>
+      </Box>
+      {selectedProduct && <ProductDetail product={selectedProduct} />}
+    </Box>
   )
 }
 

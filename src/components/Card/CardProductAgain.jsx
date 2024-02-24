@@ -1,16 +1,15 @@
-import * as React from "react"
+import React from "react"
 import Card from "@mui/material/Card"
 import CardContent from "@mui/material/CardContent"
 import CardMedia from "@mui/material/CardMedia"
 import Typography from "@mui/material/Typography"
 import { CardActionArea } from "@mui/material"
 
-const ActionAreaCard = (props) => {
-  const { children, image, alt } = props
+const ActionAreaCard = ({ children, image, alt, onClick }) => {
   return (
-    <Card sx={{ maxWidth: 345, gap: 3, margin: 5, flexDirection: "column" }}>
-      <CardActionArea>
-        <CardMedia component="img" height="140" image={""} alt={alt} />
+    <Card sx={{ maxWidth: 345, gap: 3, margin: 5, flexDirection: "row" }}>
+      <CardActionArea onClick={onClick}>
+        {image && <CardMedia component="img" height="140" alt={alt} src={image} />}
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             {children}
@@ -23,4 +22,5 @@ const ActionAreaCard = (props) => {
     </Card>
   )
 }
+
 export default ActionAreaCard
