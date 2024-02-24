@@ -8,6 +8,7 @@ import UsersPage from "./pages/AdminDashboard/User"
 import Homepage from "./pages/App/Homepage"
 import ProductDetail from "./pages/App/ProductDetail"
 import ProductList from "./pages/ProductList"
+import ProductSearchPage from "./pages/ProductSearch"
 
 const Router = createBrowserRouter([
   {
@@ -16,6 +17,7 @@ const Router = createBrowserRouter([
     children: [
       { path: "/", Component: Homepage },
       { path: "/test", Component: ProductList },
+      { path: "/test2", Component: ProductSearchPage },
       { path: "/product/:id", Component: ProductDetail }
     ]
   },

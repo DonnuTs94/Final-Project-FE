@@ -7,6 +7,7 @@ const ProductDetail = ({ product }) => {
     <div>
       <ModalParent onOpen={open} onClose={() => setOpen(false)}>
         <Typography variant="h2">Product Detail</Typography>
+        <img src={product.imageUrl} alt={product.name} style={{ maxWidth: "100%" }} />
         <Typography>Name: {product.name}</Typography>
         <Typography>Quantity: {product.quantity}</Typography>
         <Typography>Price: {product.price}</Typography>

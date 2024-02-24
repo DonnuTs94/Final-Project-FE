@@ -4,18 +4,17 @@ import Buttons from "../components/Button/ButtonTest"
 import { Typography } from "@mui/material"
 import { Link } from "react-router-dom"
 import ProductDetail from "./ProductDetailTest"
-import ModalParent from "../components/Modal"
 import ActionAreaCard from "../components/Card/CardProductAgain"
 import { CardMedia } from "@mui/material"
 import { Box } from "@mui/system"
 import { BASE_URL } from "../configs/constant/baseUrl"
-import Grid from "@mui/material/Grid"
 
 const ProductList = () => {
   const [productData, setProductData] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [selectedProduct, setSelectedProduct] = useState(null)
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     const getAllProduct = async (page) => {

@@ -1,41 +1,25 @@
 import React, { useState } from "react"
 import ProductSearch from "./ProductSearch"
-import { axiosInstance } from "../configs/api/api"
 import { Box } from "@mui/system"
-import { ListItem, ListItemText, Typography } from "@mui/material"
+import Buttons from "../components/Button/ButtonTest"
+import { useNavigate } from "react-router-dom"
 
 const ProductSearchPage = () => {
-  const [searchResults, setSearchResults] = useState([])
-  const [productData, setProductData] = useState([])
-  const [selectedLetter, setSelectedLetter] = useState("")
+  const navigate = useNavigate()
+  const [searchTerm, setSearchTerm] = useState("")
 
-  const searchProduct = async () => {
-    try {
-      const response = await axiosInstance.get("/product")
-      const data = await response.json()
-      setSearchResults(data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const handleSearch = (searchTerm) => {
-    setSearchResults("")
+  const handleSearch = (term) => {
+    setSearchTerm(term)
+    navigate(`/search?q=${term}`)
   }
 
   return (
     <Box>
       <ProductSearch onSearch={handleSearch} />
-      <ListItem>
-        {searchResults.map((product) => (
-          <ListItemText key={product.id}>{product.name}</ListItemText>
-        ))}
-      </ListItem>
-      <Button
-        key={letter}
-        variant={selectedLetter === letter ? "contained" : "outlined"}
-        onClick={() => handleLetterClick(letter)}
-      ></Button>
+      {searchTerm && <SearchResults term={searchTerm} />}
+      <Buttons variant="outlined" onClick={() => navigate("/")}>
+        Back to Product List
+      </Buttons>
     </Box>
   )
 }
