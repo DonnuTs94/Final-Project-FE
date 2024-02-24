@@ -26,8 +26,12 @@ import ClearIcon from "@mui/icons-material/Clear"
 import DoneIcon from "@mui/icons-material/Done"
 import { toast } from "react-toastify"
 import { useDispatch, useSelector } from "react-redux"
-import { fetchAdminProductData } from "../../configs/store/slicer/adminProductSlicer"
+import {
+  clearProductData,
+  fetchAdminProductData
+} from "../../configs/store/slicer/adminProductSlicer"
 import { useTheme } from "@emotion/react"
+import SelectCategory from "../../components/admin/SelectCategory"
 
 const ProductsPage = () => {
   const [page, setPage] = useState(0)
@@ -39,8 +43,9 @@ const ProductsPage = () => {
   const [openDetailProduct, setOpenDetailProduct] = useState(false)
   const [editingProductId, setEditingProductId] = useState(false)
   const [editProduct, setEditProduct] = useState(null)
-  const [searchParams, setSearchParams] = useState("")
   const [searchName, setSearchName] = useState("")
+  const [searchCategory, setSearchCategory] = useState("")
+  const [category, setCategory] = useState([])
 
   const [saveProgress, setSaveProgress] = useState(false)
 
@@ -141,36 +146,64 @@ const ProductsPage = () => {
     setEditProduct((prevProduct) => ({ ...prevProduct, quantity: value }))
   }
 
+  const getCategoryData = async () => {
+    try {
+      const response = await axiosInstance.get("categories")
+      setCategory(response.data.data)
+    } catch (err) {
+      if (err.name === "AxiosError") {
+        toast.error("Something went wrong", {
+          position: "bottom-center"
+        })
+      }
+    }
+  }
+
+  console.log(category)
+
   useEffect(() => {
     if (saveProgress) {
       dispatch(fetchAdminProductData())
       setSaveProgress(false)
     }
     dispatch(fetchAdminProductData())
-  }, [saveProgress, searchParams, dispatch])
+  }, [saveProgress, dispatch])
 
-  // useEffect(() => {
-  //   dispatch(fetchAdminProductData(searchParams))
-  // }, [dispatch, searchParams])
+  useEffect(() => {
+    getCategoryData()
+  }, [])
 
   if (error) {
     toast.error(error.message, {
       position: "bottom-center"
     })
   }
-
   const handleSearch = () => {
-    const queryParams = searchName // Buat objek queryParams dengan nama produk
-    setSearchParams(queryParams) // Perbarui searchParams
-    dispatch(fetchAdminProductData(queryParams))
+    // Dispatch action to clear existing search results
+    dispatch(clearProductData())
+    // Dispatch action to fetch new search results
+    dispatch(fetchAdminProductData(searchName))
   }
-  console.log(searchParams)
-  console.log(productSelector)
+
+  const filteredProducts = productSelector.filter((product) => {
+    const nameMatch = product.name.toLowerCase().includes(searchName.toLowerCase())
+    const categoryMatch = searchCategory ? product.categoryId === searchCategory : true
+    console.log(categoryMatch)
+    return nameMatch && categoryMatch
+  })
+
+  // console.log(searchCategory)
+  // console.log(productSelector)
 
   return (
     <>
       <Paper sx={{ width: "80vw", height: "100vh", overflow: "auto" }}>
         <Input value={searchName} onChange={(e) => setSearchName(e.target.value)} />
+        <SelectCategory
+          category={category}
+          categoryData={searchCategory}
+          handleCategory={(value) => setSearchCategory(value)}
+        />
         <Button onClick={handleSearch}>Search</Button>
         <Box
           sx={{
@@ -217,9 +250,10 @@ const ProductsPage = () => {
                   </TableCell>
                 </TableRow>
               ) : (
-                productSelector &&
-                productSelector.length > 0 &&
-                productSelector
+                // productSelector &&
+                // productSelector.length > 0 &&
+                // productSelector
+                filteredProducts
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => (
                     <TableRow hover key={index}>

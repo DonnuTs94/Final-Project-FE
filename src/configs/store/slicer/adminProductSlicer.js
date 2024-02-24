@@ -12,7 +12,7 @@ const fetchAdminProductData = createAsyncThunk("admin/product", async (searchQue
     console.log(searchQuery)
     if (searchQuery !== undefined) {
       console.log("masuk")
-      searchQuery = `?product=${searchQuery}`
+      searchQuery = `?product=${searchQuery}&category=${searchQuery}`
 
       const response = await axiosInstance.get(`product/table${searchQuery}`)
       console.log(response.data.data)
@@ -30,7 +30,11 @@ const fetchAdminProductData = createAsyncThunk("admin/product", async (searchQue
 const adminProductSlicer = createSlice({
   name: "adminProduct",
   initialState,
-  reducers: {},
+  reducers: {
+    clearProductData: (state) => {
+      state.productData = null
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchAdminProductData.pending, (state) => {
@@ -47,6 +51,8 @@ const adminProductSlicer = createSlice({
       })
   }
 })
+
+export const { clearProductData } = adminProductSlicer.actions
 
 export { fetchAdminProductData }
 export default adminProductSlicer.reducer
