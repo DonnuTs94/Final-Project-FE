@@ -199,7 +199,7 @@ const ProductDetail = () => {
               </Box>
               <Box display={"flex"} mt={4} justifyContent={"space-between"} alignItems={"center"}>
                 <Typography variant="h5" fontWeight={500}>
-                  Subtotal
+                  Subtotal:
                 </Typography>
                 <Typography variant="h4" fontWeight={"bold"}>
                   {total}

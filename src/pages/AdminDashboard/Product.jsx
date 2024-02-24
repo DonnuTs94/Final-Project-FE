@@ -39,6 +39,8 @@ const ProductsPage = () => {
   const [openDetailProduct, setOpenDetailProduct] = useState(false)
   const [editingProductId, setEditingProductId] = useState(false)
   const [editProduct, setEditProduct] = useState(null)
+  const [searchParams, setSearchParams] = useState("")
+  const [searchName, setSearchName] = useState("")
 
   const [saveProgress, setSaveProgress] = useState(false)
 
@@ -140,15 +142,16 @@ const ProductsPage = () => {
   }
 
   useEffect(() => {
-    dispatch(fetchAdminProductData())
-  }, [dispatch])
-
-  useEffect(() => {
     if (saveProgress) {
       dispatch(fetchAdminProductData())
       setSaveProgress(false)
     }
-  }, [saveProgress, dispatch])
+    dispatch(fetchAdminProductData())
+  }, [saveProgress, searchParams, dispatch])
+
+  // useEffect(() => {
+  //   dispatch(fetchAdminProductData(searchParams))
+  // }, [dispatch, searchParams])
 
   if (error) {
     toast.error(error.message, {
@@ -156,9 +159,19 @@ const ProductsPage = () => {
     })
   }
 
+  const handleSearch = () => {
+    const queryParams = searchName // Buat objek queryParams dengan nama produk
+    setSearchParams(queryParams) // Perbarui searchParams
+    dispatch(fetchAdminProductData(queryParams))
+  }
+  console.log(searchParams)
+  console.log(productSelector)
+
   return (
     <>
       <Paper sx={{ width: "80vw", height: "100vh", overflow: "auto" }}>
+        <Input value={searchName} onChange={(e) => setSearchName(e.target.value)} />
+        <Button onClick={handleSearch}>Search</Button>
         <Box
           sx={{
             display: "flex",

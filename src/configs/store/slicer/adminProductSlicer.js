@@ -7,9 +7,19 @@ const initialState = {
   error: null
 }
 
-const fetchAdminProductData = createAsyncThunk("admin/product", async (data, thunkAPI) => {
+const fetchAdminProductData = createAsyncThunk("admin/product", async (searchQuery, thunkAPI) => {
   try {
-    const response = await axiosInstance.get("product/table", data)
+    console.log(searchQuery)
+    if (searchQuery !== undefined) {
+      console.log("masuk")
+      searchQuery = `?product=${searchQuery}`
+
+      const response = await axiosInstance.get(`product/table${searchQuery}`)
+      console.log(response.data.data)
+      return response.data.data
+    }
+
+    const response = await axiosInstance.get(`product/table`)
     return response.data.data
   } catch (err) {
     console.log(err)
