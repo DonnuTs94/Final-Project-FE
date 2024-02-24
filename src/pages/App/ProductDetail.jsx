@@ -11,24 +11,26 @@ import "react-toastify/dist/ReactToastify.css"
 
 const ProductDetail = () => {
   const [product, setProduct] = useState([])
-  const [price, setPrice] = useState("")
+  const [price, setPrice] = useState(1)
   const [quantity, setQuantity] = useState(1)
   const [total, setTotal] = useState(0)
 
   const params = useParams()
 
   const handleAddQty = () => {
-    if (quantity < product.quantity) {
-      setQuantity(quantity)
+    const maxQuantity = product.quantity
+    const newQuantity = quantity + 1
+
+    if (newQuantity <= maxQuantity) {
+      setQuantity(newQuantity)
+    } else {
+      setQuantity(maxQuantity)
     }
-    setQuantity(Number(quantity + 1))
   }
 
   const handleReduceQty = () => {
-    setQuantity(quantity - 1)
-
-    if (quantity === 1) {
-      setQuantity(1)
+    if (quantity > 1) {
+      setQuantity(quantity - 1)
     }
   }
 
@@ -43,8 +45,21 @@ const ProductDetail = () => {
         position: "bottom-center"
       })
     } catch (err) {
-      if (err.name === "AxiosError" && err.response.data.message === "Unauthorized") {
+      console.log(err)
+      if (err.response.data.message === "Unauthorized") {
         toast.warn("You have to sign in to add product to your cart", {
+          position: "bottom-center"
+        })
+      }
+
+      if (err.response.data.message === "Product stock is not available") {
+        toast.warn("Product stock is not available", {
+          position: "bottom-center"
+        })
+      }
+
+      if (err.response.data.message === "Failed Create Cart") {
+        toast.error("Failed Create Cart", {
           position: "bottom-center"
         })
       }
@@ -57,7 +72,11 @@ const ProductDetail = () => {
 
       setProduct(response.data.data)
     } catch (err) {
-      console.log(err)
+      if (err.status === 500) {
+        toast.error("Something when wrong", {
+          position: "bottom-center"
+        })
+      }
     }
   }
 
@@ -70,42 +89,46 @@ const ProductDetail = () => {
 
   useEffect(() => {
     if (product) {
-      setPrice(convertPriceWithCommas(product.price)) // Format price if product epriceists
+      setPrice(convertPriceWithCommas(product.price))
     }
   }, [product])
 
   useEffect(() => {
     setTotal(convertPriceWithCommas(product.price * quantity))
-  }, [quantity])
+  }, [product.price, quantity])
 
   useEffect(() => {
     getProductDetail()
-  }, [])
+  }, [product])
 
   return (
     <>
       <Box
         display={"grid"}
-        height={"80vh"}
+        height={"60vh"}
         sx={{
           gridTemplateRows: "auto",
-          gridTemplateColumns: { xs: "1fr", md: "1fr 1fr", xl: "1fr 1fr" },
-          px: { xs: 2, md: 20 },
+          gridTemplateColumns: { s: "1fr", md: "1fr 1fr", xl: "1fr 1fr" },
           gap: 5,
-          mt: "20px"
+          mt: 5,
+          px: "0",
+          mx: 10
         }}
         px={20}
         gap={5}
       >
-        <Box position={"sticky"} sx={{ minWidth: 0 }}>
+        <Box position={"sticky"} sx={{ minWidth: 0 }} height={"100%"}>
           <Carousel>
             {product.productImages?.map((item, i) => (
-              <Box
-                key={i}
-                component={"img"}
-                sx={{ height: "500px", width: "100%", objectFit: "cover" }}
-                src={BASE_URL + item.imageUrl}
-              />
+              <>
+                <Box
+                  width={"100%"}
+                  key={i}
+                  component={"img"}
+                  sx={{ width: "100%", height: "600px", objectFit: "cover" }}
+                  src={BASE_URL + item.imageUrl}
+                />
+              </>
             ))}
           </Carousel>
         </Box>
@@ -147,7 +170,20 @@ const ProductDetail = () => {
                     }}
                     defaultValue={quantity}
                     value={quantity}
-                    onChange={(e) => setQuantity(e.target.value)}
+                    onBlur={() => {
+                      if (quantity === "") {
+                        setQuantity(1)
+                      }
+                    }}
+                    onChange={(e) => {
+                      const value = e.target.value
+                      if (value === "" || (!isNaN(value) && parseInt(value) >= 0)) {
+                        setQuantity(value === "" ? "" : parseInt(value))
+                      }
+                      if (value > product.quantity) {
+                        setQuantity(product.quantity)
+                      }
+                    }}
                     type="number"
                   />
                   <Button startIcon={<AddIcon />} color="secondary" onClick={handleAddQty} />
@@ -163,7 +199,7 @@ const ProductDetail = () => {
               </Box>
               <Box display={"flex"} mt={4} justifyContent={"space-between"} alignItems={"center"}>
                 <Typography variant="h5" fontWeight={500}>
-                  Subtotal
+                  Subtotal:
                 </Typography>
                 <Typography variant="h4" fontWeight={"bold"}>
                   {total}
