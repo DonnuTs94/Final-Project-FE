@@ -11,24 +11,26 @@ import "react-toastify/dist/ReactToastify.css"
 
 const ProductDetail = () => {
   const [product, setProduct] = useState([])
-  const [price, setPrice] = useState("")
+  const [price, setPrice] = useState(1)
   const [quantity, setQuantity] = useState(1)
   const [total, setTotal] = useState(0)
 
   const params = useParams()
 
   const handleAddQty = () => {
-    if (quantity < product.quantity) {
-      setQuantity(quantity)
+    const maxQuantity = product.quantity
+    const newQuantity = quantity + 1
+
+    if (newQuantity <= maxQuantity) {
+      setQuantity(newQuantity)
+    } else {
+      setQuantity(maxQuantity)
     }
-    setQuantity(Number(quantity + 1))
   }
 
   const handleReduceQty = () => {
-    setQuantity(quantity - 1)
-
-    if (quantity === 1) {
-      setQuantity(1)
+    if (quantity > 1) {
+      setQuantity(quantity - 1)
     }
   }
 
@@ -43,8 +45,15 @@ const ProductDetail = () => {
         position: "bottom-center"
       })
     } catch (err) {
+      console.log(err)
       if (err.name === "AxiosError" && err.response.data.message === "Unauthorized") {
         toast.warn("You have to sign in to add product to your cart", {
+          position: "bottom-center"
+        })
+      }
+
+      if (err.response.data.message === "Product stock is not available") {
+        toast.warn("Product stock is not available", {
           position: "bottom-center"
         })
       }
@@ -57,7 +66,11 @@ const ProductDetail = () => {
 
       setProduct(response.data.data)
     } catch (err) {
-      console.log(err)
+      if (err.name === "AxiosError") {
+        toast.error("Something when wrong", {
+          position: "bottom-center"
+        })
+      }
     }
   }
 
@@ -70,17 +83,17 @@ const ProductDetail = () => {
 
   useEffect(() => {
     if (product) {
-      setPrice(convertPriceWithCommas(product.price)) // Format price if product epriceists
+      setPrice(convertPriceWithCommas(product.price))
     }
   }, [product])
 
   useEffect(() => {
     setTotal(convertPriceWithCommas(product.price * quantity))
-  }, [quantity])
+  }, [product.price, quantity])
 
   useEffect(() => {
     getProductDetail()
-  }, [])
+  }, [product])
 
   return (
     <>
@@ -151,7 +164,20 @@ const ProductDetail = () => {
                     }}
                     defaultValue={quantity}
                     value={quantity}
-                    onChange={(e) => setQuantity(e.target.value)}
+                    onBlur={() => {
+                      if (quantity === "") {
+                        setQuantity(1)
+                      }
+                    }}
+                    onChange={(e) => {
+                      const value = e.target.value
+                      if (value === "" || (!isNaN(value) && parseInt(value) >= 0)) {
+                        setQuantity(value === "" ? "" : parseInt(value))
+                      }
+                      if (value > product.quantity) {
+                        setQuantity(product.quantity)
+                      }
+                    }}
                     type="number"
                   />
                   <Button startIcon={<AddIcon />} color="secondary" onClick={handleAddQty} />
