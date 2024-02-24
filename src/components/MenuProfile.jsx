@@ -65,7 +65,7 @@ const MenuProfile = ({ handleLogout }) => {
       >
         <MenuItem onClick={handleClose}>Edit Profile</MenuItem>
         <MenuItem onClick={handleClose}>My account</MenuItem>
-        {userData?.Role.name === "admin" ? (
+        {userData?.Role?.name === "admin" ? (
           <MenuItem onClick={handleClose}>
             <Link to={"/admin"}>Admin Dashboard</Link>
           </MenuItem>
