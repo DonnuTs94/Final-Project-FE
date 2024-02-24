@@ -7,6 +7,7 @@ import OrderPage from "./pages/AdminDashboard/Order"
 import UsersPage from "./pages/AdminDashboard/User"
 import Homepage from "./pages/App/Homepage"
 import ProductDetail from "./pages/App/ProductDetail"
+import ProtectThisRoute from "./pages/ProtectThisRoute"
 
 const Router = createBrowserRouter([
   {
@@ -19,8 +20,15 @@ const Router = createBrowserRouter([
   },
   {
     path: "/admin",
+    // Component: ProtectThisRoute,
     Component: AdminLayout,
+
     children: [
+      {
+        path: "",
+        // Component: AdminLayout
+        Component: ProtectThisRoute
+      },
       { path: "categories", Component: CategoryPage },
       { path: "products", Component: ProductPage },
       { path: "orders", Component: OrderPage },

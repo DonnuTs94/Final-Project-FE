@@ -41,7 +41,6 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
     if (isLogout) {
       localStorage.removeItem("auth_token")
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogout])
 
   const userDataLogin = {
@@ -64,10 +63,9 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
       setPassword("")
       onClose()
       if (response.meta.requestStatus === "fulfilled" && response.payload.data.role === "admin") {
-        navigate("/admin")
+        navigate("/admin", { replace: true })
       } else {
         navigate("/")
-        console.log("not admin")
       }
     } catch (err) {
       console.error("Error during login:", err)
@@ -109,10 +107,10 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
 
   return (
     <>
-      {!userData ? (
-        <Buttons onClick={isOpen}>Login</Buttons>
-      ) : (
+      {!loading && userData ? (
         <MenuProfile handleLogout={handleLogout} />
+      ) : (
+        <Buttons onClick={isOpen}>Login</Buttons>
       )}
 
       <ModalParent
