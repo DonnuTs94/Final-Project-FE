@@ -19,7 +19,7 @@ const MenuProfile = ({ handleLogout }) => {
       <Tooltip title="Account settings">
         <Button
           onClick={handleClick}
-          color="secondary"
+          color="inherit"
           sx={{ ml: 2, p: 1, fontWeight: "bold" }}
           aria-controls={open ? "account-menu" : undefined}
           aria-haspopup="true"

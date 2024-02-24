@@ -5,6 +5,7 @@ import {
   Button,
   CircularProgress,
   Input,
+  InputBase,
   Paper,
   Table,
   TableBody,
@@ -26,10 +27,7 @@ import ClearIcon from "@mui/icons-material/Clear"
 import DoneIcon from "@mui/icons-material/Done"
 import { toast } from "react-toastify"
 import { useDispatch, useSelector } from "react-redux"
-import {
-  clearProductData,
-  fetchAdminProductData
-} from "../../configs/store/slicer/adminProductSlicer"
+import { fetchAdminProductData } from "../../configs/store/slicer/adminProductSlicer"
 import { useTheme } from "@emotion/react"
 import SelectCategory from "../../components/admin/SelectCategory"
 
@@ -51,7 +49,7 @@ const ProductsPage = () => {
 
   const { error, loading } = useSelector((state) => state.product)
 
-  const productSelector = useSelector((state) => state.product.productData)
+  const productSelector = useSelector((state) => state.product.productData) || []
 
   const dispatch = useDispatch()
   const theme = useTheme()
@@ -178,33 +176,17 @@ const ProductsPage = () => {
       position: "bottom-center"
     })
   }
-  const handleSearch = () => {
-    // Dispatch action to clear existing search results
-    dispatch(clearProductData())
-    // Dispatch action to fetch new search results
-    dispatch(fetchAdminProductData(searchName))
-  }
 
-  const filteredProducts = productSelector.filter((product) => {
+  const filteredProducts = productSelector?.filter((product) => {
     const nameMatch = product.name.toLowerCase().includes(searchName.toLowerCase())
     const categoryMatch = searchCategory ? product.categoryId === searchCategory : true
     console.log(categoryMatch)
     return nameMatch && categoryMatch
   })
 
-  // console.log(searchCategory)
-  // console.log(productSelector)
-
   return (
     <>
       <Paper sx={{ width: "80vw", height: "100vh", overflow: "auto" }}>
-        <Input value={searchName} onChange={(e) => setSearchName(e.target.value)} />
-        <SelectCategory
-          category={category}
-          categoryData={searchCategory}
-          handleCategory={(value) => setSearchCategory(value)}
-        />
-        <Button onClick={handleSearch}>Search</Button>
         <Box
           sx={{
             display: "flex",
@@ -214,6 +196,26 @@ const ProductsPage = () => {
           }}
         >
           <Typography variant="h2">Product</Typography>
+          <Box display="flex" gap="20px" alignItems="center" bgcolor={"white"} borderRadius={2}>
+            <InputBase
+              sx={{
+                flex: 1,
+                paddingY: "2px",
+                paddingLeft: "20px",
+                fontSize: "14px",
+                border: "1px solid gray",
+                borderRadius: "5px"
+              }}
+              value={searchName}
+              onChange={(e) => setSearchName(e.target.value)}
+              placeholder="Search"
+            />
+            <SelectCategory
+              category={category}
+              categoryData={searchCategory}
+              handleCategory={(value) => setSearchCategory(value)}
+            />
+          </Box>
           <Button
             variant="contained"
             startIcon={<AddIcon />}

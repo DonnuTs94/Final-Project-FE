@@ -22,18 +22,18 @@ const Navbar = () => {
           alignItems="center"
           paddingX={5}
           paddingY={3}
+          bgcolor={theme.palette.secondary.main}
         >
           <Box>
             <Typography variant="h5">E-Commerce Logo</Typography>
           </Box>
-          <Box display="flex" gap="20px" alignItems="center">
+          <Box display="flex" gap="20px" alignItems="center" bgcolor={"white"} borderRadius={2}>
             <InputBase
               sx={{
                 flex: 1,
                 paddingY: "2px",
                 paddingLeft: "20px",
-                fontSize: "14px",
-                borderRadius: "8px"
+                fontSize: "14px"
               }}
               placeholder="Search"
             />
