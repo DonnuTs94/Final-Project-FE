@@ -46,7 +46,7 @@ const ProductDetail = () => {
       })
     } catch (err) {
       console.log(err)
-      if (err.name === "AxiosError" && err.response.data.message === "Unauthorized") {
+      if (err.response.data.message === "Unauthorized") {
         toast.warn("You have to sign in to add product to your cart", {
           position: "bottom-center"
         })
@@ -54,6 +54,12 @@ const ProductDetail = () => {
 
       if (err.response.data.message === "Product stock is not available") {
         toast.warn("Product stock is not available", {
+          position: "bottom-center"
+        })
+      }
+
+      if (err.response.data.message === "Failed Create Cart") {
+        toast.error("Failed Create Cart", {
           position: "bottom-center"
         })
       }
@@ -66,7 +72,7 @@ const ProductDetail = () => {
 
       setProduct(response.data.data)
     } catch (err) {
-      if (err.name === "AxiosError") {
+      if (err.status === 500) {
         toast.error("Something when wrong", {
           position: "bottom-center"
         })

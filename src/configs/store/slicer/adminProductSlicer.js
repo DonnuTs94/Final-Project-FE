@@ -10,7 +10,7 @@ const initialState = {
 const fetchAdminProductData = createAsyncThunk("admin/product", async (data, thunkAPI) => {
   try {
     const response = await axiosInstance.get("product/table", data)
-    return response.data.data // Return response data
+    return response.data.data
   } catch (err) {
     console.log(err)
     return thunkAPI.rejectWithValue(err.response.data.message)
