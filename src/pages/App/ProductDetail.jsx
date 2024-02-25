@@ -92,6 +92,7 @@ const ProductDetail = () => {
       <Box
         component="img"
         src="/ProductNotFound.jpg"
+        alt="Product Not Found"
         sx={{
           objectFit: "cover",
           maxWidth: "100%",
