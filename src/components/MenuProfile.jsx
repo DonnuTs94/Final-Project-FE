@@ -1,13 +1,18 @@
 import { Logout } from "@mui/icons-material"
 import { Button, Divider, ListItemIcon, Menu, MenuItem, Tooltip } from "@mui/material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 
 const MenuProfile = ({ handleLogout }) => {
   const { userData } = useSelector((state) => state.users)
+  const [showDashboardMenu, setDashboardMenu] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
+
+  useEffect(() => {
+    if (userData?.Role?.name === "admin") setDashboardMenu(true)
+  }, [userData])
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget)
   }
@@ -65,7 +70,7 @@ const MenuProfile = ({ handleLogout }) => {
       >
         <MenuItem onClick={handleClose}>Edit Profile</MenuItem>
         <MenuItem onClick={handleClose}>My account</MenuItem>
-        {userData?.Role?.name === "admin" ? (
+        {showDashboardMenu ? (
           <MenuItem onClick={handleClose}>
             <Link to={"/admin"}>Admin Dashboard</Link>
           </MenuItem>
