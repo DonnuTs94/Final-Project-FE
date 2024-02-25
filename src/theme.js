@@ -1,5 +1,6 @@
 import { createContext, useMemo, useState } from "react"
 import { createTheme } from "@mui/material/styles"
+// import { deepOrange, purple } from "@mui/material/colors"
 
 export const tokens = (mode) => ({
   ...(mode === "dark"
@@ -174,16 +175,3 @@ export const useMode = () => {
 
   return [theme, colorMode]
 }
-
-// export const button = () => {
-//   dark: {
-//     primary: "#e7e7e7"
-//     secondary: "#475569"
-//     accend: "#727272"
-//   }
-//   light: {
-//     primary: "#161616"
-//     secondary: "#8a8a8a"
-//     accend: "#444444"
-//   }
-// }
