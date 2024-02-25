@@ -174,15 +174,23 @@ const CreateProductModal = ({ open, close, reRender }) => {
                   categoryData={formData.categoryId}
                   handleCategory={handleCategoryChange}
                 />
-                <Box display="flex" gap={2} alignItems="center">
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  flexDirection={"row"}
+                  justifyContent={"center"}
+                  height={"100%"}
+                  mt={"20px"}
+                  gap={2}
+                >
                   <Button
                     component="label"
-                    variant="contained"
+                    variant="outlined"
                     startIcon={<UploadIcon />}
                     type="file"
                     sx={{
-                      marginTop: "20px",
-                      width: "100%"
+                      color: "black",
+                      border: "none"
                     }}
                   >
                     Upload file
@@ -194,6 +202,13 @@ const CreateProductModal = ({ open, close, reRender }) => {
                       ref={inputFileRef}
                       required
                     />
+                  </Button>
+                  <Button
+                    sx={{ width: "30%", bgcolor: "green", color: "white" }}
+                    variant="outlined"
+                    type="submit"
+                  >
+                    Submit
                   </Button>
                 </Box>
                 <Box
@@ -229,9 +244,6 @@ const CreateProductModal = ({ open, close, reRender }) => {
                     ))
                   )}
                 </Box>
-                <Button sx={{ marginBottom: "20px" }} variant="contained" type="submit">
-                  Submit
-                </Button>
               </Box>
             </form>
           </Box>

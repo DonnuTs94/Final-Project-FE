@@ -30,6 +30,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { fetchAdminProductData } from "../../configs/store/slicer/adminProductSlicer"
 import { useTheme } from "@emotion/react"
 import SelectCategory from "../../components/admin/SelectCategory"
+import RefreshIcon from "@mui/icons-material/Refresh"
 
 const ProductsPage = () => {
   const [page, setPage] = useState(0)
@@ -130,7 +131,11 @@ const ProductsPage = () => {
       })
       setSaveProgress(true)
     } catch (err) {
-      console.log(err)
+      if (err.response.status === 500) {
+        toast.error("Something went wrong", {
+          position: "bottom-center"
+        })
+      }
     }
   }
 
@@ -157,7 +162,10 @@ const ProductsPage = () => {
     }
   }
 
-  console.log(category)
+  const handleClearFilter = () => {
+    setSearchName("")
+    setSearchCategory("")
+  }
 
   useEffect(() => {
     if (saveProgress) {
@@ -180,7 +188,6 @@ const ProductsPage = () => {
   const filteredProducts = productSelector?.filter((product) => {
     const nameMatch = product.name.toLowerCase().includes(searchName.toLowerCase())
     const categoryMatch = searchCategory ? product.categoryId === searchCategory : true
-    console.log(categoryMatch)
     return nameMatch && categoryMatch
   })
 
@@ -196,7 +203,7 @@ const ProductsPage = () => {
           }}
         >
           <Typography variant="h2">Product</Typography>
-          <Box display="flex" gap="20px" alignItems="center" bgcolor={"white"} borderRadius={2}>
+          <Box display="flex" gap="10px" alignItems="center" bgcolor={"white"} borderRadius={2}>
             <InputBase
               sx={{
                 flex: 1,
@@ -204,7 +211,9 @@ const ProductsPage = () => {
                 paddingLeft: "20px",
                 fontSize: "14px",
                 border: "1px solid gray",
-                borderRadius: "5px"
+                borderRadius: "5px",
+                height: "50px",
+                width: "250px"
               }}
               value={searchName}
               onChange={(e) => setSearchName(e.target.value)}
@@ -215,6 +224,7 @@ const ProductsPage = () => {
               categoryData={searchCategory}
               handleCategory={(value) => setSearchCategory(value)}
             />
+            <Button startIcon={<RefreshIcon />} onClick={handleClearFilter} />
           </Box>
           <Button
             variant="contained"
@@ -252,9 +262,6 @@ const ProductsPage = () => {
                   </TableCell>
                 </TableRow>
               ) : (
-                // productSelector &&
-                // productSelector.length > 0 &&
-                // productSelector
                 filteredProducts
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => (

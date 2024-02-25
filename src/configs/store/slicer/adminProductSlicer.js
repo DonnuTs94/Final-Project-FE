@@ -7,17 +7,17 @@ const initialState = {
   error: null
 }
 
-const fetchAdminProductData = createAsyncThunk("admin/product", async (searchQuery, thunkAPI) => {
+const fetchAdminProductData = createAsyncThunk("admin/product", async (thunkAPI) => {
   try {
-    console.log(searchQuery)
-    if (searchQuery !== undefined) {
-      console.log("masuk")
-      searchQuery = `?product=${searchQuery}&category=${searchQuery}`
+    // console.log(searchQuery)
+    // if (searchQuery !== undefined) {
+    //   console.log("masuk")
+    //   searchQuery = `?product=${searchQuery}&category=${searchQuery}`
 
-      const response = await axiosInstance.get(`product/table${searchQuery}`)
-      console.log(response.data.data)
-      return response.data.data
-    }
+    //   const response = await axiosInstance.get(`product/table${searchQuery}`)
+    //   console.log(response.data.data)
+    //   return response.data.data
+    // }
 
     const response = await axiosInstance.get(`product/table`)
     return response.data.data
@@ -31,9 +31,9 @@ const adminProductSlicer = createSlice({
   name: "adminProduct",
   initialState,
   reducers: {
-    clearProductData: (state) => {
-      state.productData = null
-    }
+    // clearProductData: (state) => {
+    //   state.productData = null
+    // }
   },
   extraReducers: (builder) => {
     builder
