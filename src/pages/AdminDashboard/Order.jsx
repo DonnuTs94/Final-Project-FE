@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Modal,
   Paper,
   Table,
@@ -82,13 +83,15 @@ const OrderPage = () => {
   ]
   return (
     <Box width={"100%"}>
-      <Typography marginBottom={5} variant="h3">
-        Customer Orders
-      </Typography>
       {loading ? (
-        <Typography>Loading...</Typography>
+        <Box>
+          <CircularProgress color="info" />
+        </Box>
       ) : (
         <Paper sx={{ width: "80vw", height: "85vh", overflow: "hidden" }}>
+          <Typography py={"16px"} ml={"20px"} variant="h2">
+            Customer Orders
+          </Typography>
           <TableContainer sx={{ height: "90%" }}>
             <Table stickyHeader aria-label="a dense table">
               <TableHead>

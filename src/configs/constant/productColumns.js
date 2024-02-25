@@ -17,7 +17,7 @@ export const columns = [
   {
     id: "categoryId",
     label: "Category",
-    minWidth: 120,
+    minWidth: 100,
     align: "left"
   },
   {

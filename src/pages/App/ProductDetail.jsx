@@ -87,6 +87,23 @@ const ProductDetail = () => {
     return ""
   }
 
+  const renderNotFound = () => (
+    <Box display="flex" justifyContent="center" alignItems="center">
+      <Box
+        component="img"
+        src="/ProductNotFound.jpg"
+        alt="Product Not Found"
+        sx={{
+          objectFit: "cover",
+          maxWidth: "100%",
+          maxHeight: "100%",
+          width: "auto",
+          height: "auto"
+        }}
+      />
+    </Box>
+  )
+
   useEffect(() => {
     if (product) {
       setPrice(convertPriceWithCommas(product.price))
@@ -101,141 +118,158 @@ const ProductDetail = () => {
     getProductDetail()
   }, [product])
 
+  console.log(product)
+
   return (
     <>
-      <Box
-        display={"grid"}
-        height={"60vh"}
-        sx={{
-          gridTemplateRows: "auto",
-          gridTemplateColumns: { s: "1fr", md: "1fr 1fr", xl: "1fr 1fr" },
-          gap: 5,
-          mt: 5,
-          px: "0",
-          mx: 10
-        }}
-        px={20}
-        gap={5}
-      >
-        <Box position={"sticky"} sx={{ minWidth: 0 }} height={"100%"}>
-          <Carousel>
-            {product.productImages?.map((item, i) => (
-              <>
-                <Box
-                  width={"100%"}
-                  key={i}
-                  component={"img"}
-                  sx={{ width: "100%", height: "600px", objectFit: "cover" }}
-                  src={BASE_URL + item.imageUrl}
-                />
-              </>
-            ))}
-          </Carousel>
-        </Box>
-        <Box mx={2}>
-          <Typography variant="h2" fontWeight={"bold"} sx={{ textAlign: { xs: "center" } }}>
-            {product.name}
-          </Typography>
-          <Typography
-            sx={{ mt: "15px", textAlign: { xs: "center" } }}
-            variant="h2"
-            fontWeight={"bold"}
+      {!product || product.length === 0 ? (
+        renderNotFound()
+      ) : (
+        <>
+          <Box
+            display={"grid"}
+            height={"60vh"}
+            sx={{
+              gridTemplateRows: "auto",
+              gridTemplateColumns: { s: "1fr", md: "1fr 1fr", xl: "1fr 1fr" },
+              gap: 5,
+              mt: 5,
+              px: "0",
+              mx: 10
+            }}
+            px={20}
+            gap={5}
           >
-            Rp {price}
-          </Typography>
-          <Box height={200} display={"flex"} mt={10} flexDirection={"column"}>
-            <Box height={100} width={"50%"} position={"relative"} sx={{ left: "25%" }}>
-              <Box
-                position={"relative"}
-                display={"flex"}
-                justifyContent={"center"}
-                alignItems={"center"}
-              >
-                <Box display={"flex"}>
-                  <Button startIcon={<RemoveIcon />} color="secondary" onClick={handleReduceQty} />
-                  <TextField
-                    sx={{
-                      textAlign: "center",
-                      "& input": {
-                        textAlign: "center",
-                        "&::-webkit-inner-spin-button": {
-                          appearance: "none"
-                        },
-                        "&::-webkit-outer-spin-button": {
-                          appearance: "none"
-                        },
-                        "-moz-appearance": "textfield"
-                      },
-                      width: { xs: "100px", md: "100px", xl: "150px" }
-                    }}
-                    defaultValue={quantity}
-                    value={quantity}
-                    onBlur={() => {
-                      if (quantity === "") {
-                        setQuantity(1)
-                      }
-                    }}
-                    onChange={(e) => {
-                      const value = e.target.value
-                      if (value === "" || (!isNaN(value) && parseInt(value) >= 0)) {
-                        setQuantity(value === "" ? "" : parseInt(value))
-                      }
-                      if (value > product.quantity) {
-                        setQuantity(product.quantity)
-                      }
-                    }}
-                    type="number"
-                  />
-                  <Button startIcon={<AddIcon />} color="secondary" onClick={handleAddQty} />
-                </Box>
-                <Box display={"flex"}>
-                  <Typography mr={2} variant="h5">
-                    Stock:
-                  </Typography>
-                  <Typography variant="h5" fontWeight={"bold"}>
-                    {product.quantity}
-                  </Typography>
-                </Box>
-              </Box>
-              <Box display={"flex"} mt={4} justifyContent={"space-between"} alignItems={"center"}>
-                <Typography variant="h5" fontWeight={500}>
-                  Subtotal:
-                </Typography>
-                <Typography variant="h4" fontWeight={"bold"}>
-                  {total}
-                </Typography>
-              </Box>
-              <Button
-                sx={{
-                  width: "100%",
-                  bgcolor: "green",
-                  mt: "30px",
-                  "&:hover": {
-                    bgcolor: "darkgreen"
-                  },
-                  color: "white"
-                }}
-                onClick={addToCart}
-              >
-                Add to Cart
-              </Button>
+            <Box position={"sticky"} sx={{ minWidth: 0 }} height={"100%"}>
+              <Carousel>
+                {product.productImages?.map((item, i) => (
+                  <>
+                    <Box
+                      width={"100%"}
+                      key={i}
+                      component={"img"}
+                      sx={{ width: "100%", height: "600px", objectFit: "cover" }}
+                      src={BASE_URL + item.imageUrl}
+                    />
+                  </>
+                ))}
+              </Carousel>
             </Box>
-            <Box height={100} width={"100%"}></Box>
+            <Box mx={2}>
+              <Typography variant="h2" fontWeight={"bold"} sx={{ textAlign: { xs: "center" } }}>
+                {product.name}
+              </Typography>
+              <Typography
+                sx={{ mt: "15px", textAlign: { xs: "center" } }}
+                variant="h2"
+                fontWeight={"bold"}
+              >
+                Rp {price}
+              </Typography>
+              <Box height={200} display={"flex"} mt={10} flexDirection={"column"}>
+                <Box height={100} width={"50%"} position={"relative"} sx={{ left: "25%" }}>
+                  <Box
+                    position={"relative"}
+                    display={"flex"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                  >
+                    <Box display={"flex"}>
+                      <Button
+                        startIcon={<RemoveIcon />}
+                        color="secondary"
+                        onClick={handleReduceQty}
+                      />
+                      <TextField
+                        sx={{
+                          textAlign: "center",
+                          "& input": {
+                            textAlign: "center",
+                            "&::-webkit-inner-spin-button": {
+                              appearance: "none"
+                            },
+                            "&::-webkit-outer-spin-button": {
+                              appearance: "none"
+                            },
+                            "-moz-appearance": "textfield"
+                          },
+                          width: { xs: "100px", md: "100px", xl: "150px" }
+                        }}
+                        defaultValue={quantity}
+                        value={quantity}
+                        onBlur={() => {
+                          if (quantity === "") {
+                            setQuantity(1)
+                          }
+                        }}
+                        onChange={(e) => {
+                          const value = e.target.value
+                          if (value === "" || (!isNaN(value) && parseInt(value) >= 0)) {
+                            setQuantity(value === "" ? "" : parseInt(value))
+                          }
+                          if (value > product.quantity) {
+                            setQuantity(product.quantity)
+                          }
+                        }}
+                        type="number"
+                      />
+                      <Button startIcon={<AddIcon />} color="secondary" onClick={handleAddQty} />
+                    </Box>
+                    <Box display={"flex"}>
+                      <Typography mr={2} variant="h5">
+                        Stock:
+                      </Typography>
+                      <Typography variant="h5" fontWeight={"bold"}>
+                        {product.quantity}
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <Box
+                    display={"flex"}
+                    mt={4}
+                    justifyContent={"space-between"}
+                    alignItems={"center"}
+                  >
+                    <Typography variant="h5" fontWeight={500}>
+                      Subtotal:
+                    </Typography>
+                    <Typography variant="h4" fontWeight={"bold"}>
+                      {total}
+                    </Typography>
+                  </Box>
+                  <Button
+                    sx={{
+                      width: "100%",
+                      bgcolor: "green",
+                      mt: "30px",
+                      "&:hover": {
+                        bgcolor: "darkgreen"
+                      },
+                      color: "white"
+                    }}
+                    onClick={addToCart}
+                  >
+                    Add to Cart
+                  </Button>
+                </Box>
+                <Box height={100} width={"100%"}></Box>
+              </Box>
+              <Typography
+                textAlign={"center"}
+                sx={{ mt: "20px", borderBottom: "1px solid" }}
+                variant="h5"
+                fontWeight={600}
+              >
+                Detail
+              </Typography>
+              <Typography sx={{ mt: "20px" }} variant="h5" fontWeight={"bold"}>
+                {product.description}
+              </Typography>
+            </Box>
           </Box>
-          <Typography
-            textAlign={"center"}
-            sx={{ mt: "20px", borderBottom: "1px solid" }}
-            variant="h5"
-            fontWeight={600}
-          >
-            Detail
-          </Typography>
-          <Typography sx={{ mt: "20px" }} variant="h5" fontWeight={"bold"}>
-            {product.description}
-          </Typography>
-        </Box>
-      </Box>
-      <ToastContainer />
+          <ToastContainer />
+        </>
+      )}
     </>
   )
 }
