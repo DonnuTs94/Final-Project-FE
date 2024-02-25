@@ -1,6 +1,5 @@
 import { createContext, useMemo, useState } from "react"
 import { createTheme } from "@mui/material/styles"
-import { deepOrange, purple } from "@mui/material/colors"
 
 export const tokens = (mode) => ({
   ...(mode === "dark"
@@ -86,28 +85,28 @@ export const themeSettings = (mode) => {
       ...(mode === "dark"
         ? {
             primary: {
-              main: colors.primary[500]
+              main: "#535c91"
             },
             secondary: {
-              main: colors.secondary[500]
+              main: "#9290c3"
             },
             accent: {
-              main: colors.accent[900]
+              main: colors.accent[400]
             },
             background: {
-              default: "#222222",
-              paper: "#444444"
+              default: "#070f2b",
+              paper: "#1b1a55"
             }
           }
         : {
             primary: {
-              main: "#b3b3b3"
+              main: "#d1c1d7"
             },
             secondary: {
-              main: deepOrange[100]
+              main: "#f6cbd1"
             },
             accent: {
-              main: purple[900]
+              main: "#b4e9d6"
             },
             background: {
               default: "#f1f1f1",
@@ -176,15 +175,15 @@ export const useMode = () => {
   return [theme, colorMode]
 }
 
-export const button = () => {
-  dark: {
-    primary: "#e7e7e7"
-    secondary: "#475569"
-    accend: "#727272"
-  }
-  light: {
-    primary: "#161616"
-    secondary: "#8a8a8a"
-    accend: "#444444"
-  }
-}
+// export const button = () => {
+//   dark: {
+//     primary: "#e7e7e7"
+//     secondary: "#475569"
+//     accend: "#727272"
+//   }
+//   light: {
+//     primary: "#161616"
+//     secondary: "#8a8a8a"
+//     accend: "#444444"
+//   }
+// }

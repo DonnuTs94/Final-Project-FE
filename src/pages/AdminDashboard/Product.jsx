@@ -193,7 +193,7 @@ const ProductsPage = () => {
 
   return (
     <>
-      <Paper sx={{ width: "80vw", height: "100vh", overflow: "auto" }}>
+      <Paper sx={{ width: "100vw", height: "100vh", overflow: "auto" }}>
         <Box
           sx={{
             display: "flex",
@@ -202,7 +202,9 @@ const ProductsPage = () => {
             padding: "16px"
           }}
         >
-          <Typography variant="h2">Product</Typography>
+          <Typography variant="h2" mr="20px">
+            Product
+          </Typography>
           <Box display="flex" gap="10px" alignItems="center" bgcolor={"white"} borderRadius={2}>
             <InputBase
               sx={{
@@ -232,7 +234,7 @@ const ProductsPage = () => {
             color="primary"
             onClick={() => handleOpenModal()}
           >
-            Add Product
+            Add
           </Button>
         </Box>
         <TableContainer>
@@ -308,7 +310,7 @@ const ProductsPage = () => {
                       </TableCell>
                       <TableCell>{row.Category?.name}</TableCell>
                       <TableCell>
-                        <Box display={"flex"} gap={2}>
+                        <Box display="flex" justifyContent="center" gap={2}>
                           {editingProductId === row.id ? (
                             <>
                               <Button onClick={handleEdit} color="warning">
