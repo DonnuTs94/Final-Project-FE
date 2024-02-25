@@ -6,7 +6,7 @@ const Banners = () => {
 
   return (
     <>
-      <Box width="100vw" height="100vh">
+      <Box width="100vw">
         <Carousel swipe="true" navButtonsAlwaysInvisible="true" animation="fade" indicators={false}>
           {imagesBanner.map((image, i) => (
             <Box

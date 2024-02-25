@@ -47,7 +47,7 @@ const ProtectThisRoute = () => {
 
   // Redirect if userData is null or user is not an admin
   if (!userData || (userData.Role && userData.Role.name !== "admin")) {
-    return <Navigate to="/" />
+    return <Navigate to="/*" />
   }
 
   // Render Outlet if user is authenticated as an admin
