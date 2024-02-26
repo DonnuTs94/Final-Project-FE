@@ -10,50 +10,18 @@ import {
 import { DataGrid } from "@mui/x-data-grid"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getUserData } from "../../configs/store/slicer/userSlicer"
+import { getUserData, updateCart } from "../../configs/store/slicer/userSlicer"
 import { BASE_URL } from "../../configs/constant/baseUrl"
+import { selectItem } from "../../configs/store/slicer/cartSlicer"
+import { useNavigate } from "react-router-dom"
 
-const columns = [
-  { field: "no", headerName: "No.", width: 40 },
-  {
-    field: "product",
-    headerName: "Product",
-    width: 250,
-    resizable: true,
-    renderCell: (params) => <ProductDetail product={params.value} />
-  },
-  {
-    field: "price",
-    headerName: "Price",
-    width: 150
-  },
-  {
-    field: "quantity",
-    headerName: "Quantity",
-    align: "center",
-    width: 200,
-    innerHeight: 100,
-    outerHeight: 120,
-    renderCell: (params) => <CounterButton value={params.value} />
-  },
-  {
-    field: "subtotal",
-    headerName: "Subtotal",
-    width: 160
-  }
-]
-
-const CounterButton = ({ value }) => {
-  const [count, setCount] = useState(value || 0)
-
-  const handleIncrement = () => {
-    setCount(count + 1)
+const CounterButton = ({ value, productId, onChangeQty }) => {
+  const handleIncrement = async () => {
+    onChangeQty(value + 1, productId)
   }
 
   const handleDecrement = () => {
-    if (count > 0) {
-      setCount(count - 1)
-    }
+    onChangeQty(value - 1, productId)
   }
 
   return (
@@ -63,12 +31,12 @@ const CounterButton = ({ value }) => {
         size="medium"
         sx={{ fontSize: "20px", fontWeight: 600, paddingX: 2 }}
         onClick={handleDecrement}
-        disabled={count === 0}
+        disabled={value === 0}
       >
         -
       </IconButton>
       <Typography variant="body1" marginX={2}>
-        {count}
+        {value}
       </Typography>
       <IconButton
         color="secondary"
@@ -98,13 +66,59 @@ const ProductDetail = ({ product }) => {
 
 const CartPage = () => {
   const { userData, loading } = useSelector((state) => state.users)
+  const { selectedCarts } = useSelector((state) => state.carts)
   const [cart, setCart] = useState([])
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   useEffect(() => {
     getUserCart()
+    setCart(userData?.cart)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userData])
+  }, [userData, loading])
+
+  const columns = [
+    { field: "no", headerName: "No.", width: 40 },
+    {
+      field: "product",
+      headerName: "Product",
+      width: 250,
+      renderCell: (params) => <ProductDetail product={params.value} />
+    },
+    {
+      field: "price",
+      headerName: "Price",
+      width: 150
+    },
+    {
+      field: "quantity",
+      headerName: "Quantity",
+      align: "center",
+      width: 200,
+      innerHeight: 100,
+      outerHeight: 120,
+      renderCell: (params) => (
+        <CounterButton
+          value={params.value}
+          productId={params.row.productId}
+          onChangeQty={onChangeQty}
+        />
+      )
+    },
+    {
+      field: "subtotal",
+      headerName: "Subtotal",
+      width: 160
+    }
+  ]
+
+  const onChangeQty = (qty, productId) => {
+    dispatch(updateCart({ quantity: qty, productId: productId }))
+  }
+
+  const handleSelectItem = (selectionModel) => {
+    dispatch(selectItem(selectionModel))
+  }
 
   const getUserCart = () => {
     dispatch(getUserData)
@@ -114,6 +128,7 @@ const CartPage = () => {
   const rows = cart?.map((item, index) => {
     return {
       id: item.id,
+      productId: item.productId,
       no: index + 1,
       product: item.Product,
       price: item.Product.price,
@@ -121,8 +136,6 @@ const CartPage = () => {
       subtotal: item.total
     }
   })
-
-  console.log(rows)
 
   return (
     <Box paddingY={4} display="flex" gap={2} paddingX={10} marginX={"auto"} fontSize={5}>
@@ -143,6 +156,8 @@ const CartPage = () => {
             pageSizeOptions={[5, 10]}
             checkboxSelection
             disableRowSelectionOnClick
+            onRowSelectionModelChange={handleSelectItem}
+            rowSelectionModel={selectedCarts}
           />
         )}
       </Paper>
@@ -152,13 +167,16 @@ const CartPage = () => {
         <Typography variant="h5" display="flex" justifyContent="space-between">
           <Box component={"span"}>Subtotal:</Box>
           <Box component={"span"} fontWeight={600}>
-            {userData?.cart?.reduce((total, item) => total + item.total, 0)}
+            {userData?.cart
+              ?.filter((item) => selectedCarts.includes(item.id))
+              .reduce((total, item) => total + item.total, 0)}
           </Box>
         </Typography>
         <Button
           fullWidth
           color="inherit"
           sx={{ marginTop: 2, paddingY: 1, backgroundColor: "secondary.main" }}
+          onClick={() => navigate("/order")}
         >
           Checkout
         </Button>
