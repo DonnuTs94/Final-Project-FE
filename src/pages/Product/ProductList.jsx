@@ -8,6 +8,7 @@ import ActionAreaCard from "../../components/Card/CardProduct"
 import { CardMedia } from "@mui/material"
 import { Box } from "@mui/system"
 import { BASE_URL } from "../../configs/constant/baseUrl"
+import ProductCard from "../../components/Card/CardNew"
 
 const ProductList = () => {
   const [productData, setProductData] = useState([])
@@ -54,7 +55,7 @@ const ProductList = () => {
       }}
     >
       {productData.map((product) => (
-        <ActionAreaCard
+        <ProductCard
           key={product.id}
           onClick={() => handleProductClick(product)}
           image={product.productImages?.[0] && BASE_URL + product.productImages[0].imageUrl}
@@ -65,7 +66,7 @@ const ProductList = () => {
               <Typography>{product.name}</Typography>
             </Box>
           </Link>
-        </ActionAreaCard>
+        </ProductCard>
       ))}
       <Box>
         <Buttons

@@ -1,61 +1,37 @@
-import AspectRatio from "@mui/joy/AspectRatio"
-import Button from "@mui/joy/Button"
-import Card from "@mui/joy/Card"
-import CardContent from "@mui/joy/CardContent"
-import CardOverflow from "@mui/joy/CardOverflow"
-import Chip from "@mui/joy/Chip"
-import Link from "@mui/joy/Link"
-import Typography from "@mui/joy/Typography"
-import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward"
+import React from "react"
+import { Card, CardContent, CardMedia, Chip, Link, Typography, Button } from "@mui/material"
+import ArrowOutwardIcon from "@mui/icons-material/ArrowForward"
 
-const ProductCard = (props) => {
-  const { children } = props
+const ProductCard = ({ children, image, alt, price, quantity }) => {
   return (
-    <Card sx={{ width: 320, maxWidth: "100%", boxShadow: "lg" }}>
-      <CardOverflow>
-        <AspectRatio sx={{ minWidth: 200 }}>
-          <img
-            src="https://images.unsplash.com/photo-1593121925328-369cc8459c08?auto=format&fit=crop&w=286"
-            srcSet="https://images.unsplash.com/photo-1593121925328-369cc8459c08?auto=format&fit=crop&w=286&dpr=2 2x"
-            loading="lazy"
-            alt=""
-          />
-        </AspectRatio>
-      </CardOverflow>
+    <Card sx={{ maxWidth: 345, gap: 3, margin: 5, flexDirection: "row", boxShadow: 8 }}>
+      {image && <CardMedia component="img" height="140" alt={alt} src={image} />}
       <CardContent>
-        <Typography level="body-xs">{children}</Typography>
+        <Typography variant="body2">{children}</Typography>
         <Link
           href="#product-card"
-          fontWeight="md"
-          color="neutral"
-          textColor="text.primary"
-          overlay
-          endDecorator={<ArrowOutwardIcon />}
+          variant="body2"
+          color="primary"
+          underline="hover"
+          endIcon={<ArrowOutwardIcon />}
         >
           {children}
         </Link>
-
-        <Typography
-          level="title-lg"
-          sx={{ mt: 1, fontWeight: "xl" }}
-          endDecorator={
-            <Chip component="span" size="sm" variant="soft" color="success">
-              Lowest price
-            </Chip>
-          }
-        >
-          2,900 THB
+        <Typography variant="h6" sx={{ mt: 1, fontWeight: "bold" }}>
+          {price}
+          {/* <Chip size="small" label="Lowest price" color="success" sx={{ ml: 1 }} /> */}
         </Typography>
-        <Typography level="body-sm">
-          (Only <b>7</b> left in stock!)
+        <Typography variant="body2">
+          (Only <b>{quantity}</b> left in stock!)
         </Typography>
       </CardContent>
-      <CardOverflow>
-        <Button variant="solid" color="danger" size="lg">
+      <CardContent>
+        <Button variant="contained" color="error" size="large">
           Add to cart
         </Button>
-      </CardOverflow>
+      </CardContent>
     </Card>
   )
 }
+
 export default ProductCard
