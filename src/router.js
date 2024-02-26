@@ -9,6 +9,7 @@ import Homepage from "./pages/App/Homepage"
 import ProductDetail from "./pages/App/ProductDetail"
 import Page404 from "./pages/Page404"
 import ProtectThisRoute from "./pages/ProtectThisRoute"
+import CartPage from "./pages/App/CartPage"
 
 const Router = createBrowserRouter([
   {
@@ -16,7 +17,8 @@ const Router = createBrowserRouter([
     Component: AppLayout,
     children: [
       { path: "/", Component: Homepage },
-      { path: "/product/:id", Component: ProductDetail }
+      { path: "/product/:id", Component: ProductDetail },
+      { path: "/cart/", Component: CartPage }
     ]
   },
   {
