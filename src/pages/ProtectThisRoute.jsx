@@ -26,6 +26,10 @@ const ProtectThisRoute = () => {
     if (!userData) {
       dispatch(getUserData())
     }
+
+    if (localStorage.getItem("auth_token")) {
+      dispatch(getUserData())
+    }
   }, [dispatch, userData])
 
   useEffect(() => {

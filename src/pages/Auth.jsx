@@ -9,7 +9,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff"
 import InputLabel from "@mui/material/InputLabel"
 import Buttons from "../components/Button/ButtonTest"
 import FormControl from "@mui/material/FormControl"
-import { logout, userLogin } from "../configs/store/slicer/userSlicer"
+import { getUserData, logout, userLogin } from "../configs/store/slicer/userSlicer"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import MenuProfile from "../components/MenuProfile"
@@ -40,8 +40,10 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
   useEffect(() => {
     if (isLogout) {
       localStorage.removeItem("auth_token")
+    } else {
+      dispatch(getUserData())
     }
-  }, [isLogout])
+  }, [isLogout, dispatch])
 
   const userDataLogin = {
     email,
@@ -104,6 +106,7 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
     localStorage.removeItem("auth_token")
     setIsLogout(true)
     dispatch(logout())
+    navigate("/")
   }
 
   return (
