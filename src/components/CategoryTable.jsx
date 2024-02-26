@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import Paper from "@mui/material/Paper"
 import Table from "@mui/material/Table"
 import TableBody from "@mui/material/TableBody"
@@ -20,6 +20,8 @@ import DialogActions from "@mui/material/DialogActions"
 import DialogContent from "@mui/material/DialogContent"
 import DialogContentText from "@mui/material/DialogContentText"
 import DialogTitle from "@mui/material/DialogTitle"
+import { useTheme } from "@emotion/react"
+import { Typography } from "@mui/material"
 
 const columns = [
   { id: "no", label: "No", minWidth: "50px" },
@@ -28,6 +30,8 @@ const columns = [
 ]
 
 const CategoryPage = () => {
+  const theme = useTheme()
+
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [rows, setRows] = useState([])
@@ -85,8 +89,7 @@ const CategoryPage = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await axiosInstance.delete(`/categories/delete/${categoryToDelete.id}`, {
-      })
+      await axiosInstance.delete(`/categories/delete/${categoryToDelete.id}`, {})
       const updatedRows = rows.filter((row) => row.id !== categoryToDelete.id)
       setRows(updatedRows)
       setNotification({
@@ -109,13 +112,9 @@ const CategoryPage = () => {
       }
 
       if (selectedCategory) {
-        response = await axiosInstance.put(
-          `/categories/update/${selectedCategory.id}`,
-          {
-            name: categoryData
-          },
-
-        )
+        response = await axiosInstance.put(`/categories/update/${selectedCategory.id}`, {
+          name: categoryData
+        })
         const updatedRows = rows.map((row) =>
           row.id === selectedCategory.id ? { ...row, ...categoryData } : row
         )
@@ -126,13 +125,9 @@ const CategoryPage = () => {
           severity: "success"
         })
       } else {
-        response = await axiosInstance.post(
-          "/categories/create",
-          {
-            name: categoryData
-          },
-          
-        )
+        response = await axiosInstance.post("/categories/create", {
+          name: categoryData
+        })
         const newCategory = response.data
         setRows([...rows, newCategory])
         setNotification({
@@ -175,7 +170,7 @@ const CategoryPage = () => {
             padding: "16px"
           }}
         >
-          <h2>Categories</h2>
+          <Typography variant="h2">Categories</Typography>
           <Button
             variant="contained"
             color="primary"
@@ -193,7 +188,10 @@ const CategoryPage = () => {
                   <TableCell
                     key={column.id}
                     align={column.id === "actions" ? "right" : column.align}
-                    style={{ minWidth: column.minWidth }}
+                    style={{
+                      minWidth: column.minWidth,
+                      backgroundColor: theme.palette.secondary.main
+                    }}
                   >
                     {column.label}
                   </TableCell>

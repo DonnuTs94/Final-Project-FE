@@ -1,4 +1,4 @@
-import { Box, IconButton, InputBase, Typography, useTheme } from "@mui/material"
+import { Box, IconButton, InputBase, useTheme } from "@mui/material"
 import { ColorModeContext, tokens } from "../theme"
 import {
   DarkModeOutlined,
@@ -8,12 +8,13 @@ import {
 } from "@mui/icons-material"
 import { useContext } from "react"
 import AuthButton from "../pages/Auth"
-import SearchBar from "./Card/SearchBar"
+import { Link } from "react-router-dom"
 
 const Navbar = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
   const colorMode = useContext(ColorModeContext)
+
   return (
     <header>
       <nav>
@@ -23,18 +24,20 @@ const Navbar = () => {
           alignItems="center"
           paddingX={5}
           paddingY={3}
+          bgcolor={theme.palette.secondary.main}
         >
           <Box>
-            <Typography variant="h5">E-Commerce Logo</Typography>
+            <Link to={"/"}>
+              <Box component={"img"} src="/Logo.png" sx={{ height: "50px", width: "50px" }} />
+            </Link>
           </Box>
-          <Box display="flex" gap="20px" alignItems="center">
+          <Box display="flex" gap="20px" alignItems="center" bgcolor={"white"} borderRadius={2}>
             <InputBase
               sx={{
                 flex: 1,
                 paddingY: "2px",
                 paddingLeft: "20px",
-                fontSize: "14px",
-                borderRadius: "8px"
+                fontSize: "14px"
               }}
               placeholder="Search"
             />

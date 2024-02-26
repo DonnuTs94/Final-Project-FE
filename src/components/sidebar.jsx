@@ -10,20 +10,26 @@ import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined"
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined"
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined"
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined"
+import ReplyIcon from "@mui/icons-material/Reply"
 import { DarkModeOutlined, LightModeOutlined } from "@mui/icons-material"
+import { useDispatch } from "react-redux"
+import { logout } from "../configs/store/slicer/userSlicer"
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
-  const handleLogoutButton = () => {
-    if (title === "Logout") {
+  const dispatch = useDispatch()
+  const handleLogoutButton = (e) => {
+    if (e.target.innerText === "Logout") {
       localStorage.removeItem("auth_token")
-      setSelected(title)
+      dispatch(logout())
     }
-
-    setSelected(title)
   }
   return (
-    <MenuItem active={selected === title} onClick={() => handleLogoutButton} icon={icon}>
-      <Link to={to}>
+    <MenuItem active={selected === title} onClick={() => setSelected(title)} icon={icon}>
+      <Link
+        to={to}
+        // reloadDocument={(e) => (e.target.innerText === "Logout" ? true : false)}
+        onClick={(e) => handleLogoutButton(e)}
+      >
         <Typography>{title}</Typography>
       </Link>
     </MenuItem>
@@ -144,6 +150,13 @@ const SidebarPro = () => {
                 selected={selected}
                 setSelected={setSelected}
               />
+              <Item
+                title="Back to App"
+                to="/"
+                icon={<ReplyIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
             </Box>
             <Box sx={{ marginTop: "auto", display: "flex", flexDirection: "column" }}>
               {" "}
@@ -152,7 +165,7 @@ const SidebarPro = () => {
               </Typography>
               <Item
                 title="Logout"
-                to="/"
+                to="/admin"
                 icon={<MapOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}
