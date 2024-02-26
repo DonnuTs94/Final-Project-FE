@@ -8,6 +8,7 @@ import {
 } from "@mui/icons-material"
 import { useContext } from "react"
 import AuthButton from "../pages/Auth"
+import { Link } from "react-router-dom"
 
 const Navbar = () => {
   const theme = useTheme()
@@ -42,8 +43,10 @@ const Navbar = () => {
             </IconButton>
           </Box>
           <Box display="flex" gap={2}>
-            <IconButton>
-              <ShoppingCartOutlined sx={{ color: colors.primary[900] }} />
+            <IconButton sx={{ display: { xs: "none", sm: "flex" } }}>
+              <Link to={"/cart"}>
+                <ShoppingCartOutlined sx={{ color: colors.primary[900] }} />
+              </Link>
             </IconButton>
             <IconButton onClick={colorMode.toggleColorMode}>
               {theme.palette.mode === "dark" ? (
