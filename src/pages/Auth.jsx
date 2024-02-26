@@ -115,7 +115,20 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
       {!loading && userData ? (
         <MenuProfile handleLogout={handleLogout} />
       ) : (
-        <Buttons onClick={isOpen}>Login</Buttons>
+        <Buttons
+          onClick={isOpen}
+          sx={{
+            backgroundColor: "#4CAF50",
+            color: "white",
+            borderRadius: "5px",
+            transition: "background-color 0.3s ease-in-out",
+            "&:hover": {
+              backgroundColor: "#45a049"
+            }
+          }}
+        >
+          Login
+        </Buttons>
       )}
 
       <ModalParent
@@ -172,16 +185,27 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
                   }
                 />
               </FormControl>
-              <LoadingButton
-                variant="contained"
-                onClick={handleLogin}
-                sx={{ m: "1", top: "30%" }}
-                loading={loading}
-                disabled={loading}
-                loadingPosition="center"
-              >
-                Login
-              </LoadingButton>
+
+              <Box display="flex" justifyContent="center" mt={2}>
+                <Buttons
+                  onClick={handleLogin}
+                  sx={{
+                    backgroundColor: "#4CAF50",
+                    borderRadius: 50,
+                    border: 0,
+                    color: "white",
+                    height: 48,
+                    padding: "0 30px",
+                    boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+                    transition: "background-color 0.3s ease-in-out",
+                    "&:hover": {
+                      backgroundColor: "#45a049"
+                    }
+                  }}
+                >
+                  Login
+                </Buttons>
+              </Box>
             </Box>
           )}
 
@@ -189,10 +213,9 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
             <Box>
               {/* Register */}
               <Typography variant="h5"></Typography>
-              <Input
+              <TextField
                 sx={{
                   outline: "none",
-                  borderBottom: "1px solid #757879",
                   height: "40px",
                   backgroundColor: "transparent",
                   width: "100%",
@@ -204,11 +227,11 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
                 type="text"
                 onChange={(e) => setFirstName(e.target.value)}
                 placeholder="Firstname"
+                size="small"
               />
-              <Input
+              <TextField
                 sx={{
                   outline: "none",
-                  borderBottom: "1px solid #757879",
                   height: "40px",
                   backgroundColor: "transparent",
                   width: "100%",
@@ -220,11 +243,11 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
                 type="text"
                 onChange={(e) => setLastName(e.target.value)}
                 placeholder="Lastname"
+                size="small"
               />
-              <Input
+              <TextField
                 sx={{
                   outline: "none",
-                  borderBottom: "1px solid #757879",
                   height: "40px",
                   backgroundColor: "transparent",
                   width: "100%",
@@ -236,11 +259,11 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
                 type="text"
                 onChange={(e) => setEmailRegister(e.target.value)}
                 placeholder="Email"
+                size="small"
               />
-              <Input
+              <TextField
                 sx={{
                   outline: "none",
-                  borderBottom: "1px solid #757879",
                   height: "40px",
                   backgroundColor: "transparent",
                   width: "100%",
@@ -252,11 +275,11 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
                 type="password"
                 onChange={(e) => setPasswordRegister(e.target.value)}
                 placeholder="Password"
+                size="small"
               />
-              <Input
+              <TextField
                 sx={{
                   outline: "none",
-                  borderBottom: "1px solid #757879",
                   height: "40px",
                   backgroundColor: "transparent",
                   width: "100%",
@@ -268,10 +291,28 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
                 type="text"
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder="Address"
+                size="small"
               />
-              <Buttons onClick={handleRegister} sx={{ m: "1", top: "30%" }}>
-                Register
-              </Buttons>
+              <Box display="flex" justifyContent="center" mt={2} sx={{}}>
+                <Buttons
+                  onClick={handleRegister}
+                  sx={{
+                    backgroundColor: "#4CAF50",
+                    borderRadius: 50,
+                    border: 0,
+                    color: "white",
+                    height: 48,
+                    padding: "0 30px",
+                    boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+                    transition: "background-color 0.3s ease-in-out",
+                    "&:hover": {
+                      backgroundColor: "#45a049"
+                    }
+                  }}
+                >
+                  Register
+                </Buttons>
+              </Box>
             </Box>
           )}
         </Box>

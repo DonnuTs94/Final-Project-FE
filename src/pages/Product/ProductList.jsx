@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react"
-import { axiosInstance } from "../configs/api/api"
-import Buttons from "../components/Button/ButtonTest"
+import { axiosInstance } from "../../configs/api/api"
+import Buttons from "../../components/Button/ButtonTest"
 import { Typography } from "@mui/material"
 import { Link } from "react-router-dom"
 import ProductDetail from "./ProductDetail"
-import ActionAreaCard from "../components/Card/CardProductAgain"
+import ActionAreaCard from "../../components/Card/CardProductAgain"
 import { CardMedia } from "@mui/material"
 import { Box } from "@mui/system"
-import { BASE_URL } from "../configs/constant/baseUrl"
+import { BASE_URL } from "../../configs/constant/baseUrl"
 
 const ProductList = () => {
   const [productData, setProductData] = useState([])

@@ -7,17 +7,12 @@ const Buttons = (props) => {
     variant = "contained",
     type = "button",
     color = "secondary",
-    onClick = () => {}
+    onClick = () => {},
+    sx
   } = props
   return (
     <>
-      <Button
-        color={color}
-        variant={variant}
-        type={type}
-        onClick={onClick}
-        sx={{ borderRadius: "8px" }}
-      >
+      <Button color={color} variant={variant} type={type} onClick={onClick} sx={sx}>
         {children}
       </Button>
     </>

@@ -9,8 +9,8 @@ import Homepage from "./pages/App/Homepage"
 import ProductDetail from "./pages/App/ProductDetail"
 import Page404 from "./pages/Page404"
 import ProtectThisRoute from "./pages/ProtectThisRoute"
-import ProductList from "./pages/ProductList"
-import SearchResultsPage from "./pages/ProductResult"
+import ProductList from "./pages/Product/ProductList"
+import SearchResultsPage from "./pages/Product/ProductResult.jsx"
 import EditUserForm from "./pages/EditUser"
 
 const Router = createBrowserRouter([

@@ -1,10 +1,10 @@
 // SearchResultsPage.js
 import React, { useState, useEffect } from "react"
-import { axiosInstance } from "../configs/api/api"
-import ActionAreaCard from "../components/Card/CardProductAgain"
+import { axiosInstance } from "../../configs/api/api"
+import ActionAreaCard from "../../components/Card/CardProductAgain"
 import { Typography, Box } from "@mui/material"
 import { Link } from "react-router-dom"
-import { BASE_URL } from "../configs/constant/baseUrl"
+import { BASE_URL } from "../../configs/constant/baseUrl"
 import { useSelector } from "react-redux"
 
 const SearchResultsPage = () => {
