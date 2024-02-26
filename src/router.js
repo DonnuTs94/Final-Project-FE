@@ -12,6 +12,7 @@ import ProtectThisRoute from "./pages/ProtectThisRoute"
 import ProductList from "./pages/Product/ProductList"
 import SearchResultsPage from "./pages/Product/ProductResult.jsx"
 import EditUserForm from "./pages/EditUser"
+import CartPage from "./pages/App/CartPage.jsx"
 
 const Router = createBrowserRouter([
   {
@@ -22,6 +23,7 @@ const Router = createBrowserRouter([
       { path: "/test", Component: ProductList },
       { path: "/search", Component: SearchResultsPage },
       { path: "/product/:id", Component: ProductDetail },
+      { path: "/cart/", Component: CartPage },
       { path: "/user/edit", Component: EditUserForm }
     ]
   },

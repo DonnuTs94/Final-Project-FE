@@ -1,4 +1,4 @@
-import { Box, IconButton, InputBase, useTheme } from "@mui/material"
+import { Badge, Box, IconButton, InputBase, useTheme } from "@mui/material"
 import { ColorModeContext, tokens } from "../theme"
 import {
   DarkModeOutlined,
@@ -12,6 +12,7 @@ import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { changeQuery } from "../configs/store/slicer/querySlicer"
+import { useSelector } from "react-redux"
 
 const Navbar = () => {
   const theme = useTheme()
@@ -21,6 +22,7 @@ const Navbar = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
+  const { userData } = useSelector((state) => state.users)
   const handleSearchEnter = (e) => {
     if (e.key === "Enter") {
       dispatch(changeQuery(searchQuery))
@@ -67,8 +69,12 @@ const Navbar = () => {
             </IconButton>
           </Box>
           <Box display="flex" gap={2}>
-            <IconButton>
-              <ShoppingCartOutlined sx={{ color: colors.primary[900] }} />
+            <IconButton sx={{ display: { xs: "none", sm: "flex" } }}>
+              <Link to={"/cart"} reloadDocument>
+                <Badge badgeContent={userData?.cart?.length} color="primary">
+                  <ShoppingCartOutlined sx={{ color: colors.primary[900] }} />
+                </Badge>
+              </Link>
             </IconButton>
             <IconButton onClick={colorMode.toggleColorMode}>
               {theme.palette.mode === "dark" ? (

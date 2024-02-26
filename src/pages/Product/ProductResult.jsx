@@ -1,7 +1,7 @@
 // SearchResultsPage.js
 import React, { useState, useEffect } from "react"
 import { axiosInstance } from "../../configs/api/api"
-import ActionAreaCard from "../../components/Card/CardProductAgain"
+import ActionAreaCard from "../../components/Card/CardProduct"
 import { Typography, Box } from "@mui/material"
 import { Link } from "react-router-dom"
 import { BASE_URL } from "../../configs/constant/baseUrl"

@@ -1,42 +1,26 @@
 import React from "react"
-import Buttons from "../Button/ButtonTest"
-import { Card, CardMedia, CardContent, Typography, CardActionArea } from "@mui/material"
+import Card from "@mui/material/Card"
+import CardContent from "@mui/material/CardContent"
+import CardMedia from "@mui/material/CardMedia"
+import Typography from "@mui/material/Typography"
+import { CardActionArea } from "@mui/material"
 
-const CardProduct = (props) => {
-  const { children, img, name, price, handleAddToCart, id } = props
-
+const ActionAreaCard = ({ children, image, alt, onClick }) => {
   return (
-    <Card sx={{
-      gap: 2,
-      margin: 5,
-      transform: "translate(-50%, -50%)",
-      width: 400,
-      flexDirection: "column",
-      borderRadius: "5px",
-      height: 400
-    }} variant="outlined">
-      <CardMedia className="h-60 w-full object-cover" image={img} title="shoes" />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="h2">
-          {/* {name.substring(0, 20)}... */}
-          hello
-        </Typography>
-        <Typography variant="body2" color="textSecondary" component="p">
-          {/* {children.substring(0, 100)}... */}
-          hello
-        </Typography>
-      </CardContent>
-      <CardActionArea>
-        <Buttons size="small" color="primary" onClick={() => handleAddToCart(id)}>
-          Add to Cart
-        </Buttons>
-        <Typography variant="body2" color="textPrimary">
-          hello
-          {/* {price.toLocaleString('id-ID', { style: 'currency', currency: 'USD' })} */}
-        </Typography>
+    <Card sx={{ maxWidth: 345, gap: 3, margin: 5, flexDirection: "row" }}>
+      <CardActionArea onClick={onClick}>
+        {image && <CardMedia component="img" height="140" alt={alt} src={image} />}
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="div">
+            {children}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {children}
+          </Typography>
+        </CardContent>
       </CardActionArea>
     </Card>
   )
 }
 
-export default CardProduct
+export default ActionAreaCard
