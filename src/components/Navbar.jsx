@@ -1,4 +1,4 @@
-import { Box, IconButton, InputBase, useTheme } from "@mui/material"
+import { Badge, Box, IconButton, InputBase, useTheme } from "@mui/material"
 import { ColorModeContext, tokens } from "../theme"
 import {
   DarkModeOutlined,
@@ -9,11 +9,13 @@ import {
 import { useContext } from "react"
 import AuthButton from "../pages/Auth"
 import { Link } from "react-router-dom"
+import { useSelector } from "react-redux"
 
 const Navbar = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
   const colorMode = useContext(ColorModeContext)
+  const { userData } = useSelector((state) => state.users)
 
   return (
     <header>
@@ -47,8 +49,10 @@ const Navbar = () => {
           </Box>
           <Box display="flex" gap={2}>
             <IconButton sx={{ display: { xs: "none", sm: "flex" } }}>
-              <Link to={"/cart"}>
-                <ShoppingCartOutlined sx={{ color: colors.primary[900] }} />
+              <Link to={"/cart"} reloadDocument>
+                <Badge badgeContent={userData?.cart?.length} color="primary">
+                  <ShoppingCartOutlined sx={{ color: colors.primary[900] }} />
+                </Badge>
               </Link>
             </IconButton>
             <IconButton onClick={colorMode.toggleColorMode}>
