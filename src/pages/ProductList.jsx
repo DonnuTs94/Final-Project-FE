@@ -3,7 +3,7 @@ import { axiosInstance } from "../configs/api/api"
 import Buttons from "../components/Button/ButtonTest"
 import { Typography } from "@mui/material"
 import { Link } from "react-router-dom"
-import ProductDetail from "./ProductDetailTest"
+import ProductDetail from "./ProductDetail"
 import ActionAreaCard from "../components/Card/CardProductAgain"
 import { CardMedia } from "@mui/material"
 import { Box } from "@mui/system"
@@ -39,6 +39,11 @@ const ProductList = () => {
 
   const handleProductClick = (product) => {
     setSelectedProduct(product)
+    setOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setOpen(false)
   }
 
   return (
@@ -80,7 +85,9 @@ const ProductList = () => {
           Next
         </Buttons>
       </Box>
-      {selectedProduct && <ProductDetail product={selectedProduct} />}
+      {selectedProduct && (
+        <ProductDetail product={selectedProduct} onClose={handleCloseModal} open={open} />
+      )}
     </Box>
   )
 }

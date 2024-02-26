@@ -9,6 +9,9 @@ import Homepage from "./pages/App/Homepage"
 import ProductDetail from "./pages/App/ProductDetail"
 import Page404 from "./pages/Page404"
 import ProtectThisRoute from "./pages/ProtectThisRoute"
+import ProductList from "./pages/ProductList"
+import SearchResultsPage from "./pages/ProductResult"
+import EditUserForm from "./pages/EditUser"
 
 const Router = createBrowserRouter([
   {
@@ -17,8 +20,9 @@ const Router = createBrowserRouter([
     children: [
       { path: "/", Component: Homepage },
       { path: "/test", Component: ProductList },
-      { path: "/test2", Component: ProductSearchPage },
-      { path: "/product/:id", Component: ProductDetail }
+      { path: "/search", Component: SearchResultsPage },
+      { path: "/product/:id", Component: ProductDetail },
+      { path: "/user/edit", Component: EditUserForm }
     ]
   },
   {

@@ -11,7 +11,15 @@ import { TextField } from "@mui/material"
  * @return {JSX.Element} the common input component
  */
 
-const CommonInput = ({ variant = "outlined", label, type = "text", disable = false, value }) => {
+const CommonInput = ({
+  variant = "outlined",
+  label,
+  type = "text",
+  disable = false,
+  value,
+  onChange = () => {},
+  onKeyDown
+}) => {
   return (
     <>
       <TextField
@@ -21,6 +29,8 @@ const CommonInput = ({ variant = "outlined", label, type = "text", disable = fal
         label={label}
         type={type}
         value={value}
+        onChange={onChange}
+        onKeyDown={onKeyDown}
         sx={{ width: "100%", my: 1, borderRadius: "8px", "&:focus": { outline: "none" } }}
       />
     </>
