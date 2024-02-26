@@ -5,6 +5,7 @@ import {
   Button,
   CircularProgress,
   Input,
+  InputBase,
   Paper,
   Table,
   TableBody,
@@ -28,6 +29,8 @@ import { toast } from "react-toastify"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchAdminProductData } from "../../configs/store/slicer/adminProductSlicer"
 import { useTheme } from "@emotion/react"
+import SelectCategory from "../../components/admin/SelectCategory"
+import RefreshIcon from "@mui/icons-material/Refresh"
 
 const ProductsPage = () => {
   const [page, setPage] = useState(0)
@@ -39,14 +42,15 @@ const ProductsPage = () => {
   const [openDetailProduct, setOpenDetailProduct] = useState(false)
   const [editingProductId, setEditingProductId] = useState(false)
   const [editProduct, setEditProduct] = useState(null)
-  const [searchParams, setSearchParams] = useState("")
   const [searchName, setSearchName] = useState("")
+  const [searchCategory, setSearchCategory] = useState("")
+  const [category, setCategory] = useState([])
 
   const [saveProgress, setSaveProgress] = useState(false)
 
   const { error, loading } = useSelector((state) => state.product)
 
-  const productSelector = useSelector((state) => state.product.productData)
+  const productSelector = useSelector((state) => state.product.productData) || []
 
   const dispatch = useDispatch()
   const theme = useTheme()
@@ -127,7 +131,11 @@ const ProductsPage = () => {
       })
       setSaveProgress(true)
     } catch (err) {
-      console.log(err)
+      if (err.response.status === 500) {
+        toast.error("Something went wrong", {
+          position: "bottom-center"
+        })
+      }
     }
   }
 
@@ -141,17 +149,35 @@ const ProductsPage = () => {
     setEditProduct((prevProduct) => ({ ...prevProduct, quantity: value }))
   }
 
+  const getCategoryData = async () => {
+    try {
+      const response = await axiosInstance.get("categories")
+      setCategory(response.data.data)
+    } catch (err) {
+      if (err.name === "AxiosError") {
+        toast.error("Something went wrong", {
+          position: "bottom-center"
+        })
+      }
+    }
+  }
+
+  const handleClearFilter = () => {
+    setSearchName("")
+    setSearchCategory("")
+  }
+
   useEffect(() => {
     if (saveProgress) {
       dispatch(fetchAdminProductData())
       setSaveProgress(false)
     }
     dispatch(fetchAdminProductData())
-  }, [saveProgress, searchParams, dispatch])
+  }, [saveProgress, dispatch])
 
-  // useEffect(() => {
-  //   dispatch(fetchAdminProductData(searchParams))
-  // }, [dispatch, searchParams])
+  useEffect(() => {
+    getCategoryData()
+  }, [])
 
   if (error) {
     toast.error(error.message, {
@@ -159,19 +185,15 @@ const ProductsPage = () => {
     })
   }
 
-  const handleSearch = () => {
-    const queryParams = searchName // Buat objek queryParams dengan nama produk
-    setSearchParams(queryParams) // Perbarui searchParams
-    dispatch(fetchAdminProductData(queryParams))
-  }
-  console.log(searchParams)
-  console.log(productSelector)
+  const filteredProducts = productSelector?.filter((product) => {
+    const nameMatch = product.name.toLowerCase().includes(searchName.toLowerCase())
+    const categoryMatch = searchCategory ? product.categoryId === searchCategory : true
+    return nameMatch && categoryMatch
+  })
 
   return (
     <>
-      <Paper sx={{ width: "80vw", height: "100vh", overflow: "auto" }}>
-        <Input value={searchName} onChange={(e) => setSearchName(e.target.value)} />
-        <Button onClick={handleSearch}>Search</Button>
+      <Paper sx={{ width: "100vw", height: "100vh", overflow: "auto" }}>
         <Box
           sx={{
             display: "flex",
@@ -180,14 +202,39 @@ const ProductsPage = () => {
             padding: "16px"
           }}
         >
-          <Typography variant="h2">Product</Typography>
+          <Typography variant="h2" mr="20px">
+            Product
+          </Typography>
+          <Box display="flex" gap="10px" alignItems="center" bgcolor={"white"} borderRadius={2}>
+            <InputBase
+              sx={{
+                flex: 1,
+                paddingY: "2px",
+                paddingLeft: "20px",
+                fontSize: "14px",
+                border: "1px solid gray",
+                borderRadius: "5px",
+                height: "50px",
+                width: "250px"
+              }}
+              value={searchName}
+              onChange={(e) => setSearchName(e.target.value)}
+              placeholder="Search"
+            />
+            <SelectCategory
+              category={category}
+              categoryData={searchCategory}
+              handleCategory={(value) => setSearchCategory(value)}
+            />
+            <Button startIcon={<RefreshIcon />} onClick={handleClearFilter} />
+          </Box>
           <Button
             variant="contained"
             startIcon={<AddIcon />}
             color="primary"
             onClick={() => handleOpenModal()}
           >
-            Add Product
+            Add
           </Button>
         </Box>
         <TableContainer>
@@ -217,9 +264,7 @@ const ProductsPage = () => {
                   </TableCell>
                 </TableRow>
               ) : (
-                productSelector &&
-                productSelector.length > 0 &&
-                productSelector
+                filteredProducts
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => (
                     <TableRow hover key={index}>
@@ -265,7 +310,7 @@ const ProductsPage = () => {
                       </TableCell>
                       <TableCell>{row.Category?.name}</TableCell>
                       <TableCell>
-                        <Box display={"flex"} gap={2}>
+                        <Box display="flex" justifyContent="center" gap={2}>
                           {editingProductId === row.id ? (
                             <>
                               <Button onClick={handleEdit} color="warning">

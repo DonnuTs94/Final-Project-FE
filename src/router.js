@@ -7,6 +7,7 @@ import OrderPage from "./pages/AdminDashboard/Order"
 import UsersPage from "./pages/AdminDashboard/User"
 import Homepage from "./pages/App/Homepage"
 import ProductDetail from "./pages/App/ProductDetail"
+import Page404 from "./pages/Page404"
 import ProtectThisRoute from "./pages/ProtectThisRoute"
 import CartPage from "./pages/App/CartPage"
 
@@ -36,7 +37,8 @@ const Router = createBrowserRouter([
       { path: "orders", Component: OrderPage },
       { path: "users", Component: UsersPage }
     ]
-  }
+  },
+  { path: "*", Component: Page404 }
 ])
 
 export default Router

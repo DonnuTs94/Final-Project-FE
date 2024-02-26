@@ -7,6 +7,7 @@ import { BASE_URL } from "../../configs/constant/baseUrl"
 import ClearIcon from "@mui/icons-material/Clear"
 import ConfirmDialogDelete from "./ConfirmDialogDelete"
 import UploadIcon from "@mui/icons-material/Upload"
+import ArrowBackIcon from "@mui/icons-material/ArrowBack"
 
 const DetailProductModal = ({ open, close, productId }) => {
   const [product, setProduct] = useState([])
@@ -113,7 +114,7 @@ const DetailProductModal = ({ open, close, productId }) => {
                 </Carousel>
               )}
             </Box>
-            <Box mx={5} mt={2} textAlign={"center"}>
+            <Box mx={5} mt={2} textAlign={"center"} display={"flex"} flexDirection={"column"}>
               <Typography variant="h1" fontWeight="bold" sx={{ textTransform: "uppercase" }}>
                 {product?.name}
               </Typography>
@@ -130,19 +131,54 @@ const DetailProductModal = ({ open, close, productId }) => {
               <Typography variant="body1" mt={2}>
                 <strong>Description:</strong> {product?.description}
               </Typography>
-              <IconButton onClick={() => toggleVariant()}>
-                <ModeEditIcon /> Add/Delete Image
-              </IconButton>
+              {mode === "regular" ? (
+                <IconButton
+                  onClick={() => toggleVariant()}
+                  variant="outlined"
+                  sx={{
+                    width: "50%",
+                    mt: "20px",
+                    color: "black",
+                    border: "none",
+                    alignSelf: "center"
+                  }}
+                >
+                  <ModeEditIcon /> <Typography sx={{ ml: "5px" }}>Edit</Typography>
+                </IconButton>
+              ) : (
+                <IconButton
+                  onClick={() => toggleVariant()}
+                  variant="outlined"
+                  sx={{
+                    width: "50%",
+                    mt: "20px",
+                    color: "black",
+                    border: "none",
+                    alignSelf: "center"
+                  }}
+                >
+                  <ArrowBackIcon /> <Typography sx={{ ml: "5px" }}>Back</Typography>
+                </IconButton>
+              )}
               {mode === "edit" && (
-                <Box>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  flexDirection={"column"}
+                  justifyContent={"center"}
+                  height={"100%"}
+                  mt={"20px"}
+                  gap={2}
+                >
                   <Button
                     component="label"
-                    variant="contained"
+                    variant="outlined"
                     startIcon={<UploadIcon />}
                     type="file"
                     sx={{
-                      marginTop: "20px",
-                      width: "100%"
+                      color: "black",
+                      border: "none",
+                      width: "50%"
                     }}
                   >
                     Upload file
@@ -157,8 +193,7 @@ const DetailProductModal = ({ open, close, productId }) => {
                   <Button
                     onClick={handleSubmit}
                     sx={{
-                      marginTop: "20px",
-                      width: "100%"
+                      width: "50%"
                     }}
                     color="primary"
                     variant="contained"
