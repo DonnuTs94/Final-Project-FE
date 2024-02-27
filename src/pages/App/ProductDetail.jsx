@@ -1,22 +1,23 @@
 import { useParams } from "react-router-dom"
 import { axiosInstance } from "../../configs/api/api"
 import { useEffect, useState } from "react"
-import { Box, Button, TextField, Typography } from "@mui/material"
+import { Box, Button, CircularProgress, Stack, TextField, Typography } from "@mui/material"
 import Carousel from "react-material-ui-carousel"
 import { BASE_URL } from "../../configs/constant/baseUrl"
 import RemoveIcon from "@mui/icons-material/Remove"
 import AddIcon from "@mui/icons-material/Add"
-import { toast } from "react-toastify"
+import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { useDispatch } from "react-redux"
 import { getUserData } from "../../configs/store/slicer/userSlicer"
+import { convertPriceWithCommas } from "../../helper/formatter"
 
 const ProductDetail = () => {
-  const [product, setProduct] = useState([])
-  const [price, setPrice] = useState(1)
+  const [product, setProduct] = useState(null)
   const [quantity, setQuantity] = useState(1)
   const [total, setTotal] = useState(0)
   const [addingItem, setAddingItem] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   const params = useParams()
   const dispatch = useDispatch()
@@ -40,12 +41,10 @@ const ProductDetail = () => {
 
   const addToCart = async () => {
     try {
-      const response = await axiosInstance.post("/carts/create", {
+      await axiosInstance.post("/carts/create", {
         quantity: quantity,
         productId: product.id
       })
-
-      console.log(response)
 
       toast.success("Success add product to cart!", {
         position: "bottom-center"
@@ -79,26 +78,41 @@ const ProductDetail = () => {
     }
   }
 
-  const getProductDetail = async () => {
-    try {
-      const response = await axiosInstance.get(`product/${Number(params.id)}`)
+  useEffect(() => {
+    let isMounted = true
 
-      setProduct(response.data.data)
-    } catch (err) {
-      if (err.status === 500) {
-        toast.error("Something when wrong", {
-          position: "bottom-center"
-        })
+    const getProductDetail = async () => {
+      try {
+        const response = await axiosInstance.get(`product/${Number(params.id)}`)
+        if (isMounted) {
+          setProduct(response.data.data)
+          setLoading(false) // Set loading to false once data is fetched
+        }
+      } catch (err) {
+        if (err.status === 500) {
+          toast.error("Something went wrong", {
+            position: "bottom-center"
+          })
+        }
+        setLoading(false) // Set loading to false in case of error
       }
     }
-  }
 
-  const convertPriceWithCommas = (price) => {
-    if (typeof price === "number" && !isNaN(price)) {
-      return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+    const timeoutId = setTimeout(() => {
+      if (isMounted && loading) {
+        // Check if loading is still true after 2 seconds
+        setLoading(false) // Set loading to false after 2 seconds
+        setProduct(null) // Set product to null after 2 seconds
+      }
+    }, 5000)
+
+    getProductDetail()
+
+    return () => {
+      isMounted = false
+      clearTimeout(timeoutId) // Clear the timeout when component unmounts
     }
-    return ""
-  }
+  }, [params.id, addingItem, loading]) // Added loading to dependencies
 
   const renderNotFound = () => (
     <Box display="flex" justifyContent="center" alignItems="center">
@@ -118,23 +132,34 @@ const ProductDetail = () => {
   )
 
   useEffect(() => {
-    if (product) {
-      setPrice(convertPriceWithCommas(product.price))
-    }
-  }, [product])
+    setTotal(convertPriceWithCommas(product?.price * quantity))
+  }, [product?.price, quantity])
 
   useEffect(() => {
-    setTotal(convertPriceWithCommas(product.price * quantity))
-  }, [product.price, quantity])
-
-  useEffect(() => {
-    getProductDetail()
     dispatch(getUserData())
   }, [addingItem])
 
+  if (loading) {
+    return (
+      <Stack
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "60vh"
+        }}
+      >
+        <CircularProgress color="info" />
+        <CircularProgress color="info" />
+        <CircularProgress color="info" />
+      </Stack>
+    )
+  }
+
   return (
     <>
-      {!product || product.length === 0 ? (
+      {!product || product === null ? (
         renderNotFound()
       ) : (
         <>
@@ -153,7 +178,7 @@ const ProductDetail = () => {
             gap={5}
           >
             <Box position={"sticky"} sx={{ minWidth: 0 }} height={"100%"}>
-              <Carousel>
+              <Carousel indicators={false}>
                 {product.productImages?.map((item, i) => (
                   <>
                     <Box
@@ -176,7 +201,7 @@ const ProductDetail = () => {
                 variant="h2"
                 fontWeight={"bold"}
               >
-                Rp {price}
+                Rp {convertPriceWithCommas(product?.price)}
               </Typography>
               <Box height={200} display={"flex"} mt={10} flexDirection={"column"}>
                 <Box height={100} width={"50%"} position={"relative"} sx={{ left: "25%" }}>
@@ -281,6 +306,7 @@ const ProductDetail = () => {
           </Box>
         </>
       )}
+      <ToastContainer />
     </>
   )
 }

@@ -17,6 +17,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import ConfirmDialogDelete from "../../components/admin/ConfirmDialogDelete"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import { convertPriceWithCommas } from "../../helper/formatter"
 
 const CounterButton = ({ value, productId, cartId, onChangeQty, onConfirmDelete }) => {
   const handleIncrement = async () => {
@@ -221,9 +222,12 @@ const CartPage = () => {
         <Typography variant="h5" display="flex" justifyContent="space-between">
           <Box component={"span"}>Subtotal:</Box>
           <Box component={"span"} fontWeight={600}>
-            {userData?.cart
-              ?.filter((item) => selectedCarts.includes(item.id))
-              .reduce((total, item) => total + item.total, 0)}
+            Rp{" "}
+            {convertPriceWithCommas(
+              userData?.cart
+                ?.filter((item) => selectedCarts.includes(item.id))
+                .reduce((total, item) => total + item.total, 0)
+            )}
           </Box>
         </Typography>
         <Button
