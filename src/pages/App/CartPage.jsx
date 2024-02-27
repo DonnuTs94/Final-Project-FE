@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react"
 import {
   Box,
   Button,
@@ -8,7 +9,6 @@ import {
   Typography
 } from "@mui/material"
 import { DataGrid } from "@mui/x-data-grid"
-import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { deleteItemInCart, getUserData, updateCart } from "../../configs/store/slicer/userSlicer"
 import { BASE_URL } from "../../configs/constant/baseUrl"
@@ -174,6 +174,14 @@ const CartPage = () => {
     }
   })
 
+  const handleCheckout = () => {
+    if (selectedCarts.length > 0) {
+      navigate("/order", { state: { selectedItems: selectedCarts } })
+    } else {
+      alert("Please select at least one item before proceeding to checkout.")
+    }
+  }
+
   return (
     <Box paddingY={4} display="flex" gap={2} paddingX={10} marginX={"auto"} fontSize={5}>
       <Paper
@@ -228,6 +236,8 @@ const CartPage = () => {
         <Button
           fullWidth
           color="inherit"
+          sx={{ marginTop: 2, paddingY: 1, backgroundColor: "secondary.main" }}
+          onClick={handleCheckout}
           sx={{ marginTop: 2, paddingY: 1, backgroundColor: "secondary.main", fontWeight: 600 }}
           onClick={() => navigate("/order")}
         >
