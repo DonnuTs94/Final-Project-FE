@@ -15,7 +15,8 @@ import {
   ListItemSecondaryAction,
   Divider,
   Grid,
-  Paper
+  Paper,
+  Box
 } from "@mui/material"
 import Autocomplete from "@mui/material/Autocomplete"
 import { axiosInstance } from "../../configs/api/api"
@@ -312,7 +313,13 @@ const Order = () => {
             </Paper>
           )}
           {showPayment && (
-            <div>
+            <Box
+              display="flex"
+              flexDirection="column"
+              gap={4}
+              justifyContent="center"
+              alignItems="center"
+            >
               <Typography variant="h5" gutterBottom>
                 Select Payment Method:
               </Typography>
@@ -322,7 +329,7 @@ const Order = () => {
               <Button variant="contained" color="secondary" onClick={() => setShowPayment(false)}>
                 Cancel
               </Button>
-            </div>
+            </Box>
           )}
         </Grid>
       </Grid>
