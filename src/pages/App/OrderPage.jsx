@@ -15,7 +15,8 @@ import {
   ListItemSecondaryAction,
   Divider,
   Grid,
-  Paper
+  Paper,
+  Box
 } from "@mui/material"
 import Autocomplete from "@mui/material/Autocomplete"
 import { axiosInstance } from "../../configs/api/api"
@@ -46,6 +47,13 @@ const Order = () => {
     calculateTotalProduct()
   }, [cartItems])
 
+  useEffect(() => {
+    const selectedServiceCost = cityCosts[0]?.costs.filter(
+      (service) => service.service === shippingOption
+    )[0]?.cost[0]?.value
+    setTotalShipping(selectedServiceCost)
+  }, [shippingOption])
+
   const fetchProvinces = async () => {
     try {
       const response = await axiosInstance.get("/shippingCost/province")
@@ -59,6 +67,7 @@ const Order = () => {
     try {
       const response = await axiosInstance.get(`/shippingCost/city?province=${provinceId}`)
       setCities(response.data.data)
+      setShippingOption("")
     } catch (error) {
       console.error("Error fetching cities:", error)
     }
@@ -110,7 +119,7 @@ const Order = () => {
     if (value) {
       try {
         const response = await axiosInstance.post(`/shippingCost/cost`, {
-          origin: selectedProvince.province_id,
+          origin: 501,
           destination: value.city_id,
           weight,
           courier: "jne"
@@ -119,11 +128,10 @@ const Order = () => {
           setCityCosts(response.data.data)
 
           // Calculate total shipping
-          const shippingCost = response.data.data.reduce((acc, curr) => {
-            const selectedService = curr.costs[0]
-            return acc + selectedService.cost[0].value
-          }, 0)
-          setTotalShipping(shippingCost)
+          // const shippingCost = response.data.data.reduce((acc, curr) => {
+          //   const selectedService = curr.costs[0]
+          //   return acc + selectedService.cost[0].value
+          // }, 0)
         } else {
           console.error("Invalid response structure:", response.data)
         }
@@ -131,6 +139,10 @@ const Order = () => {
         console.error("Error fetching city costs:", error)
       }
     }
+  }
+
+  const onHandleShippingOptionChange = (event) => {
+    setShippingOption(event.target.value)
   }
 
   // Tambahkan validasi sebelum membuat pesanan
@@ -234,16 +246,15 @@ const Order = () => {
             <Select
               label="Shipping Option"
               value={shippingOption}
-              onChange={(e) => setShippingOption(e.target.value)}
+              onChange={onHandleShippingOptionChange}
             >
               {cityCosts.map((cost) =>
-                cost.costs.map((service) =>
-                  ["REG", "OKE"].includes(service.service) ? (
-                    <MenuItem key={`${service.service}`} value={`${service.service}`}>
-                      {cost.name} - {service.service} ({cost.code})
-                    </MenuItem>
-                  ) : null
-                )
+                cost.costs.map((service) => (
+                  <MenuItem key={`${service.service}`} value={`${service.service}`}>
+                    {cost.name} - {service.service} ({cost.code}) - {service.cost[0].value} (ETD:{" "}
+                    {service.cost[0].etd})
+                  </MenuItem>
+                ))
               )}
             </Select>
           </FormControl>
@@ -291,18 +302,24 @@ const Order = () => {
 
               <Divider />
               <Typography variant="h6" gutterBottom style={{ marginTop: 10 }}>
-                Total Product: ${totalProduct}
+                Total Product: Rp {totalProduct}
               </Typography>
               <Typography variant="h6" gutterBottom style={{ marginTop: 10 }}>
-                Total Shipping: ${totalShipping}
+                Total Shipping: Rp {totalShipping}
               </Typography>
               <Typography variant="h6" gutterBottom style={{ marginTop: 10 }}>
-                Grand Total: ${grandTotal}
+                Grand Total: {isNaN(grandTotal) ? "-" : `Rp ${grandTotal}`}
               </Typography>
             </Paper>
           )}
           {showPayment && (
-            <div>
+            <Box
+              display="flex"
+              flexDirection="column"
+              gap={4}
+              justifyContent="center"
+              alignItems="center"
+            >
               <Typography variant="h5" gutterBottom>
                 Select Payment Method:
               </Typography>
@@ -312,7 +329,7 @@ const Order = () => {
               <Button variant="contained" color="secondary" onClick={() => setShowPayment(false)}>
                 Cancel
               </Button>
-            </div>
+            </Box>
           )}
         </Grid>
       </Grid>
