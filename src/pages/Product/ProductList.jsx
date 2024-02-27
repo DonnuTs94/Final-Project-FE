@@ -3,7 +3,6 @@ import { axiosInstance } from "../../configs/api/api"
 import Buttons from "../../components/Button/ButtonTest"
 import { Typography, Pagination } from "@mui/material"
 import { Link } from "react-router-dom"
-import ProductDetail from "./ProductDetail"
 import { Box } from "@mui/system"
 import { BASE_URL } from "../../configs/constant/baseUrl"
 import ProductCard from "../../components/Card/CardNew"
@@ -51,8 +50,9 @@ const ProductList = () => {
           onClick={() => handleProductClick(product)}
           image={product.productImages?.[0] && BASE_URL + product.productImages[0].imageUrl}
           alt={product.name}
-          price={product.price}
+          price={convertPriceWithCommas(product.price)}
           quantity={product.quantity}
+          productId={product.id}
           category={product.categoryId && product.Category.name}
         >
           <Link key={product.id} onClick={() => handleProductClick(product)}>
