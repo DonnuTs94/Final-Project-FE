@@ -1,50 +1,30 @@
-import {
-  Box,
-  Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
-  Paper,
-  Typography,
-  useTheme
-} from "@mui/material"
-import { axiosInstance } from "../configs/api/api"
-import { useEffect, useState } from "react"
+import { Box, Card, CardActionArea, CardContent, CardMedia, Paper, Typography } from "@mui/material"
+import { useEffect } from "react"
 import { BASE_URL } from "../configs/constant/baseUrl"
 import { Link } from "react-router-dom"
+import { convertPriceWithCommas } from "../helper/formatter"
+import { useDispatch, useSelector } from "react-redux"
+import { fetchProductData } from "../configs/store/slicer/productSlicer"
 
 const CardProductHome = () => {
-  const [products, setProducts] = useState([])
+  const dispatch = useDispatch()
 
-  const theme = useTheme()
-  const getProductData = async () => {
-    try {
-      const response = await axiosInstance("/product")
-      setProducts(response.data.data)
-    } catch (err) {
-      console.log(err)
-    }
-  }
+  const products = useSelector((state) => state.product.productData) || []
 
-  const convertPriceWithCommas = (price) => {
-    if (typeof price === "number" && !isNaN(price)) {
-      return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-    }
-    return ""
+  const params = {
+    category: 6
   }
 
   useEffect(() => {
-    getProductData()
+    dispatch(fetchProductData(params))
   }, [])
+
   return (
     <>
-      <Box px={{ xl: 15, s: 5 }} mt={{ xs: 2 }}>
-        <Paper elevation={6} sx={{ borderRadius: "10px" }}>
+      <Box mt={{ xs: 2 }}>
+        <Paper elevation={6}>
           <Box pt={2} mr={2} display={"flex"} gap={3} alignItems={"center"} ml={2}>
-            <Typography variant="h2">Product List</Typography>
-            <Typography sx={{ cursor: "pointer" }} color={theme.palette.secondary.main}>
-              See More
-            </Typography>
+            <Typography variant="h2">Newest Product</Typography>
           </Box>
           <Box
             display={"grid"}
@@ -52,30 +32,37 @@ const CardProductHome = () => {
             gap={2}
             p={2}
             sx={{
-              "@media (min-width: 600px)": {
-                gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))"
+              height: "10%",
+              overflowX: "auto",
+              "@media (min-width: 200px)": {
+                gridTemplateColumns: "repeat(5, minmax(50%, 1fr))"
+              },
+              "@media (min-width: 1080px)": {
+                gridTemplateColumns: "repeat(5, minmax(20%, 1fr))"
               },
               "@media (min-width: 1280px)": {
-                gridTemplateColumns: "repeat( minmax(250px, 1fr))", // Adjusted card width for larger screens
-                maxWidth: "1280px", // Adjusted maximum width for larger screens
-                margin: "0 auto" // Centering the grid
+                gridTemplateColumns: "repeat(5, minmax(20%, 1fr))",
+                maxWidth: "1440px",
+                margin: "0 auto"
               }
             }}
           >
             {products.slice(0, 5).map((product, i) => (
-              <Card key={i} sx={{ width: "100%" }}>
+              <Card key={i} sx={{ minWidth: "150px", maxWidth: "100%" }}>
                 <Link to={`product/${product.id}`}>
                   <CardActionArea>
                     <CardMedia
-                      sx={{ width: "100%", height: "200px" }}
+                      sx={{ height: "200px", maxWidth: "100%", objectFit: "contain" }}
                       component={"img"}
                       src={BASE_URL + product?.productImages[0]?.imageUrl}
                     />
                     <CardContent>
                       <Typography
                         variant="h3"
-                        fontWeight={"bold"}
-                        sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
+                        fontWeight={600}
+                        sx={{
+                          overflow: "hidden"
+                        }}
                       >
                         {product.name}
                       </Typography>
@@ -84,6 +71,9 @@ const CardProductHome = () => {
                       </Typography>
                       <Typography variant="h5" mt={1} fontWeight={"600"}>
                         Stock: {product.quantity}
+                      </Typography>{" "}
+                      <Typography variant="h5" mt={1} fontWeight={"600"}>
+                        {product.Category.name}
                       </Typography>
                     </CardContent>
                   </CardActionArea>

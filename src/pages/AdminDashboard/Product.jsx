@@ -48,9 +48,9 @@ const ProductsPage = () => {
 
   const [saveProgress, setSaveProgress] = useState(false)
 
-  const { error, loading } = useSelector((state) => state.product)
+  const { error, loading } = useSelector((state) => state.adminProduct)
 
-  const productSelector = useSelector((state) => state.product.productData) || []
+  const productSelector = useSelector((state) => state.adminProduct.productData) || []
 
   const dispatch = useDispatch()
   const theme = useTheme()

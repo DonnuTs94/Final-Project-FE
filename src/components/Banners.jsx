@@ -6,14 +6,20 @@ const Banners = () => {
 
   return (
     <>
-      <Box width="100vw">
-        <Carousel swipe="true" navButtonsAlwaysInvisible="true" animation="fade" indicators={false}>
+      <Box width="100%">
+        <Carousel
+          swipe="true"
+          navButtonsAlwaysInvisible="true"
+          duration={"2000"}
+          animation="fade"
+          indicators={false}
+        >
           {imagesBanner.map((image, i) => (
             <Box
               key={i}
               component={"img"}
               src={image}
-              sx={{ objectFit: "cover", width: "100%", height: "100%" }}
+              sx={{ objectFit: "cover", width: "100%", height: "100%", borderRadius: "10px" }}
             />
           ))}
         </Carousel>

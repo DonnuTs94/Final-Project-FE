@@ -5,7 +5,7 @@ import CardProductHome from "../../components/CardProductHome"
 const Homepage = () => {
   return (
     <>
-      <Box display={"flex"} flexDirection={"column"}>
+      <Box display={"flex"} flexDirection={"column"} px={5} pt={3}>
         <Banners />
         <CardProductHome />
       </Box>
