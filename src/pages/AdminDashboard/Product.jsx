@@ -31,6 +31,7 @@ import { fetchAdminProductData } from "../../configs/store/slicer/adminProductSl
 import { useTheme } from "@emotion/react"
 import SelectCategory from "../../components/admin/SelectCategory"
 import RefreshIcon from "@mui/icons-material/Refresh"
+import "react-toastify/dist/ReactToastify.css"
 
 const ProductsPage = () => {
   const [page, setPage] = useState(0)
@@ -48,9 +49,9 @@ const ProductsPage = () => {
 
   const [saveProgress, setSaveProgress] = useState(false)
 
-  const { error, loading } = useSelector((state) => state.product)
+  const { error, loading } = useSelector((state) => state.adminProduct)
 
-  const productSelector = useSelector((state) => state.product.productData) || []
+  const productSelector = useSelector((state) => state.adminProduct.productData) || []
 
   const dispatch = useDispatch()
   const theme = useTheme()

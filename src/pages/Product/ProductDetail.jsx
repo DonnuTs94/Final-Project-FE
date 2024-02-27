@@ -1,5 +1,4 @@
 import { Typography } from "@mui/material"
-import React from "react"
 import ModalParent from "../../components/Modal"
 import { BASE_URL } from "../../configs/constant/baseUrl"
 
