@@ -176,11 +176,19 @@ const CartPage = () => {
   }
 
   return (
-    <Box paddingY={4} display="flex" gap={2} paddingX={10} marginX={"auto"} fontSize={5}>
+    <Box
+      paddingY={4}
+      display="flex"
+      flexDirection={{ xs: "column", lg: "row" }}
+      gap={2}
+      paddingX={{ xs: 2, sm: 10 }}
+      marginX={"auto"}
+      fontSize={5}
+    >
       <Paper
         sx={{
           minHeight: "50vh",
-          width: "75%",
+          width: { xs: "100%", lg: "75%" },
           display: "flex",
           justifyContent: "center",
           alignItems: "center"
@@ -209,7 +217,7 @@ const CartPage = () => {
           />
         )}
       </Paper>
-      <Paper sx={{ height: "fit-content", width: "25%", padding: 2 }}>
+      <Paper sx={{ height: "fit-content", width: { xs: "100%", lg: "25%" }, padding: 2 }}>
         <Typography variant="h3">Cart Totals</Typography>
         <Divider sx={{ marginBottom: 8 }} />
         <Typography variant="h5" display="flex" justifyContent="space-between">
