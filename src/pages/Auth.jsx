@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import IconButton from "@mui/material/IconButton"
 import { Box, Tab, Tabs, TextField, Typography, Input } from "@mui/material"
-import { LoadingButton } from "@mui/lab"
 import ModalParent from "../components/Modal"
 import { axiosInstance } from "../configs/api/api"
 import Visibility from "@mui/icons-material/Visibility"
@@ -88,10 +87,8 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
         console.error("Register Failed")
       } else {
         console.log("Register success")
-        window.location.href = "/"
+        navigate("/")
       }
-      // setAlertMessage("User successfull created", response)
-      // setAlertStatus("success")
       setFirstName("")
       setLastName("")
       setEmailRegister("")
@@ -101,10 +98,6 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
       console.error("Error during register:", err)
     }
   }
-  // const handleLogout = () => {
-  //   localStorage.removeItem("auth_token")
-  //   window.location.href = "/"
-  // }
 
   const handleLogout = () => {
     localStorage.removeItem("auth_token")
