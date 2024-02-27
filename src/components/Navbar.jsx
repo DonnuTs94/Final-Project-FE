@@ -6,7 +6,7 @@ import {
   Search,
   ShoppingCartOutlined
 } from "@mui/icons-material"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import AuthButton from "../pages/Auth"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
@@ -18,11 +18,16 @@ const Navbar = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
   const colorMode = useContext(ColorModeContext)
+  const [cartCount, setCartCount] = useState(0)
   const [searchQuery, setSearchQuery] = useState("")
   const navigate = useNavigate()
   const dispatch = useDispatch()
-
   const { userData } = useSelector((state) => state.users)
+
+  useEffect(() => {
+    setCartCount(userData?.cart?.length)
+  }, [userData])
+
   const handleSearchEnter = (e) => {
     if (e.key === "Enter") {
       dispatch(changeQuery(searchQuery))
@@ -71,7 +76,7 @@ const Navbar = () => {
           <Box display="flex" gap={2}>
             <IconButton sx={{ display: { xs: "none", sm: "flex" } }}>
               <Link to={"/cart"} reloadDocument>
-                <Badge badgeContent={userData?.cart?.length} color="primary">
+                <Badge badgeContent={cartCount} color="primary">
                   <ShoppingCartOutlined sx={{ color: colors.primary[900] }} />
                 </Badge>
               </Link>
