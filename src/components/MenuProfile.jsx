@@ -1,10 +1,14 @@
-import { Logout } from "@mui/icons-material"
+import { useTheme } from "@emotion/react"
+import { DarkModeOutlined, LightModeOutlined, Logout } from "@mui/icons-material"
 import { Button, Divider, ListItemIcon, Menu, MenuItem, Tooltip } from "@mui/material"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
+import { ColorModeContext } from "../theme"
 
 const MenuProfile = ({ handleLogout }) => {
+  const theme = useTheme()
+  const colorMode = useContext(ColorModeContext)
   const { userData } = useSelector((state) => state.users)
   const [showDashboardMenu, setDashboardMenu] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
@@ -25,7 +29,13 @@ const MenuProfile = ({ handleLogout }) => {
         <Button
           onClick={handleClick}
           color="inherit"
-          sx={{ ml: 2, p: 1, fontWeight: "bold" }}
+          sx={{
+            ml: 2,
+            p: 1,
+            width: "max-content",
+            fontWeight: "bold",
+            fontSize: { xs: "10px", sm: "12px" }
+          }}
           aria-controls={open ? "account-menu" : undefined}
           aria-haspopup="true"
           aria-expanded={open ? "true" : undefined}
@@ -70,12 +80,26 @@ const MenuProfile = ({ handleLogout }) => {
       >
         <MenuItem onClick={handleClose}>Edit Profile</MenuItem>
         <MenuItem onClick={handleClose}>My account</MenuItem>
+        <MenuItem onClick={handleClose} sx={{ display: { xs: "flex", sm: "none" } }}>
+          <Link to={"/cart"}>My Cart ({userData?.cart?.length})</Link>
+        </MenuItem>
         {showDashboardMenu ? (
           <MenuItem onClick={handleClose}>
             <Link to={"/admin"}>Admin Dashboard</Link>
           </MenuItem>
         ) : null}
         <Divider />
+        <MenuItem
+          sx={{ display: { xs: "flex", sm: "none" }, justifyContent: "space-between" }}
+          onClick={colorMode.toggleColorMode}
+        >
+          {theme.palette.mode === "dark" ? "Light" : "Dark"}
+          {theme.palette.mode === "dark" ? (
+            <LightModeOutlined sx={{ color: "orange" }} />
+          ) : (
+            <DarkModeOutlined sx={{ color: "indigo" }} />
+          )}
+        </MenuItem>
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />

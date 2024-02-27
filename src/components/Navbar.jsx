@@ -34,13 +34,16 @@ const Navbar = () => {
           display="flex"
           justifyContent="space-between"
           alignItems="center"
-          paddingX={5}
-          paddingY={3}
+          sx={{ paddingX: { xs: 2, sm: 5 }, paddingY: { xs: 2, sm: 3 } }}
           bgcolor={theme.palette.secondary.main}
         >
-          <Box>
+          <Box marginRight={{ xs: 4, sm: 0 }}>
             <Link to={"/"}>
-              <Box component={"img"} src="/Logo.png" sx={{ height: "50px", width: "50px" }} />
+              <Box
+                component={"img"}
+                src="/Logo.png"
+                sx={{ height: "50px", width: "50px", objectFit: "cover" }}
+              />
             </Link>
           </Box>
           <Box display="flex" gap="20px" alignItems="center" bgcolor={"white"} borderRadius={2}>
@@ -49,7 +52,8 @@ const Navbar = () => {
                 flex: 1,
                 paddingY: "2px",
                 paddingLeft: "20px",
-                fontSize: "14px"
+                fontSize: "14px",
+                color: "primary.dark"
               }}
               value={searchQuery}
               onKeyDown={handleSearchEnter}
@@ -58,12 +62,15 @@ const Navbar = () => {
             />
 
             <IconButton onClick={handleSearchClick}>
-              <Search fontSize="small" />
+              <Search fontSize="small" color="primary" />
             </IconButton>
           </Box>
-          <Box display="flex" gap={2}>
+          <Box display="flex" justifyContent="space-between" alignItems="center">
             <ShoppingCart />
-            <IconButton onClick={colorMode.toggleColorMode}>
+            <IconButton
+              sx={{ display: { xs: "none", sm: "block" }, marginLeft: 2 }}
+              onClick={colorMode.toggleColorMode}
+            >
               {theme.palette.mode === "dark" ? (
                 <LightModeOutlined sx={{ color: "orange" }} />
               ) : (
