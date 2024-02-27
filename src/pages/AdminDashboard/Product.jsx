@@ -31,6 +31,7 @@ import { fetchAdminProductData } from "../../configs/store/slicer/adminProductSl
 import { useTheme } from "@emotion/react"
 import SelectCategory from "../../components/admin/SelectCategory"
 import RefreshIcon from "@mui/icons-material/Refresh"
+import "react-toastify/dist/ReactToastify.css"
 
 const ProductsPage = () => {
   const [page, setPage] = useState(0)

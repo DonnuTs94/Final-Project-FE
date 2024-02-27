@@ -1,6 +1,7 @@
 import { Box } from "@mui/material"
 import Banners from "../../components/Banners"
 import CardProductHome from "../../components/CardProductHome"
+import ProductList from "../Product/ProductList"
 
 const Homepage = () => {
   return (
@@ -9,6 +10,7 @@ const Homepage = () => {
         <Banners />
         <CardProductHome />
       </Box>
+      <ProductList />
     </>
   )
 }
