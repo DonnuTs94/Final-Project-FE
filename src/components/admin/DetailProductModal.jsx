@@ -68,6 +68,13 @@ const DetailProductModal = ({ open, close, productId }) => {
     }
   }
 
+  const convertPriceWithCommas = (price) => {
+    if (typeof price === "number" && !isNaN(price)) {
+      return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+    }
+    return ""
+  }
+
   const toggleVariant = useCallback(() => {
     setMode((currentMode) => (currentMode === "regular" ? "edit" : "regular"))
   }, [])
@@ -120,7 +127,7 @@ const DetailProductModal = ({ open, close, productId }) => {
               </Typography>
 
               <Typography variant="h4" fontWeight="bold" mt={2} sx={{ textTransform: "uppercase" }}>
-                Price: ${product?.price}
+                Price: {convertPriceWithCommas(product?.price)}
               </Typography>
               <Typography variant="h4" fontWeight="bold" mt={1}>
                 Quantity: {product?.quantity} unit
