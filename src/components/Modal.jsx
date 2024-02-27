@@ -10,11 +10,11 @@ const ModalParent = ({ title, onClose, onOpen, children }) => {
           left: "50%",
           transform: "translate(-50%, -50%)",
           width: 700,
+          height: 400,
           bgcolor: "background.paper",
           display: "flex",
           flexDirection: "column",
-          borderRadius: "5px",
-          height: 400
+          borderRadius: "5px"
         }}
       >
         <Typography variant="h2" sx={{ mt: "10px", pl: "20px", bgcolor: "#fff" }}>
