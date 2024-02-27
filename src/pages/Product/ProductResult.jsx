@@ -16,9 +16,8 @@ const SearchResultsPage = () => {
     console.log(queryProduct)
     const fetchSearchResults = async () => {
       try {
-        const response = await axiosInstance.get("/product")
+        const response = await axiosInstance.get(`/product?product=${queryProduct}`)
         setSearchResults(response.data.data)
-        console.log(response.data) // Log the response data
       } catch (error) {
         console.error("Error fetching search results:", error)
       }
@@ -28,22 +27,24 @@ const SearchResultsPage = () => {
   }, [queryProduct])
 
   const renderSearchResults = () => {
-    return searchResults
-      .filter((item) => item.name.toLowerCase().includes(queryProduct.toLowerCase()))
-      .map((product) => (
-        <ActionAreaCard
-          key={product.id}
-          onClick={() => navigate(`/product/${product.id}`)}
-          image={product.productImages?.[0] && BASE_URL + product.productImages[0].imageUrl}
-          alt={product.name}
-        >
-          <Link key={product.id}>
-            <Box>
-              <Typography>{product.name}</Typography>
-            </Box>
-          </Link>
-        </ActionAreaCard>
-      ))
+    return (
+      searchResults
+        // .filter((item) => item.name.toLowerCase().includes(queryProduct.toLowerCase()))
+        .map((product) => (
+          <ActionAreaCard
+            key={product.id}
+            onClick={() => navigate(`/product/${product.id}`)}
+            image={product.productImages?.[0] && BASE_URL + product.productImages[0].imageUrl}
+            alt={product.name}
+          >
+            <Link key={product.id}>
+              <Box>
+                <Typography>{product.name}</Typography>
+              </Box>
+            </Link>
+          </ActionAreaCard>
+        ))
+    )
   }
 
   return (

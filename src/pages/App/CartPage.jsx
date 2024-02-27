@@ -15,7 +15,8 @@ import { BASE_URL } from "../../configs/constant/baseUrl"
 import { selectItem } from "../../configs/store/slicer/cartSlicer"
 import { useLocation, useNavigate } from "react-router-dom"
 import ConfirmDialogDelete from "../../components/admin/ConfirmDialogDelete"
-import { toast } from "react-toastify"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 const CounterButton = ({ value, productId, cartId, onChangeQty, onConfirmDelete }) => {
   const handleIncrement = async () => {
@@ -71,10 +72,9 @@ const ProductDetail = ({ product }) => {
 }
 
 const CartPage = () => {
-  const { userData, loading, error } = useSelector((state) => state.users)
+  const { userData, loading } = useSelector((state) => state.users)
   const { selectedCarts } = useSelector((state) => state.carts)
   const [cart, setCart] = useState([])
-  // const [rows, setRows] = useState([])
   const [openDialogDelete, setOpenDialogDelete] = useState(false)
   const [removeCartId, setRemoveCartId] = useState(null)
   const dispatch = useDispatch()
@@ -144,16 +144,9 @@ const CartPage = () => {
 
   const handleDelete = (cartId) => {
     dispatch(deleteItemInCart(cartId))
-    if (!loading && error) {
-      console.log(error)
-      toast.error(error, {
-        position: "bottom-center"
-      })
-    } else {
-      toast.success("Success delete product", {
-        position: "bottom-center"
-      })
-    }
+    toast.success("Success delete product", {
+      position: "bottom-center"
+    })
     dispatch(getUserData)
   }
 
@@ -250,6 +243,7 @@ const CartPage = () => {
         productId={removeCartId}
         dialog={"Are you sure want to remove this product from cart?"}
       />
+      <ToastContainer />
     </Box>
   )
 }
