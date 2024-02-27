@@ -3,7 +3,7 @@ import { Card, CardContent, CardMedia, Link, Typography, Button, Box, Chip } fro
 import ArrowOutwardIcon from "@mui/icons-material/ArrowForward"
 import Buttons from "../Button/ButtonTest"
 
-const ProductCard = ({ children, category, image, alt, price, quantity }) => {
+const ProductCard = ({ children, category, image, alt, price, quantity, productId }) => {
   return (
     <Card sx={{ maxWidth: 345, margin: 2, boxShadow: 8 }}>
       {image && (
