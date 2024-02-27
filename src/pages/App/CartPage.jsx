@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import {
   Box,
   Button,
@@ -238,8 +238,6 @@ const CartPage = () => {
           color="inherit"
           sx={{ marginTop: 2, paddingY: 1, backgroundColor: "secondary.main" }}
           onClick={handleCheckout}
-          sx={{ marginTop: 2, paddingY: 1, backgroundColor: "secondary.main", fontWeight: 600 }}
-          onClick={() => navigate("/order")}
         >
           Checkout
         </Button>
