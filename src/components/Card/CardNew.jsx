@@ -6,7 +6,16 @@ import Buttons from "../Button/ButtonTest"
 const ProductCard = ({ children, category, image, alt, price, quantity }) => {
   return (
     <Card sx={{ maxWidth: 345, margin: 2, boxShadow: 8 }}>
-      {image && <CardMedia component="img" alt={alt} src={image} sx={{ height: 140 }} />}
+      {image && (
+        <Link to={`/product/${productId}`}>
+          <CardMedia
+            component="img"
+            alt={alt}
+            src={image}
+            sx={{ height: 140, objectFit: "cover" }}
+          />{" "}
+        </Link>
+      )}
       <CardContent
         sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}
       >
