@@ -1,15 +1,16 @@
 // SearchResultsPage.js
-import React, { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { axiosInstance } from "../../configs/api/api"
 import ActionAreaCard from "../../components/Card/CardProduct"
 import { Typography, Box } from "@mui/material"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { BASE_URL } from "../../configs/constant/baseUrl"
 import { useSelector } from "react-redux"
 
 const SearchResultsPage = () => {
   const [searchResults, setSearchResults] = useState([])
   const { queryProduct } = useSelector((state) => state.queryProduct)
+  const navigate = useNavigate()
 
   useEffect(() => {
     console.log(queryProduct)
@@ -32,7 +33,7 @@ const SearchResultsPage = () => {
       .map((product) => (
         <ActionAreaCard
           key={product.id}
-          onClick={() => console.log("Handle click on search result")}
+          onClick={() => navigate(`/product/${product.id}`)}
           image={product.productImages?.[0] && BASE_URL + product.productImages[0].imageUrl}
           alt={product.name}
         >
@@ -47,7 +48,7 @@ const SearchResultsPage = () => {
 
   return (
     <Box>
-      <Typography variant="h4">Search Results for "{queryProduct}"</Typography>
+      <Typography variant="h4">Search Results for {queryProduct}</Typography>
       {searchResults.length > 0 ? (
         renderSearchResults()
       ) : (
