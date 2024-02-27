@@ -5,7 +5,7 @@ import CardMedia from "@mui/material/CardMedia"
 import Typography from "@mui/material/Typography"
 import { CardActionArea } from "@mui/material"
 
-const ActionAreaCard = ({ children, image, alt, onClick }) => {
+const ActionAreaCard = ({ children, desc, image, alt, onClick }) => {
   return (
     <Card sx={{ maxWidth: 345, gap: 3, margin: 5, flexDirection: "row" }}>
       <CardActionArea onClick={onClick}>
@@ -15,7 +15,7 @@ const ActionAreaCard = ({ children, image, alt, onClick }) => {
             {children}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {children}
+            {desc}
           </Typography>
         </CardContent>
       </CardActionArea>

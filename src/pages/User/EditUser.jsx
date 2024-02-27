@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { TextField, Button, Typography, Box } from "@mui/material"
-import { axiosInstance } from "../configs/api/api"
+import { axiosInstance } from "../../configs/api/api"
 
 const EditUserForm = ({ userData = {}, onClose }) => {
   const [firstName, setFirstName] = useState(userData.firstName ?? "")
@@ -14,7 +14,6 @@ const EditUserForm = ({ userData = {}, onClose }) => {
       setLoading(true)
       setError("")
 
-      // Make API request to update user information
       const response = await axiosInstance.put("/user/edit", {
         firstName: firstName,
         lastName: lastName,
@@ -31,7 +30,7 @@ const EditUserForm = ({ userData = {}, onClose }) => {
       onClose()
     } catch (error) {
       console.error("Error editing user:", error.response?.data?.message || error.message)
-      setError("Failed to edit user. Please try again.") // Set error message
+      setError("Failed to edit user. Please try again.")
     } finally {
       setLoading(false)
     }

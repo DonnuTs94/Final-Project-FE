@@ -11,7 +11,7 @@ import Page404 from "./pages/Page404"
 import ProtectThisRoute from "./pages/ProtectThisRoute"
 import ProductList from "./pages/Product/ProductList"
 import SearchResultsPage from "./pages/Product/ProductResult.jsx"
-import EditUserForm from "./pages/EditUser"
+import EditUserForm from "./pages/User/EditUser.jsx"
 import CartPage from "./pages/App/CartPage.jsx"
 
 const Router = createBrowserRouter([
