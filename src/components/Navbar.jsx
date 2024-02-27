@@ -8,14 +8,31 @@ import {
 } from "@mui/icons-material"
 import { useContext } from "react"
 import AuthButton from "../pages/Auth"
-import { Link } from "react-router-dom"
+import { useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux"
+import { changeQuery } from "../configs/store/slicer/querySlicer"
 import { useSelector } from "react-redux"
 
 const Navbar = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
   const colorMode = useContext(ColorModeContext)
+  const [searchQuery, setSearchQuery] = useState("")
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
   const { userData } = useSelector((state) => state.users)
+  const handleSearchEnter = (e) => {
+    if (e.key === "Enter") {
+      dispatch(changeQuery(searchQuery))
+      navigate(`/search?q=${searchQuery}`)
+    }
+  }
+  const handleSearchClick = () => {
+    dispatch(changeQuery(searchQuery))
+    navigate(`/search?q=${searchQuery}`)
+  }
 
   return (
     <header>
@@ -41,9 +58,13 @@ const Navbar = () => {
                 paddingLeft: "20px",
                 fontSize: "14px"
               }}
+              value={searchQuery}
+              onKeyDown={handleSearchEnter}
+              onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search"
             />
-            <IconButton>
+
+            <IconButton onClick={handleSearchClick}>
               <Search fontSize="small" />
             </IconButton>
           </Box>
