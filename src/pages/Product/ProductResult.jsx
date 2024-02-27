@@ -17,7 +17,7 @@ const SearchResultsPage = () => {
   useEffect(() => {
     const fetchSearchResults = async () => {
       try {
-        const response = await axiosInstance.get("/product")
+        const response = await axiosInstance.get(`/product?product=${queryProduct}`)
         setSearchResults(response.data.data)
       } catch (error) {
         console.error("Error fetching search results:", error)

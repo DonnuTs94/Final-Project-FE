@@ -1,14 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit"
 import userSlicer from "./slicer/userSlicer"
-import productSlicer from "./slicer/adminProductSlicer"
+import adminProductSlicer from "./slicer/adminProductSlicer"
 import cartSlicer from "./slicer/cartSlicer"
+import productSlicer from "./slicer/productSlicer"
 import querySlicer from "./slicer/querySlicer"
 
 const store = configureStore({
   reducer: {
     users: userSlicer,
-    product: productSlicer,
+    adminProduct: adminProductSlicer,
     carts: cartSlicer,
+    product: productSlicer,
     queryProduct: querySlicer
   }
 })

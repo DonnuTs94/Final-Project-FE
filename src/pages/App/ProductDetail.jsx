@@ -6,15 +6,20 @@ import Carousel from "react-material-ui-carousel"
 import { BASE_URL } from "../../configs/constant/baseUrl"
 import RemoveIcon from "@mui/icons-material/Remove"
 import AddIcon from "@mui/icons-material/Add"
-import { ToastContainer, toast } from "react-toastify"
+import { toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import { useDispatch } from "react-redux"
+import { getUserData } from "../../configs/store/slicer/userSlicer"
 
 const ProductDetail = () => {
   const [product, setProduct] = useState([])
   const [price, setPrice] = useState(1)
   const [quantity, setQuantity] = useState(1)
   const [total, setTotal] = useState(0)
+  const [addingItem, setAddingItem] = useState(false)
 
   const params = useParams()
+  const dispatch = useDispatch()
 
   const handleAddQty = () => {
     const maxQuantity = product.quantity
@@ -35,14 +40,18 @@ const ProductDetail = () => {
 
   const addToCart = async () => {
     try {
-      await axiosInstance.post("/carts/create", {
+      const response = await axiosInstance.post("/carts/create", {
         quantity: quantity,
         productId: product.id
       })
 
+      console.log(response)
+
       toast.success("Success add product to cart!", {
         position: "bottom-center"
       })
+
+      setAddingItem(true)
     } catch (err) {
       console.log(err)
       if (err.response.data.message === "Unauthorized") {
@@ -59,6 +68,11 @@ const ProductDetail = () => {
 
       if (err.response.data.message === "Failed Create Cart") {
         toast.error("Failed Create Cart", {
+          position: "bottom-center"
+        })
+      }
+      if (err.response.request.status === "403") {
+        toast.error("You must login first!", {
           position: "bottom-center"
         })
       }
@@ -115,9 +129,8 @@ const ProductDetail = () => {
 
   useEffect(() => {
     getProductDetail()
-  }, [product])
-
-  console.log(product)
+    dispatch(getUserData())
+  }, [addingItem])
 
   return (
     <>
@@ -266,7 +279,6 @@ const ProductDetail = () => {
               </Typography>
             </Box>
           </Box>
-          <ToastContainer />
         </>
       )}
     </>

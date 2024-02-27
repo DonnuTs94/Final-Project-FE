@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { axiosInstance } from "../../configs/api/api"
 import Buttons from "../../components/Button/ButtonTest"
 import { Typography, Pagination } from "@mui/material"
 import { Link } from "react-router-dom"
 import ProductDetail from "./ProductDetail"
-import ActionAreaCard from "../../components/Card/CardProduct"
-import { CardMedia } from "@mui/material"
 import { Box } from "@mui/system"
 import { BASE_URL } from "../../configs/constant/baseUrl"
 import ProductCard from "../../components/Card/CardNew"
+import "react-toastify/dist/ReactToastify.css"
+import { convertPriceWithCommas } from "../../helper/formatter"
 
 const ProductList = () => {
   const [productData, setProductData] = useState([])
