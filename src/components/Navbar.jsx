@@ -1,32 +1,20 @@
-import { Badge, Box, IconButton, InputBase, useTheme } from "@mui/material"
-import { ColorModeContext, tokens } from "../theme"
-import {
-  DarkModeOutlined,
-  LightModeOutlined,
-  Search,
-  ShoppingCartOutlined
-} from "@mui/icons-material"
-import { useContext, useEffect } from "react"
+import { Box, IconButton, InputBase, useTheme } from "@mui/material"
+import { ColorModeContext } from "../theme"
+import { DarkModeOutlined, LightModeOutlined, Search } from "@mui/icons-material"
+import { useContext } from "react"
 import AuthButton from "../pages/Auth"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { changeQuery } from "../configs/store/slicer/querySlicer"
-import { useSelector } from "react-redux"
+import ShoppingCart from "./ShoppingCart"
 
 const Navbar = () => {
   const theme = useTheme()
-  const colors = tokens(theme.palette.mode)
   const colorMode = useContext(ColorModeContext)
-  const [cartCount, setCartCount] = useState(0)
   const [searchQuery, setSearchQuery] = useState("")
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { userData } = useSelector((state) => state.users)
-
-  useEffect(() => {
-    setCartCount(userData?.cart?.length)
-  }, [userData])
 
   const handleSearchEnter = (e) => {
     if (e.key === "Enter") {
@@ -74,13 +62,7 @@ const Navbar = () => {
             </IconButton>
           </Box>
           <Box display="flex" gap={2}>
-            <IconButton sx={{ display: { xs: "none", sm: "flex" } }}>
-              <Link to={"/cart"} reloadDocument>
-                <Badge badgeContent={cartCount} color="primary">
-                  <ShoppingCartOutlined sx={{ color: colors.primary[900] }} />
-                </Badge>
-              </Link>
-            </IconButton>
+            <ShoppingCart />
             <IconButton onClick={colorMode.toggleColorMode}>
               {theme.palette.mode === "dark" ? (
                 <LightModeOutlined sx={{ color: "orange" }} />
