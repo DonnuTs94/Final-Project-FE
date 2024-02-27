@@ -25,7 +25,7 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import AddIcon from "@mui/icons-material/Add"
 import ClearIcon from "@mui/icons-material/Clear"
 import DoneIcon from "@mui/icons-material/Done"
-import { toast } from "react-toastify"
+import { toast, ToastContainer } from "react-toastify"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchAdminProductData } from "../../configs/store/slicer/adminProductSlicer"
 import { useTheme } from "@emotion/react"
@@ -380,6 +380,7 @@ const ProductsPage = () => {
         close={handleCloseProductDetail}
         productId={productDetailId}
       />
+      <ToastContainer />
     </>
   )
 }
