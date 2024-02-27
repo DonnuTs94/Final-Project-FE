@@ -1,19 +1,44 @@
 import { Box, Card, CardActionArea, CardContent, CardMedia, Paper, Typography } from "@mui/material"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { BASE_URL } from "../configs/constant/baseUrl"
 import { Link } from "react-router-dom"
 import { convertPriceWithCommas } from "../helper/formatter"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchProductData } from "../configs/store/slicer/productSlicer"
+import { axiosInstance } from "../configs/api/api"
 
 const CardProductHome = () => {
+  const [category, setCategory] = useState([])
   const dispatch = useDispatch()
 
   const products = useSelector((state) => state.product.productData) || []
 
-  const params = {
-    category: 6
+  const getAllCategory = async () => {
+    const response = await axiosInstance.get("categories")
+    setCategory(response.data.data)
   }
+
+  const getCategoryId = (name) => {
+    // return category.find((data) => data.name === name)
+    let categoryId = category.find((item) => {
+      return item.name.toLowerCase() === name.toLowerCase()
+    })
+
+    return categoryId?.id
+  }
+  // const findCategoryId = getCategoryId("Vga")
+
+  // console.log(findCategoryId.id)
+
+  useEffect(() => {
+    getAllCategory()
+  }, [])
+
+  const params = {
+    category: getCategoryId("Vga")
+  }
+
+  console.log(params)
 
   useEffect(() => {
     dispatch(fetchProductData(params))

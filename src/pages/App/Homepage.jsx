@@ -9,8 +9,8 @@ const Homepage = () => {
       <Box display={"flex"} flexDirection={"column"} px={5} pt={3}>
         <Banners />
         <CardProductHome />
+        <ProductList />
       </Box>
-      <ProductList />
     </>
   )
 }

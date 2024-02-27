@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { axiosInstance } from "../../configs/api/api"
 import Buttons from "../../components/Button/ButtonTest"
 import { Typography } from "@mui/material"
-import { Link } from "react-router-dom"
 import ProductDetail from "./ProductDetail"
-import ActionAreaCard from "../../components/Card/CardProduct"
-import { CardMedia } from "@mui/material"
 import { Box } from "@mui/system"
 import { BASE_URL } from "../../configs/constant/baseUrl"
 import ProductCard from "../../components/Card/CardNew"
 import "react-toastify/dist/ReactToastify.css"
+import { convertPriceWithCommas } from "../../helper/formatter"
 
 const ProductList = () => {
   const [productData, setProductData] = useState([])
@@ -49,48 +47,54 @@ const ProductList = () => {
   }
 
   return (
-    <Box
-      sx={{
-        display: "grid",
-        gridTemplateColumns: "repeat(5, 1fr)"
-      }}
-    >
-      {productData.map((product) => (
-        <ProductCard
-          key={product.id}
-          onClick={() => handleProductClick(product)}
-          image={product.productImages?.[0] && BASE_URL + product.productImages[0].imageUrl}
-          alt={product.name}
-        >
-          <Link key={product.id} onClick={() => handleProductClick(product)}>
-            <Box>
-              <Typography>{product.name}</Typography>
-            </Box>
-          </Link>
-        </ProductCard>
-      ))}
-      <Box>
-        <Buttons
-          onClick={() => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </Buttons>
-        <span>
-          {" "}
-          Page {currentPage} of {totalPages}{" "}
-        </span>
-        <Buttons
-          onClick={() => setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages))}
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </Buttons>
+    <>
+      <Typography variant="h2" mt={"40px"}>
+        All Product List
+      </Typography>
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "repeat(5, 1fr)",
+          gap: "10px",
+          mt: "20px"
+        }}
+      >
+        {productData.map((product) => (
+          <>
+            <ProductCard
+              key={product.id}
+              onClick={() => handleProductClick(product)}
+              image={product.productImages?.[0] && BASE_URL + product.productImages[0].imageUrl}
+              alt={product.name}
+              price={convertPriceWithCommas(product.price)}
+              quantity={product.quantity}
+              productId={product.id}
+            />
+          </>
+        ))}
+        <Box>
+          <Buttons
+            onClick={() => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </Buttons>
+          <span>
+            {" "}
+            Page {currentPage} of {totalPages}{" "}
+          </span>
+          <Buttons
+            onClick={() => setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages))}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </Buttons>
+        </Box>
+        {selectedProduct && (
+          <ProductDetail product={selectedProduct} onClose={handleCloseModal} open={open} />
+        )}
       </Box>
-      {selectedProduct && (
-        <ProductDetail product={selectedProduct} onClose={handleCloseModal} open={open} />
-      )}
-    </Box>
+    </>
   )
 }
 
