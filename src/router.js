@@ -10,6 +10,7 @@ import ProductDetail from "./pages/App/ProductDetail"
 import Page404 from "./pages/Page404"
 import ProtectThisRoute from "./pages/ProtectThisRoute"
 import CartPage from "./pages/App/CartPage"
+import Order from "./pages/App/OrderPage"
 
 const Router = createBrowserRouter([
   {
@@ -18,7 +19,8 @@ const Router = createBrowserRouter([
     children: [
       { path: "/", Component: Homepage },
       { path: "/product/:id", Component: ProductDetail },
-      { path: "/cart/", Component: CartPage }
+      { path: "/cart/", Component: CartPage },
+      { path: "/order/", Component: Order }
     ]
   },
   {
