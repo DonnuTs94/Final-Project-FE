@@ -24,9 +24,6 @@ const EditUserForm = ({ userData = {}, onClose }) => {
       setLastName("")
       setAddress("")
 
-      console.log(response.data.message) // Log success message
-
-      // Close the modal or perform other actions
       onClose()
     } catch (error) {
       console.error("Error editing user:", error.response?.data?.message || error.message)

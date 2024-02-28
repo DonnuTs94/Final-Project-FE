@@ -8,7 +8,6 @@ const ProtectThisRoute = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    // Dispatch the action to fetch user data if it's not already loaded
     if (!userData) {
       dispatch(getUserData())
     }
@@ -20,22 +19,18 @@ const ProtectThisRoute = () => {
 
   useEffect(() => {}, [userData, loading, error])
 
-  // Handle loading state
   if (loading) {
     return <div>Loading...</div>
   }
 
-  // Handle error state
   if (error) {
     return <div>Error: {error}</div>
   }
 
-  // Redirect if userData is null or user is not an admin
   if (!userData || (userData.Role && userData.Role.name !== "admin")) {
     return <Navigate to="/*" />
   }
 
-  // Render Outlet if user is authenticated as an admin
   return <Outlet />
 }
 
