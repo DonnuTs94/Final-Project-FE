@@ -63,29 +63,48 @@ const Navbar = () => {
               />
             </Link>
           </Box>
-          <Box display="flex" gap="10px" alignItems="center" bgcolor={"white"} borderRadius={2}>
+          {/* search */}
+          <Box
+            display="flex"
+            gap="10px"
+            alignItems="center"
+            bgcolor="white"
+            borderRadius={2}
+            sx={{
+              border: "1px solid #ccc",
+              width: "fit-content"
+            }}
+          >
             <Select
               value={searchType}
               size="small"
               onChange={(e) => setSearchType(e.target.value)}
-              sx={{ padding: "2px" }}
+              sx={{
+                padding: "2px",
+                fontSize: "14px",
+                color: "primary.dark",
+                height: "36px",
+                backgroundColor: "#f0f0f0",
+                borderTopLeftRadius: "5px",
+                borderBottomLeftRadius: "5px"
+              }}
             >
               <MenuItem value="all">All Category</MenuItem>
-              {category.map((category) => {
-                return (
-                  <MenuItem key={category.id} value={category.id}>
-                    {category.name}
-                  </MenuItem>
-                )
-              })}
+              {category.map((category) => (
+                <MenuItem key={category.id} value={category.id}>
+                  {category.name}
+                </MenuItem>
+              ))}
             </Select>
+
             <InputBase
               sx={{
                 flex: 1,
                 paddingY: "2px",
                 paddingLeft: "20px",
                 fontSize: "14px",
-                color: "primary.dark"
+                color: "primary.dark",
+                height: "36px"
               }}
               value={searchQuery}
               onKeyDown={handleSearchEnter}
@@ -97,6 +116,7 @@ const Navbar = () => {
               <Search fontSize="small" color="primary" />
             </IconButton>
           </Box>
+
           <Box
             height="max-content"
             display="flex"
