@@ -28,8 +28,6 @@ const EditUserForm = ({ userData = {}, onClose }) => {
       setLastName("")
       setAddress("")
 
-      console.log(response.data.message)
-
       toast.success("Success edit data user", {
         position: "bottom-center"
       })
