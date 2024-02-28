@@ -19,9 +19,6 @@ import { axiosInstance } from "../../configs/api/api"
 import { VisibilityOutlined } from "@mui/icons-material"
 import { currFormatter } from "../../helper/formatter"
 
-// const tokenAdmin =
-//   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksInJvbGVJZCI6MTMsImlhdCI6MTcwODMzNDMwNSwiZXhwIjoxNzEwOTI2MzA1fQ.G505TR_v9a7NoKRy9rYVpBA8T4KEUylFci3PmrngZC4"
-
 const OrderPage = () => {
   const theme = useTheme()
   const [orders, setOrders] = useState([])
@@ -40,12 +37,7 @@ const OrderPage = () => {
   const getAllOrders = async () => {
     try {
       setLoading(true)
-      const response = await axiosInstance.get("orders/admin", {
-        // headers: {
-        //   Authorization: `Bearer ${tokenAdmin}`,
-        //   "Content-Type": "application/json"
-        // }
-      })
+      const response = await axiosInstance.get("orders/admin", {})
       setOrders(response.data.orders)
     } catch (err) {
       setLoading(false)

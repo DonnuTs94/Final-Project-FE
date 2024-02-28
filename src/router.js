@@ -33,13 +33,11 @@ const Router = createBrowserRouter([
   },
   {
     path: "/admin",
-    // Component: ProtectThisRoute,
     Component: AdminLayout,
 
     children: [
       {
         path: "",
-        // Component: AdminLayout
         Component: ProtectThisRoute
       },
       { path: "categories", Component: CategoryPage },

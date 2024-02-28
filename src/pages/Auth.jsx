@@ -212,7 +212,6 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
                   fullWidth
                   type={showPassword ? "text" : "password"}
                   endAdornment={
-                    // <InputAdornment>
                     <IconButton
                       aria-label="toggle password visibility"
                       onClick={handleClickShowPassword}
