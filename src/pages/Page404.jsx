@@ -7,21 +7,19 @@ const Page404 = () => {
       display="flex"
       justifyContent="center"
       alignItems="center"
+      width="100vw"
       height="100vh"
       flexDirection={"column"}
     >
-      <Box width="60%">
+      <Box width="50%" height="50%">
         <Box
           component={"img"}
           src="/404.png"
           alt="404 Not Found"
-          style={{ width: "100%", height: "auto" }}
+          style={{ width: "100%", height: "100%", objectFit: "contain" }}
         />
       </Box>
-      <Button
-        sx={{ color: "black", width: "200px", height: "50px", maxWidth: "100%", mt: 2 }}
-        variant="contained"
-      >
+      <Button sx={{ color: "black", maxWidth: "50%", mt: 2 }} variant="contained">
         <Link to="/">Back to home</Link>
       </Button>
     </Box>
