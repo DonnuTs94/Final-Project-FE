@@ -70,9 +70,9 @@ const Navbar = () => {
               sx={{ padding: "2px" }}
             >
               <MenuItem value="all">All Category</MenuItem>
-              {category.map((category, i) => {
+              {category.map((category) => {
                 return (
-                  <MenuItem key={i} value={category.id}>
+                  <MenuItem key={category.id} value={category.id}>
                     {category.name}
                   </MenuItem>
                 )
@@ -96,10 +96,15 @@ const Navbar = () => {
               <Search fontSize="small" color="primary" />
             </IconButton>
           </Box>
-          <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Box
+            height="max-content"
+            display="flex"
+            justifyContent="space-between"
+            // alignItems="center"
+          >
             <ShoppingCart />
             <IconButton
-              sx={{ display: { xs: "none", sm: "block" }, marginLeft: 2 }}
+              sx={{ display: { xs: "none", sm: "block" }, paddingTop: "15px", paddingX: "15px" }}
               onClick={colorMode.toggleColorMode}
             >
               {theme.palette.mode === "dark" ? (

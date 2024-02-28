@@ -17,7 +17,10 @@ import {
 import { useState, useEffect } from "react"
 import { axiosInstance } from "../../configs/api/api"
 import { VisibilityOutlined } from "@mui/icons-material"
+import RocketLaunchOutlinedIcon from "@mui/icons-material/RocketLaunchOutlined"
 import { currFormatter } from "../../helper/formatter"
+import { toast } from "react-toastify"
+import { statusOrder } from "../../configs/constant/orderStatus"
 
 const OrderPage = () => {
   const theme = useTheme()
@@ -28,16 +31,16 @@ const OrderPage = () => {
   const [orderDetail, setOrderDetail] = useState([])
   const [loading, setLoading] = useState(false)
   const [loadingDetail, setLoadingDetail] = useState(false)
+  const [statusUpdated, setStatusUpdated] = useState(false)
 
   useEffect(() => {
     getAllOrders()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [statusUpdated])
 
   const getAllOrders = async () => {
     try {
       setLoading(true)
-      const response = await axiosInstance.get("orders/admin", {})
+      const response = await axiosInstance.get("orders/admin")
       setOrders(response.data.orders)
     } catch (err) {
       setLoading(false)
@@ -59,6 +62,26 @@ const OrderPage = () => {
     const orderDetailById = orders.filter((order) => order.id === orderId)
     setOrderDetail(orderDetailById[0])
     setLoadingDetail(false)
+  }
+
+  const handleUpdateStatus = async (orderId, status) => {
+    try {
+      const response = await axiosInstance.put(`orders/updateStatus`, {
+        orderId,
+        status
+      })
+
+      if (response.status !== 200) {
+        console.log(response.data.message)
+      }
+
+      setStatusUpdated(true)
+      toast.success("Success update order status", {
+        position: "bottom-center"
+      })
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   const columns = [
@@ -122,7 +145,7 @@ const OrderPage = () => {
                         {currFormatter(order.totalOrder * 16000 + order.totalOngkir)}
                       </TableCell>
                       <TableCell>{order.status}</TableCell>
-                      <TableCell>
+                      <TableCell sx={{ display: "flex", justifyContent: "center", gap: 1 }}>
                         <Button
                           variant="contained"
                           color="secondary"
@@ -130,6 +153,16 @@ const OrderPage = () => {
                         >
                           <VisibilityOutlined fontSize="small" />
                         </Button>
+                        {order.status === statusOrder.PAID ? (
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            title="Deliver Order"
+                            onClick={() => handleUpdateStatus(order.id, statusOrder.DELIVERED)}
+                          >
+                            <RocketLaunchOutlinedIcon fontSize="small" />
+                          </Button>
+                        ) : null}
                       </TableCell>
                     </TableRow>
                   )
@@ -215,15 +248,15 @@ const OrderPage = () => {
                             <TableCell>{index + 1}</TableCell>
                             <TableCell>{item.productId}</TableCell>
                             <TableCell>{item.quantity}</TableCell>
-                            <TableCell>{currFormatter(item.price * 16000)}</TableCell>
-                            <TableCell>{currFormatter(item.total * 16000)}</TableCell>
+                            <TableCell>{currFormatter(item.price)}</TableCell>
+                            <TableCell>{currFormatter(item.total)}</TableCell>
                           </TableRow>
                         )
                       })}
                       <TableRow>
                         <TableCell colSpan={2}></TableCell>
                         <TableCell colSpan={2}>Subtotal</TableCell>
-                        <TableCell>{currFormatter(orderDetail.totalOrder * 16000)}</TableCell>
+                        <TableCell>{currFormatter(orderDetail.totalOrder)}</TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell colSpan={2}></TableCell>
@@ -234,7 +267,7 @@ const OrderPage = () => {
                         <TableCell colSpan={2}></TableCell>
                         <TableCell colSpan={2}>Grand Total</TableCell>
                         <TableCell>
-                          {currFormatter(orderDetail.totalOrder * 16000 + orderDetail.totalOngkir)}
+                          {currFormatter(orderDetail.totalOrder + orderDetail.totalOngkir)}
                         </TableCell>
                       </TableRow>
                     </TableBody>
