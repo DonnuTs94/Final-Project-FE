@@ -4,9 +4,9 @@ import { Outlet } from "react-router-dom"
 
 const AdminLayout = () => {
   return (
-    <Box display={"flex"} maxWidth={false} width={"100vw"} height={"100vh"}>
+    <Box display="flex" width="100vw" height="100vh">
       <SidebarPro />
-      <Box padding={2}>
+      <Box padding={2} width="100%">
         <Outlet />
       </Box>
     </Box>

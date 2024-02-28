@@ -19,16 +19,12 @@ const CardProductHome = () => {
   }
 
   const getCategoryId = (name) => {
-    // return category.find((data) => data.name === name)
     let categoryId = category.find((item) => {
       return item.name.toLowerCase() === name.toLowerCase()
     })
 
     return categoryId?.id
   }
-  // const findCategoryId = getCategoryId("Vga")
-
-  // console.log(findCategoryId.id)
 
   useEffect(() => {
     getAllCategory()
