@@ -69,6 +69,7 @@ const Navbar = () => {
                 value={searchType}
                 onChange={(e) => setSearchType(e.target.value)}
                 sx={{ padding: "2px" }}
+                size="small"
               >
                 <MenuItem value="all">All Category</MenuItem>
                 {category.map((category) => {
