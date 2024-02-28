@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import {
   Container,
   Typography,
@@ -22,7 +22,6 @@ import Autocomplete from "@mui/material/Autocomplete"
 import { axiosInstance } from "../../configs/api/api"
 import { currFormatter } from "../../helper/formatter"
 import { useSelector } from "react-redux"
-import { Snap } from "midtrans-client"
 import { getUserData } from "../../configs/store/slicer/userSlicer"
 
 const Order = () => {
@@ -38,13 +37,13 @@ const Order = () => {
   const [totalProduct, setTotalProduct] = useState(0)
   const [totalShipping, setTotalShipping] = useState(0)
   const { userData } = useSelector((state) => state.users)
-  const [id, setOrderId] = useState(null)
-  const orders = userData.orders || []
-
-  console.log(" userData", userData.orders)
+  const [orderId, setOrderId] = useState(0)
+  const [grandTotal, setGrandTotal] = useState(0)
 
   const location = useLocation()
   const selectedItems = location.state ? location.state.selectedItems || [] : []
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetchProvinces()
@@ -65,6 +64,20 @@ const Order = () => {
   useEffect(() => {
     getUserData()
   }, [showPayment])
+
+  useEffect(() => {
+    const selectedServiceCost = cityCosts[0]?.costs.find(
+      (service) => service.service === shippingOption
+    )?.cost[0]?.value
+    setTotalShipping(selectedServiceCost)
+
+    const productTotal = cartItems.reduce((acc, cartItem) => acc + cartItem.total, 0)
+    setGrandTotal(productTotal + (selectedServiceCost || 0))
+  }, [shippingOption, cartItems, cityCosts])
+
+  useEffect(() => {
+    setGrandTotal(totalProduct + (totalShipping || 0))
+  }, [totalProduct, totalShipping])
 
   const fetchProvinces = async () => {
     try {
@@ -175,8 +188,12 @@ const Order = () => {
         weight,
         shippingOption
       })
-      setOrderId(response.data.id)
-      console.log("Order berhasil dibuat:", response.data.data)
+
+      console.log("Order berhasil dibuat:", response.data)
+      setOrderId(response.data.data.id)
+
+      const productTotal = cartItems.reduce((acc, cartItem) => acc + cartItem.total, 0)
+      setGrandTotal(productTotal + totalShipping)
 
       setShowPayment(true)
     } catch (error) {
@@ -197,32 +214,48 @@ const Order = () => {
     }
   }
 
-  const handlePayment = async () => {
+  const initiatePayment = async () => {
     try {
-      const response = await axiosInstance.post("/orders/payment", {
-        order_id: orders[orders.length - 1].id,
-        gross_amount: orders[orders.length - 1].grandTotal
+      const response = await axiosInstance.post("/payment/transaction", {
+        order_id: parseInt(orderId),
+        gross_amount: Number(grandTotal)
       })
 
-      // Handling payment with Snap
-      Snap.pay(response.data.token, {
-        onSuccess: function (result) {
-          console.log("Payment successful:", result)
-          setShowPayment(true)
-        },
-        onPending: function (result) {
-          console.log("Payment pending:", result)
-        },
-        onError: function (result) {
-          console.error("Payment error:", result)
-        }
+      console.log("Payment response:", response)
+
+      const width = 600
+      const height = 600
+      const left = (window.innerWidth - width) / 2
+      const top = (window.innerHeight - height) / 2
+
+      const url = `https://app.sandbox.midtrans.com/snap/v3/redirection/${response.data.token}`
+
+      const popup = window.open(
+        url,
+        "popupWindow",
+        `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes,status=yes`
+      )
+
+      if (popup) {
+        popup.focus()
+      } else {
+        console.error("Popup blocked. Please allow popups for this website.")
+      }
+
+      const webHookResponse = await axiosInstance.post("/webhook/midtrans", {
+        transaction_status: "settlement",
+        order_id: orderId
       })
+
+      if (webHookResponse.data === "OK") {
+        setTimeout(() => {
+          window.location.href = "/"
+        }, 7000)
+      }
     } catch (error) {
-      console.error("Error processing payment:", error)
+      console.error("Error initiating payment:", error)
     }
   }
-
-  const grandTotal = totalProduct + totalShipping
 
   return (
     <Container>
@@ -298,7 +331,6 @@ const Order = () => {
           md={6}
           style={{
             paddingTop: "60px",
-            // paddingLeft: "50px",
             textAlign: "center",
             justifyContent: "center",
             alignItems: "center"
@@ -403,7 +435,7 @@ const Order = () => {
               <Typography variant="h5" gutterBottom>
                 Select Payment Method:
               </Typography>
-              <Button variant="contained" color="primary" onClick={handlePayment}>
+              <Button variant="contained" color="primary" onClick={initiatePayment}>
                 Pay with Midtrans
               </Button>
               <Button variant="contained" color="secondary" onClick={() => setShowPayment(false)}>

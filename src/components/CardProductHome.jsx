@@ -34,8 +34,6 @@ const CardProductHome = () => {
     category: getCategoryId("Vga")
   }
 
-  console.log(params)
-
   useEffect(() => {
     dispatch(fetchProductData(params))
   }, [])

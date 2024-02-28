@@ -25,11 +25,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
   }
   return (
     <MenuItem active={selected === title} onClick={() => setSelected(title)} icon={icon}>
-      <Link
-        to={to}
-        // reloadDocument={(e) => (e.target.innerText === "Logout" ? true : false)}
-        onClick={(e) => handleLogoutButton(e)}
-      >
+      <Link to={to} onClick={(e) => handleLogoutButton(e)}>
         <Typography>{title}</Typography>
       </Link>
     </MenuItem>
