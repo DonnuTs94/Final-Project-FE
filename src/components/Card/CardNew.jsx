@@ -1,35 +1,44 @@
-import { Card, CardContent, CardMedia, Typography, Button, Box } from "@mui/material"
-import { Link } from "react-router-dom"
+import React from "react"
+import { Card, CardContent, CardMedia, Link, Typography, Button, Box, Chip } from "@mui/material"
+import ArrowOutwardIcon from "@mui/icons-material/ArrowForward"
+import Buttons from "../Button/ButtonTest"
 
-const ProductCard = ({ children, image, alt, price, quantity, productId }) => {
+const ProductCard = ({ children, category, image, alt, price, quantity, productId }) => {
   return (
-    <Card sx={{ maxWidth: 345, boxShadow: 8 }}>
+    <Card sx={{ maxWidth: 345, margin: 2, boxShadow: 8 }}>
       {image && (
         <Link to={`/product/${productId}`}>
           <CardMedia
             component="img"
-            height="140"
             alt={alt}
             src={image}
-            sx={{ objectFit: "cover" }}
-          />
+            sx={{ height: 140, objectFit: "cover" }}
+          />{" "}
         </Link>
       )}
-      <CardContent>
-        <Typography variant="body2">{children}</Typography>
-
-        <Typography variant="h6" sx={{ mt: 1, fontWeight: "bold" }}>
-          Rp {price}
-        </Typography>
-        <Typography variant="body2">
-          (Only <b>{quantity}</b> left in stock!)
-        </Typography>
-      </CardContent>
-      <CardContent>
-        <Box textAlign={"center"}>
-          <Button variant="contained" color="error" sx={{ padding: 1.3, width: "100%" }}>
+      <CardContent
+        sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}
+      >
+        <Box>
+          <Typography variant="body1" color="grey">
+            {category}
+          </Typography>
+          <Link variant="body1" color="black" underline="hover" endIcon={<ArrowOutwardIcon />}>
+            {children}
+          </Link>
+          <Typography variant="h6" sx={{ mt: 1, fontWeight: "bold" }}>
+            Rp.
+            {price}
+            <Chip size="small" label="Price" color="success" sx={{ ml: 1 }} />
+          </Typography>
+        </Box>
+        <Box>
+          <Typography variant="body2">
+            (Only <b>{quantity}</b> left in stock!)
+          </Typography>
+          <Buttons variant="contained" color="error" size="large" sx={{ mt: 2, width: "100%" }}>
             Add to cart
-          </Button>
+          </Buttons>
         </Box>
       </CardContent>
     </Card>
