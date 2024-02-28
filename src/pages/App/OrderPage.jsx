@@ -22,8 +22,8 @@ import Autocomplete from "@mui/material/Autocomplete"
 import { axiosInstance } from "../../configs/api/api"
 import { currFormatter } from "../../helper/formatter"
 import { useSelector } from "react-redux"
-import { Snap } from "midtrans-client"
 import { getUserData } from "../../configs/store/slicer/userSlicer"
+import { Snap } from "midtrans-client"
 
 const Order = () => {
   const [weight] = useState(2000)
@@ -38,10 +38,8 @@ const Order = () => {
   const [totalProduct, setTotalProduct] = useState(0)
   const [totalShipping, setTotalShipping] = useState(0)
   const { userData } = useSelector((state) => state.users)
-  const [id, setOrderId] = useState(null)
-  const orders = userData.orders || []
-
-  console.log(" userData", userData.orders)
+  const [orderId, setOrderId] = useState(0) // Define orderId state
+  const [grandTotal, setGrandTotal] = useState(0)
 
   const location = useLocation()
   const selectedItems = location.state ? location.state.selectedItems || [] : []
@@ -175,8 +173,13 @@ const Order = () => {
         weight,
         shippingOption
       })
-      setOrderId(response.data.id)
-      console.log("Order berhasil dibuat:", response.data.data)
+
+      console.log("Order berhasil dibuat:", response.data)
+      setOrderId(response.data.data.id) // Set orderId
+
+      // Calculate grandTotal
+      const productTotal = cartItems.reduce((acc, cartItem) => acc + cartItem.total, 0)
+      setGrandTotal(productTotal + totalShipping)
 
       setShowPayment(true)
     } catch (error) {
@@ -197,32 +200,34 @@ const Order = () => {
     }
   }
 
-  const handlePayment = async () => {
+  const initiatePayment = async () => {
     try {
-      const response = await axiosInstance.post("/orders/payment", {
-        order_id: orders[orders.length - 1].id,
-        gross_amount: orders[orders.length - 1].grandTotal
+      console.log("orderId:", orderId)
+      console.log("grandTotal:", grandTotal)
+
+      const response = await axiosInstance.post("/payment/transaction", {
+        order_id: parseInt(orderId),
+        gross_amount: Number(grandTotal)
       })
 
-      // Handling payment with Snap
-      Snap.pay(response.data.token, {
-        onSuccess: function (result) {
-          console.log("Payment successful:", result)
-          setShowPayment(true)
-        },
-        onPending: function (result) {
-          console.log("Payment pending:", result)
-        },
-        onError: function (result) {
-          console.error("Payment error:", result)
-        }
+      console.log("Payment response:", response)
+      // Redirect user to payment page
+      window.location(
+        `https://app.sandbox.midtrans.com/snap/v3/redirection/${response.data.token}`,
+        "_blank"
+      )
+
+      const webHookResponse = await axiosInstance.post("/webhook/midtrans", {
+        transaction_status: "settlement",
+        order_id: orderId
       })
+
+      console.log("Webhook response:", webHookResponse)
     } catch (error) {
-      console.error("Error processing payment:", error)
+      console.error("Error initiating payment:", error)
+      // Handle error
     }
   }
-
-  const grandTotal = totalProduct + totalShipping
 
   return (
     <Container>
@@ -403,7 +408,7 @@ const Order = () => {
               <Typography variant="h5" gutterBottom>
                 Select Payment Method:
               </Typography>
-              <Button variant="contained" color="primary" onClick={handlePayment}>
+              <Button variant="contained" color="primary" onClick={initiatePayment}>
                 Pay with Midtrans
               </Button>
               <Button variant="contained" color="secondary" onClick={() => setShowPayment(false)}>
