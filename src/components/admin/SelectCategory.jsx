@@ -19,6 +19,8 @@ const SelectCategory = ({ category, handleCategory, categoryData }) => {
           value={categoryData}
           label="Category"
           onChange={handleChange}
+          color="secondary"
+          sx={{ outline: "none", height: "50px" }}
         >
           {category.map((item, i) => (
             <MenuItem key={i} value={item.id}>
