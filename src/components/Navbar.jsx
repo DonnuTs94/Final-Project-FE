@@ -30,7 +30,6 @@ const Navbar = () => {
       }
     }
     GetAllCategory()
-    console.log(category)
   }, [])
 
   const handleSearchEnter = (e) => {
@@ -72,7 +71,11 @@ const Navbar = () => {
             >
               <MenuItem value="all">All Category</MenuItem>
               {category.map((category) => {
-                return <MenuItem value={category.id}>{category.name}</MenuItem>
+                return (
+                  <MenuItem key={category.id} value={category.id}>
+                    {category.name}
+                  </MenuItem>
+                )
               })}
             </Select>
             <InputBase
@@ -93,10 +96,15 @@ const Navbar = () => {
               <Search fontSize="small" color="primary" />
             </IconButton>
           </Box>
-          <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Box
+            height="max-content"
+            display="flex"
+            justifyContent="space-between"
+            // alignItems="center"
+          >
             <ShoppingCart />
             <IconButton
-              sx={{ display: { xs: "none", sm: "block" }, marginLeft: 2 }}
+              sx={{ display: { xs: "none", sm: "block" }, paddingTop: "15px", paddingX: "15px" }}
               onClick={colorMode.toggleColorMode}
             >
               {theme.palette.mode === "dark" ? (

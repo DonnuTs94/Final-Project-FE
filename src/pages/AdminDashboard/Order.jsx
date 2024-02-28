@@ -223,15 +223,15 @@ const OrderPage = () => {
                             <TableCell>{index + 1}</TableCell>
                             <TableCell>{item.productId}</TableCell>
                             <TableCell>{item.quantity}</TableCell>
-                            <TableCell>{currFormatter(item.price * 16000)}</TableCell>
-                            <TableCell>{currFormatter(item.total * 16000)}</TableCell>
+                            <TableCell>{currFormatter(item.price)}</TableCell>
+                            <TableCell>{currFormatter(item.total)}</TableCell>
                           </TableRow>
                         )
                       })}
                       <TableRow>
                         <TableCell colSpan={2}></TableCell>
                         <TableCell colSpan={2}>Subtotal</TableCell>
-                        <TableCell>{currFormatter(orderDetail.totalOrder * 16000)}</TableCell>
+                        <TableCell>{currFormatter(orderDetail.totalOrder)}</TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell colSpan={2}></TableCell>
@@ -242,7 +242,7 @@ const OrderPage = () => {
                         <TableCell colSpan={2}></TableCell>
                         <TableCell colSpan={2}>Grand Total</TableCell>
                         <TableCell>
-                          {currFormatter(orderDetail.totalOrder * 16000 + orderDetail.totalOngkir)}
+                          {currFormatter(orderDetail.totalOrder + orderDetail.totalOngkir)}
                         </TableCell>
                       </TableRow>
                     </TableBody>

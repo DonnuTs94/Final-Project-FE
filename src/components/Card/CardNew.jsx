@@ -1,6 +1,5 @@
-import React from "react"
-import { Card, CardContent, CardMedia, Link, Typography, Button, Box, Chip } from "@mui/material"
-import ArrowOutwardIcon from "@mui/icons-material/ArrowForward"
+import { Card, CardContent, CardMedia, Link, Typography, Box, Chip } from "@mui/material"
+// import ArrowOutwardIcon from "@mui/icons-material/ArrowForward"
 import Buttons from "../Button/ButtonTest"
 
 const ProductCard = ({ children, category, image, alt, price, quantity, productId }) => {
@@ -13,7 +12,7 @@ const ProductCard = ({ children, category, image, alt, price, quantity, productI
             alt={alt}
             src={image}
             sx={{ height: 140, objectFit: "cover" }}
-          />{" "}
+          />
         </Link>
       )}
       <CardContent
@@ -23,9 +22,9 @@ const ProductCard = ({ children, category, image, alt, price, quantity, productI
           <Typography variant="body1" color="grey">
             {category}
           </Typography>
-          <Link variant="body1" color="black" underline="hover" endIcon={<ArrowOutwardIcon />}>
-            {children}
-          </Link>
+          {/* <Link variant="body1" color="black" underline="hover" endIcon={<ArrowOutwardIcon />}> */}
+          {children}
+          {/* </Link> */}
           <Typography variant="h6" sx={{ mt: 1, fontWeight: "bold" }}>
             Rp.
             {price}

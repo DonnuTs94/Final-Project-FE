@@ -172,7 +172,10 @@ const CartPage = () => {
     if (selectedCarts.length > 0) {
       navigate("/order", { state: { selectedItems: selectedCarts } })
     } else {
-      alert("Please select at least one item before proceeding to checkout.")
+      toast.info("Please select at least one item before proceeding to checkout.", {
+        position: "bottom-center"
+      })
+      // alert("Please select at least one item before proceeding to checkout.")
     }
   }
 
@@ -241,7 +244,12 @@ const CartPage = () => {
         <Button
           fullWidth
           color="inherit"
-          sx={{ marginTop: 2, paddingY: 1, backgroundColor: "secondary.main" }}
+          sx={{
+            marginTop: 2,
+            paddingY: 1,
+            backgroundColor: "secondary.main",
+            ":hover": { backgroundColor: "secondary.light" }
+          }}
           onClick={handleCheckout}
         >
           Checkout
