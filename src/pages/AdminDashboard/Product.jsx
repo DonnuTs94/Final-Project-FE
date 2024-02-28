@@ -194,7 +194,7 @@ const ProductsPage = () => {
 
   return (
     <>
-      <Paper sx={{ width: "100vw", height: "100vh", overflow: "auto" }}>
+      <Paper sx={{ width: "100%", height: "95vh", overflow: "auto" }}>
         <Box
           sx={{
             display: "flex",
@@ -206,17 +206,18 @@ const ProductsPage = () => {
           <Typography variant="h2" mr="20px">
             Product
           </Typography>
-          <Box display="flex" gap="10px" alignItems="center" bgcolor={"white"} borderRadius={2}>
+          <Box display="flex" gap="10px" alignItems="center" borderRadius={2}>
             <InputBase
               sx={{
                 flex: 1,
                 paddingY: "2px",
                 paddingLeft: "20px",
                 fontSize: "14px",
-                border: "1px solid gray",
                 borderRadius: "5px",
                 height: "50px",
-                width: "250px"
+                width: "250px",
+                bgcolor: "secondary.light",
+                color: "primary.dark"
               }}
               value={searchName}
               onChange={(e) => setSearchName(e.target.value)}
@@ -238,7 +239,7 @@ const ProductsPage = () => {
             Add
           </Button>
         </Box>
-        <TableContainer>
+        <TableContainer sx={{ height: "80%" }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
@@ -260,7 +261,7 @@ const ProductsPage = () => {
             <TableBody>
               {loading ? (
                 <TableRow>
-                  <TableCell colSpan={columns.length}>
+                  <TableCell align="center" colSpan={columns.length}>
                     <CircularProgress color="info" />
                   </TableCell>
                 </TableRow>
@@ -351,6 +352,7 @@ const ProductsPage = () => {
           </Table>
         </TableContainer>
         <TablePagination
+          sx={{ position: "sticky", bottom: 0 }}
           component="div"
           rowsPerPageOptions={[10, 20, 40]}
           rowsPerPage={rowsPerPage}

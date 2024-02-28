@@ -12,6 +12,8 @@ import { getUserData, logout, userLogin } from "../configs/store/slicer/userSlic
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import MenuProfile from "../components/MenuProfile"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
   const [showPassword, setShowPassword] = useState(false)
@@ -58,12 +60,32 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
 
     try {
       const response = await dispatch(userLogin(userDataLogin))
-      localStorage.setItem("auth_token", response.payload.token)
-      setIsLogout(false)
-      setEmail("")
-      setPassword("")
-      onClose()
-      console.log(response)
+      if (response.payload === "Please provide email and password") {
+        toast.info("Please provide email and password", {
+          position: "bottom-center"
+        })
+      }
+
+      if (
+        response.payload ===
+        "Password must contain at least 8 characters, alphanumeric, one uppercase letter, one lowercase letter and symbol"
+      ) {
+        toast.info("Please provide email and password", {
+          position: "bottom-center"
+        })
+      }
+
+      if (response.payload.message === "Login Success") {
+        localStorage.setItem("auth_token", response.payload.token)
+        setIsLogout(false)
+        setEmail("")
+        setPassword("")
+        setShowPassword(false)
+        onClose()
+        toast.success("Welcome :)", {
+          position: "bottom-center"
+        })
+      }
       if (response.meta.requestStatus === "fulfilled" && response.payload.data.role === "admin") {
         navigate("/admin", { replace: true })
       } else {
@@ -83,19 +105,38 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
         password: passwordRegister,
         address: address
       })
-      if (!response) {
-        console.error("Register Failed")
-      } else {
-        console.log("Register success")
-        navigate("/")
+
+      if (response.data.message === "Register Success") {
+        toast.success("Register Success", {
+          position: "bottom-center"
+        })
+        setTabValue(0)
       }
-      setFirstName("")
-      setLastName("")
-      setEmailRegister("")
-      setPasswordRegister("")
-      setAddress("")
     } catch (err) {
       console.error("Error during register:", err)
+      if (err.response.data.message === "User already exists") {
+        toast.info("User already exists", {
+          position: "bottom-center"
+        })
+      }
+
+      if (err.response.data.message === "Please enter an email") {
+        toast.info("Wrong email format", {
+          position: "bottom-center"
+        })
+      }
+
+      if (
+        err.response.data.message ===
+        "Password must have minimum 8 characters , at least 1 number, and at least 1 special character"
+      ) {
+        toast.info(
+          "Password must have minimum 8 characters , at least 1 number, and at least 1 special character",
+          {
+            position: "bottom-center"
+          }
+        )
+      }
     }
   }
 
@@ -208,39 +249,6 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
           {tabValue === 1 && (
             <Box>
               {/* Register */}
-              <Typography variant="h5"></Typography>
-              <TextField
-                sx={{
-                  outline: "none",
-                  height: "40px",
-                  backgroundColor: "transparent",
-                  width: "100%",
-                  paddingLeft: "3px",
-                  "&::placeholder": {
-                    color: "#757879"
-                  }
-                }}
-                type="text"
-                onChange={(e) => setFirstName(e.target.value)}
-                placeholder="Firstname"
-                size="small"
-              />
-              <TextField
-                sx={{
-                  outline: "none",
-                  height: "40px",
-                  backgroundColor: "transparent",
-                  width: "100%",
-                  paddingLeft: "3px",
-                  "&::placeholder": {
-                    color: "#757879"
-                  }
-                }}
-                type="text"
-                onChange={(e) => setLastName(e.target.value)}
-                placeholder="Lastname"
-                size="small"
-              />
               <TextField
                 sx={{
                   outline: "none",
@@ -285,6 +293,39 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
                   }
                 }}
                 type="text"
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="Firstname"
+                size="small"
+              />
+
+              <TextField
+                sx={{
+                  outline: "none",
+                  height: "40px",
+                  backgroundColor: "transparent",
+                  width: "100%",
+                  paddingLeft: "3px",
+                  "&::placeholder": {
+                    color: "#757879"
+                  }
+                }}
+                type="text"
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="Lastname"
+                size="small"
+              />
+              <TextField
+                sx={{
+                  outline: "none",
+                  height: "40px",
+                  backgroundColor: "transparent",
+                  width: "100%",
+                  paddingLeft: "3px",
+                  "&::placeholder": {
+                    color: "#757879"
+                  }
+                }}
+                type="text"
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder="Address"
                 size="small"
@@ -313,6 +354,7 @@ const TestPage = ({ openModalLogin, onCloseModalLogin }) => {
           )}
         </Box>
       </ModalParent>
+      <ToastContainer />
     </>
   )
 }

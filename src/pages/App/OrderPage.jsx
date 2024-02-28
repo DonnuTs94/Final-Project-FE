@@ -20,6 +20,7 @@ import {
 } from "@mui/material"
 import Autocomplete from "@mui/material/Autocomplete"
 import { axiosInstance } from "../../configs/api/api"
+import { currFormatter } from "../../helper/formatter"
 
 const Order = () => {
   const [weight] = useState(2000)
@@ -78,7 +79,7 @@ const Order = () => {
       const response = await axiosInstance.get("/carts")
       const cartProducts = response.data.data
       const productIds = cartProducts.map((product) => product.productId)
-      const products = await axiosInstance.get("/product")
+      const products = await axiosInstance.get("/product/table")
       const filteredProducts = products.data.data.filter((product) =>
         productIds.includes(product.id)
       )
@@ -206,7 +207,7 @@ const Order = () => {
         Order Page
       </Typography>
       <Grid container spacing={2}>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
           <Typography variant="h6" gutterBottom>
             Enter Order Details:
           </Typography>
@@ -219,24 +220,24 @@ const Order = () => {
             InputProps={{ disabled: true, style: { fontWeight: "bold" } }}
           />
           <FormControl fullWidth margin="normal">
-            <InputLabel></InputLabel>
             <Autocomplete
               options={provinces}
               getOptionLabel={(option) => option.province}
               value={selectedProvince}
               onChange={handleProvinceChange}
-              renderInput={(params) => <TextField {...params} variant="outlined" />}
+              renderInput={(params) => (
+                <TextField {...params} label="Province" variant="outlined" />
+              )}
               placeholder="Select Province"
             />
           </FormControl>
           <FormControl fullWidth margin="normal">
-            <InputLabel></InputLabel>
             <Autocomplete
               options={cities}
               getOptionLabel={(option) => option.type + " " + option.city_name}
               value={selectedCity}
               onChange={handleCityChange}
-              renderInput={(params) => <TextField {...params} variant="outlined" />}
+              renderInput={(params) => <TextField {...params} label="City" variant="outlined" />}
               disabled={!selectedProvince}
               placeholder="Select City"
             />
@@ -259,16 +260,22 @@ const Order = () => {
             </Select>
           </FormControl>
 
-          <Button variant="contained" color="primary" onClick={handleOrder}>
+          <Button
+            sx={{ justifySelf: "center" }}
+            variant="contained"
+            color="primary"
+            onClick={handleOrder}
+          >
             Order Now
           </Button>
         </Grid>
         <Grid
           item
-          xs={6}
+          xs={12}
+          md={6}
           style={{
             paddingTop: "60px",
-            paddingLeft: "50px",
+            // paddingLeft: "50px",
             textAlign: "center",
             justifyContent: "center",
             alignItems: "center"
@@ -292,7 +299,7 @@ const Order = () => {
                         <ListItemText primary="Product Not Found" />
                       )}
                       <ListItemSecondaryAction>
-                        <Typography variant="body1">${cartItem.total}</Typography>
+                        <Typography variant="body1">{currFormatter(cartItem.total)}</Typography>
                       </ListItemSecondaryAction>
                     </ListItem>
                     {index !== cartItems.length - 1 && <Divider />}
@@ -301,15 +308,65 @@ const Order = () => {
               </List>
 
               <Divider />
-              <Typography variant="h6" gutterBottom style={{ marginTop: 10 }}>
-                Total Product: Rp {totalProduct}
-              </Typography>
-              <Typography variant="h6" gutterBottom style={{ marginTop: 10 }}>
-                Total Shipping: Rp {totalShipping}
-              </Typography>
-              <Typography variant="h6" gutterBottom style={{ marginTop: 10 }}>
-                Grand Total: {isNaN(grandTotal) ? "-" : `Rp ${grandTotal}`}
-              </Typography>
+              <Box
+                width="100%"
+                marginTop={2}
+                display="flex"
+                gap={1}
+                flexDirection="column"
+                alignItems="flex-end"
+              >
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  style={{
+                    fontWeight: "bold",
+                    textAlign: "right",
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "space-between"
+                  }}
+                >
+                  <Box width="50%" component="span">
+                    Total Product:
+                  </Box>
+                  <Box component="span">{currFormatter(totalProduct)}</Box>
+                </Typography>
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  style={{
+                    fontWeight: "bold",
+                    textAlign: "right",
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "space-between"
+                  }}
+                >
+                  <Box width="50%" component="span">
+                    Total Shipping:
+                  </Box>
+                  <Box component="span">
+                    {isNaN(totalShipping) ? "-" : currFormatter(totalShipping)}
+                  </Box>
+                </Typography>
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  style={{
+                    fontWeight: "bold",
+                    textAlign: "right",
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "space-between"
+                  }}
+                >
+                  <Box width="50%" component="span">
+                    Grand Total:
+                  </Box>
+                  <Box component="span">{isNaN(grandTotal) ? "-" : currFormatter(grandTotal)}</Box>
+                </Typography>
+              </Box>
             </Paper>
           )}
           {showPayment && (

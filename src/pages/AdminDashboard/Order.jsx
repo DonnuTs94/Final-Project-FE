@@ -82,37 +82,39 @@ const OrderPage = () => {
     { id: "action", label: "Action", minWidth: 120, align: "left" }
   ]
   return (
-    <Box width={"100%"}>
-      {loading ? (
-        <Box>
-          <CircularProgress color="info" />
-        </Box>
-      ) : (
-        <Paper sx={{ width: "80vw", height: "85vh", overflow: "hidden" }}>
-          <Typography py={"16px"} ml={"20px"} variant="h2">
-            Customer Orders
-          </Typography>
-          <TableContainer sx={{ height: "90%" }}>
-            <Table stickyHeader aria-label="a dense table">
-              <TableHead>
+    <Box maxWidth="100vw">
+      <Paper sx={{ width: "100%", height: "95vh", overflow: "auto" }}>
+        <Typography py={"16px"} ml={"20px"} variant="h2">
+          Customer Orders
+        </Typography>
+        <TableContainer sx={{ height: "90%" }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {columns.map((item) => (
+                  <TableCell
+                    key={item.id}
+                    align={item.align}
+                    style={{
+                      minWidth: item.minWidth,
+                      fontWeight: "bold",
+                      backgroundColor: theme.palette.secondary.main
+                    }}
+                  >
+                    {item.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {loading ? (
                 <TableRow>
-                  {columns.map((item) => (
-                    <TableCell
-                      key={item.id}
-                      align={item.align}
-                      style={{
-                        minWidth: item.minWidth,
-                        fontWeight: "bold",
-                        backgroundColor: theme.palette.secondary.main
-                      }}
-                    >
-                      {item.label}
-                    </TableCell>
-                  ))}
+                  <TableCell align="center" colSpan={columns.length}>
+                    <CircularProgress color="info" />
+                  </TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order) => {
+              ) : (
+                orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order) => {
                   return (
                     <TableRow hover key={order.id}>
                       <TableCell>{order.id}</TableCell>
@@ -139,23 +141,22 @@ const OrderPage = () => {
                       </TableCell>
                     </TableRow>
                   )
-                })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            sx={{ position: "sticky", bottom: 0 }}
-            rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-            component="div"
-            count={orders.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Paper>
-      )}
-
+                })
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          sx={{ position: "sticky", bottom: 0 }}
+          rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+          component="div"
+          count={orders.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Paper>
       <Modal open={open} onClose={() => setOpen(false)}>
         <Box
           sx={{
