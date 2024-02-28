@@ -5,7 +5,6 @@ import { Link } from "react-router-dom"
 import { BASE_URL } from "../../configs/constant/baseUrl"
 import { useSelector } from "react-redux"
 import ProductCard from "../../components/Card/CardNew"
-import Buttons from "../../components/Button/ButtonTest"
 
 const SearchResultsPage = () => {
   const [searchResults, setSearchResults] = useState([])
@@ -36,28 +35,23 @@ const SearchResultsPage = () => {
     const startIndex = (currentPage - 1) * itemsPerPage
     const endIndex = startIndex + itemsPerPage
 
-    return (
-      searchResults
-        // .filter((item) => item.name.toLowerCase().includes(queryProduct.toLowerCase()))
-        // .slice(startIndex, endIndex)
-        .map((product) => (
-          <ProductCard
-            key={product.id}
-            onClick={() => console.log("Handle click on search result")}
-            image={product.productImages?.[0] && BASE_URL + product.productImages[0].imageUrl}
-            alt={product.name}
-            price={product.price}
-            quantity={product.quantity}
-            category={product.categoryId && product.Category.name}
-          >
-            <Link to={`/product/${product.id}`} key={product.id}>
-              <Box>
-                <Typography>{product.name}</Typography>
-              </Box>
-            </Link>
-          </ProductCard>
-        ))
-    )
+    return searchResults.map((product) => (
+      <ProductCard
+        key={product.id}
+        onClick={() => console.log("Handle click on search result")}
+        image={product.productImages?.[0] && BASE_URL + product.productImages[0].imageUrl}
+        alt={product.name}
+        price={product.price}
+        quantity={product.quantity}
+        category={product.categoryId && product.Category.name}
+      >
+        <Link to={`/product/${product.id}`} key={product.id}>
+          <Box>
+            <Typography>{product.name}</Typography>
+          </Box>
+        </Link>
+      </ProductCard>
+    ))
   }
 
   const handlePageChange = async (event, value) => {
@@ -72,28 +66,23 @@ const SearchResultsPage = () => {
     } catch (error) {
       console.error("Error fetching search results:", error)
     }
-    // fetchSearchResults(currentPage)
   }
-
-  // const filteredResultsCount = searchResults.filter((item) =>
-  //   item.name.toLowerCase().includes(queryProduct.toLowerCase())
-  // ).length
 
   return (
     <Box>
-      <Typography variant="h4">
-        Search Results for "{name}" {currentPage}
-      </Typography>
       {searchResults.length > 0 ? (
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: "repeat(5, 1fr)",
-            gap: 3,
-            justifyContent: "center"
-          }}
-        >
-          {renderSearchResults()}
+        <Box>
+          <Typography variant="h4">Search Results for product "{name}"</Typography>
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "repeat(5, 1fr)",
+              gap: 3,
+              justifyContent: "center"
+            }}
+          >
+            {renderSearchResults()}
+          </Box>
         </Box>
       ) : (
         <Box
@@ -101,13 +90,28 @@ const SearchResultsPage = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            justifyContent: "center"
+            justifyContent: "center",
+            alignContent: "center",
+            height: "100vh"
           }}
         >
-          <Typography variant="h1">No results found.</Typography>
-          <Button variant="contained" component={Link} to="/" sx={{ marginTop: 2 }}>
-            Back to Home
-          </Button>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              alignContent: "center",
+              margin: "auto"
+            }}
+          >
+            <Typography variant="h1" alignItems="center">
+              No products found.
+            </Typography>
+            <Button variant="contained" component={Link} to="/" sx={{ marginTop: 2 }}>
+              Back to Home
+            </Button>
+          </Box>
         </Box>
       )}
       <Box
@@ -125,7 +129,6 @@ const SearchResultsPage = () => {
               page={currentPage}
               onChange={handlePageChange}
               color="primary"
-              // onChange={(event, value) => setCurrentPage(value)}
             />
           </Box>
         )}
