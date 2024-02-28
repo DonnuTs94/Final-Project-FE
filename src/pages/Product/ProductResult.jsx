@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { axiosInstance } from "../../configs/api/api"
 import { Typography, Box, Pagination, Button } from "@mui/material"
 import { Link } from "react-router-dom"

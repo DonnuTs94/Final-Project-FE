@@ -30,7 +30,6 @@ const Navbar = () => {
       }
     }
     GetAllCategory()
-    console.log(category)
   }, [])
 
   const handleSearchEnter = (e) => {
