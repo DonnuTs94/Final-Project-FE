@@ -1,21 +1,7 @@
-// import { useSelector } from "react-redux"
-// import { Navigate, Outlet } from "react-router-dom"
-
-// const ProtectThisRoute = () => {
-//   const { userData } = useSelector((state) => state.users)
-
-//   console.log(userData)
-
-//   return userData?.Role?.name === "admin" ? <Outlet /> : <Navigate to="/" />
-// }
-
-// export default ProtectThisRoute
-
 import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { Navigate, Outlet } from "react-router-dom"
 import { getUserData } from "../configs/store/slicer/userSlicer"
-// import { getUserData } from "./redux/userSlice" // Import the getUserData action creator
 
 const ProtectThisRoute = () => {
   const { userData, loading, error } = useSelector((state) => state.users)
@@ -32,12 +18,7 @@ const ProtectThisRoute = () => {
     }
   }, [dispatch, userData])
 
-  useEffect(() => {
-    // Log userData, loading, and error for debugging purposes
-    console.log("userData:", userData)
-    console.log("loading:", loading)
-    console.log("error:", error)
-  }, [userData, loading, error])
+  useEffect(() => {}, [userData, loading, error])
 
   // Handle loading state
   if (loading) {

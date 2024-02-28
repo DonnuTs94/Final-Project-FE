@@ -5,6 +5,7 @@ import SelectCategory from "./SelectCategory"
 import UploadIcon from "@mui/icons-material/Upload"
 import ClearIcon from "@mui/icons-material/Clear"
 import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 const CreateProductModal = ({ open, close, reRender }) => {
   const [category, setCategory] = useState([])
@@ -203,11 +204,7 @@ const CreateProductModal = ({ open, close, reRender }) => {
                       required
                     />
                   </Button>
-                  <Button
-                    sx={{ width: "30%", bgcolor: "green", color: "white" }}
-                    variant="outlined"
-                    type="submit"
-                  >
+                  <Button sx={{ width: "30%" }} color="success" variant="contained" type="submit">
                     Submit
                   </Button>
                 </Box>
