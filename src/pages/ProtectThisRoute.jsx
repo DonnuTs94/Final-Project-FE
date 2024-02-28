@@ -2,7 +2,6 @@ import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { Navigate, Outlet } from "react-router-dom"
 import { getUserData } from "../configs/store/slicer/userSlicer"
-// import { getUserData } from "./redux/userSlice" // Import the getUserData action creator
 
 const ProtectThisRoute = () => {
   const { userData, loading, error } = useSelector((state) => state.users)
