@@ -21,6 +21,9 @@ import {
 import Autocomplete from "@mui/material/Autocomplete"
 import { axiosInstance } from "../../configs/api/api"
 import { currFormatter } from "../../helper/formatter"
+import { useSelector } from "react-redux"
+import { getUserData } from "../../configs/store/slicer/userSlicer"
+import { Snap } from "midtrans-client"
 
 const Order = () => {
   const [weight] = useState(2000)
@@ -34,6 +37,9 @@ const Order = () => {
   const [cartItems, setCartItems] = useState([])
   const [totalProduct, setTotalProduct] = useState(0)
   const [totalShipping, setTotalShipping] = useState(0)
+  const { userData } = useSelector((state) => state.users)
+  const [orderId, setOrderId] = useState(0) // Define orderId state
+  const [grandTotal, setGrandTotal] = useState(0)
 
   const location = useLocation()
   const selectedItems = location.state ? location.state.selectedItems || [] : []
@@ -44,16 +50,19 @@ const Order = () => {
   }, [])
 
   useEffect(() => {
-    // Hitung total produk setiap kali ada perubahan pada item-item keranjang yang dipilih
     calculateTotalProduct()
   }, [cartItems])
 
   useEffect(() => {
-    const selectedServiceCost = cityCosts[0]?.costs.filter(
+    const selectedServiceCost = cityCosts[0]?.costs.find(
       (service) => service.service === shippingOption
-    )[0]?.cost[0]?.value
+    )?.cost[0]?.value
     setTotalShipping(selectedServiceCost)
   }, [shippingOption])
+
+  useEffect(() => {
+    getUserData()
+  }, [showPayment])
 
   const fetchProvinces = async () => {
     try {
@@ -87,11 +96,11 @@ const Order = () => {
         const product = filteredProducts.find((product) => product.id === cartItem.productId)
         return {
           ...cartItem,
-          product: product
+          product
         }
       })
       setCartItems(filterSelectedItems(updatedCartItems, selectedItems))
-      calculateTotalProduct() // Panggil calculateTotalProduct setelah pembaruan cartItems
+      calculateTotalProduct()
     } catch (error) {
       console.error("Error fetching cart items:", error)
     }
@@ -127,12 +136,6 @@ const Order = () => {
         })
         if (response.data.data) {
           setCityCosts(response.data.data)
-
-          // Calculate total shipping
-          // const shippingCost = response.data.data.reduce((acc, curr) => {
-          //   const selectedService = curr.costs[0]
-          //   return acc + selectedService.cost[0].value
-          // }, 0)
         } else {
           console.error("Invalid response structure:", response.data)
         }
@@ -146,7 +149,6 @@ const Order = () => {
     setShippingOption(event.target.value)
   }
 
-  // Tambahkan validasi sebelum membuat pesanan
   const handleOrder = async () => {
     try {
       if (!shippingOption) {
@@ -154,7 +156,6 @@ const Order = () => {
         return
       }
 
-      // Tambahkan validasi untuk memastikan opsi pengiriman yang dipilih tersedia
       const availableShippingOptions = cityCosts.flatMap((cost) =>
         cost.costs.map((service) => service.service)
       )
@@ -165,7 +166,6 @@ const Order = () => {
         return
       }
 
-      // Lanjutkan dengan membuat pesanan jika opsi pengiriman tersedia
       const cartIds = cartItems.map((item) => item.id)
       const response = await axiosInstance.post("/orders/create", {
         cartId: cartIds,
@@ -175,11 +175,16 @@ const Order = () => {
       })
 
       console.log("Order berhasil dibuat:", response.data)
+      setOrderId(response.data.data.id) // Set orderId
+
+      // Calculate grandTotal
+      const productTotal = cartItems.reduce((acc, cartItem) => acc + cartItem.total, 0)
+      setGrandTotal(productTotal + totalShipping)
+
       setShowPayment(true)
     } catch (error) {
       console.error("Error creating order:", error)
       if (error.response && error.response.data && error.response.data.message) {
-        // Handle specific error message
         if (
           error.response.data.message === "Shipping cost is not available for the selected option"
         ) {
@@ -195,11 +200,34 @@ const Order = () => {
     }
   }
 
-  const handlePayment = () => {
-    console.log("Menampilkan metode pembayaran Midtrans...")
-  }
+  const initiatePayment = async () => {
+    try {
+      console.log("orderId:", orderId)
+      console.log("grandTotal:", grandTotal)
 
-  const grandTotal = totalProduct + totalShipping
+      const response = await axiosInstance.post("/payment/transaction", {
+        order_id: parseInt(orderId),
+        gross_amount: Number(grandTotal)
+      })
+
+      console.log("Payment response:", response)
+      // Redirect user to payment page
+      window.location(
+        `https://app.sandbox.midtrans.com/snap/v3/redirection/${response.data.token}`,
+        "_blank"
+      )
+
+      const webHookResponse = await axiosInstance.post("/webhook/midtrans", {
+        transaction_status: "settlement",
+        order_id: orderId
+      })
+
+      console.log("Webhook response:", webHookResponse)
+    } catch (error) {
+      console.error("Error initiating payment:", error)
+      // Handle error
+    }
+  }
 
   return (
     <Container>
@@ -380,7 +408,7 @@ const Order = () => {
               <Typography variant="h5" gutterBottom>
                 Select Payment Method:
               </Typography>
-              <Button variant="contained" color="primary" onClick={handlePayment}>
+              <Button variant="contained" color="primary" onClick={initiatePayment}>
                 Pay with Midtrans
               </Button>
               <Button variant="contained" color="secondary" onClick={() => setShowPayment(false)}>

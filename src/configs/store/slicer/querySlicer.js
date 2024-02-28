@@ -1,7 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-  queryProduct: ""
+  queryProduct: {
+    name: "",
+    category: "",
+    page: 1
+  }
 }
 
 const querySlicer = createSlice({
@@ -9,7 +13,7 @@ const querySlicer = createSlice({
   initialState,
   reducers: {
     changeQuery: (state, action) => {
-      state.queryProduct = action.payload
+      state.queryProduct = { ...state.queryProduct, ...action.payload }
     }
   }
 })
