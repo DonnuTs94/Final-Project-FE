@@ -65,16 +65,18 @@ const Navbar = () => {
             </Link>
           </Box>
           <Box display="flex" gap="10px" alignItems="center" bgcolor={"white"} borderRadius={2}>
-            <Select
-              value={searchType}
-              onChange={(e) => setSearchType(e.target.value)}
-              sx={{ padding: "2px" }}
-            >
-              <MenuItem value="all">All Category</MenuItem>
-              {category.map((category) => {
-                return <MenuItem value={category.id}>{category.name}</MenuItem>
-              })}
-            </Select>
+            <Box width="100px">
+              <Select
+                value={searchType}
+                onChange={(e) => setSearchType(e.target.value)}
+                sx={{ padding: "2px" }}
+              >
+                <MenuItem value="all">All Category</MenuItem>
+                {category.map((category) => {
+                  return <MenuItem value={category.id}>{category.name}</MenuItem>
+                })}
+              </Select>
+            </Box>
             <InputBase
               sx={{
                 flex: 1,
@@ -89,9 +91,11 @@ const Navbar = () => {
               placeholder="Search"
             />
 
-            <IconButton onClick={handleSearchClick}>
-              <Search fontSize="small" color="primary" />
-            </IconButton>
+            <Box>
+              <IconButton onClick={handleSearchClick}>
+                <Search fontSize="small" color="primary" />
+              </IconButton>
+            </Box>
           </Box>
           <Box display="flex" justifyContent="space-between" alignItems="center">
             <ShoppingCart />

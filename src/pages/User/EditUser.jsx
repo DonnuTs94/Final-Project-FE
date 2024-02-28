@@ -1,18 +1,22 @@
 import React, { useState } from "react"
-import { TextField, Button, Typography, Box } from "@mui/material"
+import { TextField, Typography, Box } from "@mui/material"
 import { axiosInstance } from "../../configs/api/api"
+import { toast, ToastContainer } from "react-toastify"
+import Buttons from "../../components/Button/ButtonTest"
 
 const EditUserForm = ({ userData = {}, onClose }) => {
   const [firstName, setFirstName] = useState(userData.firstName ?? "")
   const [lastName, setLastName] = useState(userData.lastName ?? "")
   const [address, setAddress] = useState(userData.address ?? "")
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
 
   const handleEditUser = async () => {
     try {
-      setLoading(true)
-      setError("")
+      if (!firstName || !lastName || !address) {
+        toast.error("Please fill in all fields", {
+          position: "bottom-center"
+        })
+        return
+      }
 
       const response = await axiosInstance.put("/user/edit", {
         firstName: firstName,
@@ -24,49 +28,62 @@ const EditUserForm = ({ userData = {}, onClose }) => {
       setLastName("")
       setAddress("")
 
-      console.log(response.data.message) // Log success message
+      console.log(response.data.message)
 
-      // Close the modal or perform other actions
-      onClose()
+      toast.success("Success edit data user", {
+        position: "bottom-center"
+      })
     } catch (error) {
-      console.error("Error editing user:", error.response?.data?.message || error.message)
-      setError("Failed to edit user. Please try again.")
-    } finally {
-      setLoading(false)
+      console.log("Error editing user:", error)
+
+      toast.error("Failed edit data user", {
+        position: "bottom-center"
+      })
     }
   }
 
   return (
-    <Box>
-      <Typography variant="h4">Edit User</Typography>
-      <TextField
-        label="First Name"
-        variant="outlined"
-        fullWidth
-        margin="normal"
-        value={firstName}
-        onChange={(e) => setFirstName(e.target.value)}
-      />
-      <TextField
-        label="Last Name"
-        variant="outlined"
-        fullWidth
-        margin="normal"
-        value={lastName}
-        onChange={(e) => setLastName(e.target.value)}
-      />
-      <TextField
-        label="Address"
-        variant="outlined"
-        fullWidth
-        margin="normal"
-        value={address}
-        onChange={(e) => setAddress(e.target.value)}
-      />
-      {error && <Typography color="error">{error}</Typography>}
-      <Button variant="contained" onClick={handleEditUser} disabled={loading} sx={{ mt: 2 }}>
-        {loading ? "Updating..." : "Update User"}
-      </Button>
+    <Box
+      sx={{
+        maxWidth: 500,
+        margin: "auto",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: "55px"
+      }}
+    >
+      <Box>
+        <Typography variant="h4">Edit User</Typography>
+        <TextField
+          label="First Name"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+        />
+        <TextField
+          label="Last Name"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+        />
+        <TextField
+          label="Address"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+        />
+
+        <Buttons variant="contained" onClick={handleEditUser} sx={{ mt: 2 }}>
+          Update User
+        </Buttons>
+      </Box>
     </Box>
   )
 }
