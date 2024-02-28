@@ -86,7 +86,7 @@ const ProductDetail = () => {
         const response = await axiosInstance.get(`product/${Number(params.id)}`)
         if (isMounted) {
           setProduct(response.data.data)
-          setLoading(false) // Set loading to false once data is fetched
+          setLoading(false)
         }
       } catch (err) {
         if (err.status === 500) {
@@ -94,15 +94,14 @@ const ProductDetail = () => {
             position: "bottom-center"
           })
         }
-        setLoading(false) // Set loading to false in case of error
+        setLoading(false)
       }
     }
 
     const timeoutId = setTimeout(() => {
       if (isMounted && loading) {
-        // Check if loading is still true after 2 seconds
-        setLoading(false) // Set loading to false after 2 seconds
-        setProduct(null) // Set product to null after 2 seconds
+        setLoading(false)
+        setProduct(null)
       }
     }, 5000)
 
@@ -110,9 +109,9 @@ const ProductDetail = () => {
 
     return () => {
       isMounted = false
-      clearTimeout(timeoutId) // Clear the timeout when component unmounts
+      clearTimeout(timeoutId)
     }
-  }, [params.id, addingItem, loading]) // Added loading to dependencies
+  }, [params.id, addingItem, loading])
 
   const renderNotFound = () => (
     <Box display="flex" justifyContent="center" alignItems="center">

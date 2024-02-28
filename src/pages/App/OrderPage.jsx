@@ -61,6 +61,20 @@ const Order = () => {
     getUserData()
   }, [showPayment])
 
+  useEffect(() => {
+    const selectedServiceCost = cityCosts[0]?.costs.find(
+      (service) => service.service === shippingOption
+    )?.cost[0]?.value
+    setTotalShipping(selectedServiceCost)
+
+    const productTotal = cartItems.reduce((acc, cartItem) => acc + cartItem.total, 0)
+    setGrandTotal(productTotal + (selectedServiceCost || 0))
+  }, [shippingOption, cartItems, cityCosts])
+
+  useEffect(() => {
+    setGrandTotal(totalProduct + (totalShipping || 0))
+  }, [totalProduct, totalShipping])
+
   const fetchProvinces = async () => {
     try {
       const response = await axiosInstance.get("/shippingCost/province")
@@ -172,9 +186,8 @@ const Order = () => {
       })
 
       console.log("Order berhasil dibuat:", response.data)
-      setOrderId(response.data.data.id) // Set orderId
+      setOrderId(response.data.data.id)
 
-      // Calculate grandTotal
       const productTotal = cartItems.reduce((acc, cartItem) => acc + cartItem.total, 0)
       setGrandTotal(productTotal + totalShipping)
 
@@ -199,30 +212,44 @@ const Order = () => {
 
   const initiatePayment = async () => {
     try {
-      console.log("orderId:", orderId)
-      console.log("grandTotal:", grandTotal)
-
       const response = await axiosInstance.post("/payment/transaction", {
         order_id: parseInt(orderId),
         gross_amount: Number(grandTotal)
       })
 
       console.log("Payment response:", response)
-      // Redirect user to payment page
-      window.location(
-        `https://app.sandbox.midtrans.com/snap/v3/redirection/${response.data.token}`,
-        "_blank"
+
+      const width = 600
+      const height = 600
+      const left = (window.innerWidth - width) / 2
+      const top = (window.innerHeight - height) / 2
+
+      const url = `https://app.sandbox.midtrans.com/snap/v3/redirection/${response.data.token}`
+
+      const popup = window.open(
+        url,
+        "popupWindow",
+        `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes,status=yes`
       )
+
+      if (popup) {
+        popup.focus()
+      } else {
+        console.error("Popup blocked. Please allow popups for this website.")
+      }
 
       const webHookResponse = await axiosInstance.post("/webhook/midtrans", {
         transaction_status: "settlement",
         order_id: orderId
       })
 
-      console.log("Webhook response:", webHookResponse)
+      if (webHookResponse.data === "OK") {
+        setTimeout(() => {
+          window.location.href = "/"
+        }, 7000)
+      }
     } catch (error) {
       console.error("Error initiating payment:", error)
-      // Handle error
     }
   }
 
@@ -300,7 +327,6 @@ const Order = () => {
           md={6}
           style={{
             paddingTop: "60px",
-            // paddingLeft: "50px",
             textAlign: "center",
             justifyContent: "center",
             alignItems: "center"
