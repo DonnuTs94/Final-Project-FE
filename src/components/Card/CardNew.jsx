@@ -1,5 +1,5 @@
 import { Card, CardContent, CardMedia, Link, Typography, Box, Chip } from "@mui/material"
-// import ArrowOutwardIcon from "@mui/icons-material/ArrowForward"
+import ArrowOutwardIcon from "@mui/icons-material/ArrowForward"
 import Buttons from "../Button/ButtonTest"
 
 const ProductCard = ({ children, category, image, alt, price, quantity, productId }) => {
