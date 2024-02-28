@@ -21,9 +21,7 @@ import {
 import Autocomplete from "@mui/material/Autocomplete"
 import { axiosInstance } from "../../configs/api/api"
 import { currFormatter } from "../../helper/formatter"
-import { useSelector } from "react-redux"
 import { getUserData } from "../../configs/store/slicer/userSlicer"
-import { Snap } from "midtrans-client"
 
 const Order = () => {
   const [weight] = useState(2000)
@@ -37,7 +35,6 @@ const Order = () => {
   const [cartItems, setCartItems] = useState([])
   const [totalProduct, setTotalProduct] = useState(0)
   const [totalShipping, setTotalShipping] = useState(0)
-  const { userData } = useSelector((state) => state.users)
   const [orderId, setOrderId] = useState(0) // Define orderId state
   const [grandTotal, setGrandTotal] = useState(0)
 

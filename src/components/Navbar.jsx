@@ -30,7 +30,6 @@ const Navbar = () => {
       }
     }
     GetAllCategory()
-    console.log(category)
   }, [])
 
   const handleSearchEnter = (e) => {
@@ -71,8 +70,12 @@ const Navbar = () => {
               sx={{ padding: "2px" }}
             >
               <MenuItem value="all">All Category</MenuItem>
-              {category.map((category) => {
-                return <MenuItem value={category.id}>{category.name}</MenuItem>
+              {category.map((category, i) => {
+                return (
+                  <MenuItem key={i} value={category.id}>
+                    {category.name}
+                  </MenuItem>
+                )
               })}
             </Select>
             <InputBase

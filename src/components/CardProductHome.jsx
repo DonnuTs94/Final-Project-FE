@@ -1,4 +1,13 @@
-import { Box, Card, CardActionArea, CardContent, CardMedia, Paper, Typography } from "@mui/material"
+import {
+  Box,
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  Chip,
+  Paper,
+  Typography
+} from "@mui/material"
 import { useEffect, useState } from "react"
 import { BASE_URL } from "../configs/constant/baseUrl"
 import { Link } from "react-router-dom"
@@ -33,8 +42,6 @@ const CardProductHome = () => {
   const params = {
     category: getCategoryId("Vga")
   }
-
-  console.log(params)
 
   useEffect(() => {
     dispatch(fetchProductData(params))
@@ -73,29 +80,36 @@ const CardProductHome = () => {
                 <Link to={`product/${product.id}`}>
                   <CardActionArea>
                     <CardMedia
-                      sx={{ height: "200px", maxWidth: "100%", objectFit: "contain" }}
+                      sx={{ height: "200px", maxWidth: "100%", objectFit: "cover" }}
                       component={"img"}
                       src={BASE_URL + product?.productImages[0]?.imageUrl}
                     />
                     <CardContent>
                       <Typography
-                        variant="h3"
+                        variant="h4"
                         fontWeight={600}
                         sx={{
                           overflow: "hidden"
                         }}
                       >
-                        {product.name}
+                        {product?.name}
+                      </Typography>
+                      <Typography variant="h5" mt={1} fontWeight={"600"}>
+                        {product.Category?.name}
                       </Typography>
                       <Typography mt={1} variant="h4" fontWeight={"600"}>
-                        Rp {convertPriceWithCommas(product.price)}
+                        Rp {convertPriceWithCommas(product?.price)}
+                        <Chip size="small" label="Price" color="success" sx={{ ml: 1 }} />
                       </Typography>
-                      <Typography variant="h5" mt={1} fontWeight={"600"}>
-                        Stock: {product.quantity}
-                      </Typography>{" "}
-                      <Typography variant="h5" mt={1} fontWeight={"600"}>
-                        {product.Category.name}
-                      </Typography>
+                      {product.quantity < 20 ? (
+                        <Typography variant="body1" mt={1} fontWeight={"600"}>
+                          (Only <b>{product?.quantity}</b> left in stock!)
+                        </Typography>
+                      ) : (
+                        <Typography variant="body1" mt={1} fontWeight={"600"}>
+                          Stock: {product?.quantity}
+                        </Typography>
+                      )}
                     </CardContent>
                   </CardActionArea>
                 </Link>
