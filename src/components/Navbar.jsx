@@ -64,19 +64,21 @@ const Navbar = () => {
             </Link>
           </Box>
           <Box display="flex" gap="10px" alignItems="center" bgcolor={"white"} borderRadius={2}>
-            <Box width="100px">
-              <Select
-                value={searchType}
-                onChange={(e) => setSearchType(e.target.value)}
-                sx={{ padding: "2px" }}
-                size="small"
-              >
-                <MenuItem value="all">All Category</MenuItem>
-                {category.map((category) => {
-                  return <MenuItem value={category.id}>{category.name}</MenuItem>
-                })}
-              </Select>
-            </Box>
+            <Select
+              value={searchType}
+              size="small"
+              onChange={(e) => setSearchType(e.target.value)}
+              sx={{ padding: "2px" }}
+            >
+              <MenuItem value="all">All Category</MenuItem>
+              {category.map((category) => {
+                return (
+                  <MenuItem key={category.id} value={category.id}>
+                    {category.name}
+                  </MenuItem>
+                )
+              })}
+            </Select>
             <InputBase
               sx={{
                 flex: 1,
@@ -91,16 +93,19 @@ const Navbar = () => {
               placeholder="Search"
             />
 
-            <Box>
-              <IconButton onClick={handleSearchClick}>
-                <Search fontSize="small" color="primary" />
-              </IconButton>
-            </Box>
+            <IconButton onClick={handleSearchClick}>
+              <Search fontSize="small" color="primary" />
+            </IconButton>
           </Box>
-          <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Box
+            height="max-content"
+            display="flex"
+            justifyContent="space-between"
+            // alignItems="center"
+          >
             <ShoppingCart />
             <IconButton
-              sx={{ display: { xs: "none", sm: "block" }, marginLeft: 2 }}
+              sx={{ display: { xs: "none", sm: "block" }, paddingTop: "15px", paddingX: "15px" }}
               onClick={colorMode.toggleColorMode}
             >
               {theme.palette.mode === "dark" ? (

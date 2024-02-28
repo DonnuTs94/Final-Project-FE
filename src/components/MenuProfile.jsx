@@ -31,11 +31,11 @@ const MenuProfile = ({ handleLogout }) => {
           onClick={handleClick}
           color="inherit"
           sx={{
-            ml: 2,
-            p: 1,
+            // ml: 2,
+            p: 2,
             width: "max-content",
             fontWeight: "bold",
-            fontSize: { xs: "10px", sm: "12px" }
+            fontSize: { xs: "10px", md: "12px" }
           }}
           aria-controls={open ? "account-menu" : undefined}
           aria-haspopup="true"
@@ -82,9 +82,13 @@ const MenuProfile = ({ handleLogout }) => {
         <Link to={"user/edit"}>
           <MenuItem onClick={handleClose}>Edit Profile</MenuItem>
         </Link>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
+        <MenuItem onClick={handleClose}>
+          <Link to={"/myorder"}>My Order</Link>
+        </MenuItem>
         <MenuItem onClick={handleClose} sx={{ display: { xs: "flex", sm: "none" } }}>
-          <Link to={"/cart"}>My Cart ({userData?.cart?.length})</Link>
+          <Link to={"/cart"}>
+            My Cart ({userData?.cart?.length === 0 ? 0 : userData?.cart?.length})
+          </Link>
         </MenuItem>
         {showDashboardMenu ? (
           <MenuItem onClick={handleClose}>
@@ -93,7 +97,7 @@ const MenuProfile = ({ handleLogout }) => {
         ) : null}
         <Divider />
         <MenuItem
-          sx={{ display: { xs: "flex", sm: "none" }, justifyContent: "space-between" }}
+          sx={{ display: { xs: "flex", md: "none" }, justifyContent: "space-between" }}
           onClick={colorMode.toggleColorMode}
         >
           {theme.palette.mode === "dark" ? "Light" : "Dark"}

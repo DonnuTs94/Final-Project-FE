@@ -15,9 +15,7 @@ const ProtectThisRoute = () => {
     if (localStorage.getItem("auth_token")) {
       dispatch(getUserData())
     }
-  }, [dispatch, userData])
-
-  useEffect(() => {}, [userData, loading, error])
+  }, [])
 
   if (loading) {
     return <div>Loading...</div>
@@ -28,7 +26,7 @@ const ProtectThisRoute = () => {
   }
 
   if (!userData || (userData.Role && userData.Role.name !== "admin")) {
-    return <Navigate to="/*" />
+    return <Navigate to="/" />
   }
 
   return <Outlet />

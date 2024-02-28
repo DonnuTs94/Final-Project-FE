@@ -14,6 +14,7 @@ import SearchResultsPage from "./pages/Product/ProductResult.jsx"
 import EditUserForm from "./pages/User/EditUser.jsx"
 import CartPage from "./pages/App/CartPage.jsx"
 import Order from "./pages/App/OrderPage"
+import OrderUser from "./pages/User/OrderUser.jsx"
 
 const Router = createBrowserRouter([
   {
@@ -26,7 +27,8 @@ const Router = createBrowserRouter([
       { path: "/product/:id", Component: ProductDetail },
       { path: "/cart/", Component: CartPage },
       { path: "/user/edit", Component: EditUserForm },
-      { path: "/order/", Component: Order }
+      { path: "/order/", Component: Order },
+      { path: "/myorder", Component: OrderUser }
     ]
   },
   {
