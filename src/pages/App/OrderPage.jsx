@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import {
   Container,
   Typography,
@@ -21,7 +21,6 @@ import {
 import Autocomplete from "@mui/material/Autocomplete"
 import { axiosInstance } from "../../configs/api/api"
 import { currFormatter } from "../../helper/formatter"
-import { useSelector } from "react-redux"
 import { getUserData } from "../../configs/store/slicer/userSlicer"
 
 const Order = () => {
@@ -36,14 +35,11 @@ const Order = () => {
   const [cartItems, setCartItems] = useState([])
   const [totalProduct, setTotalProduct] = useState(0)
   const [totalShipping, setTotalShipping] = useState(0)
-  const { userData } = useSelector((state) => state.users)
-  const [orderId, setOrderId] = useState(0)
+  const [orderId, setOrderId] = useState(0) // Define orderId state
   const [grandTotal, setGrandTotal] = useState(0)
 
   const location = useLocation()
   const selectedItems = location.state ? location.state.selectedItems || [] : []
-
-  const navigate = useNavigate()
 
   useEffect(() => {
     fetchProvinces()

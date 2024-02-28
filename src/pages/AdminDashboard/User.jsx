@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import Paper from "@mui/material/Paper"
 import Table from "@mui/material/Table"
 import TableBody from "@mui/material/TableBody"
@@ -10,6 +10,8 @@ import TableRow from "@mui/material/TableRow"
 import Snackbar from "@mui/material/Snackbar"
 import Alert from "@mui/material/Alert"
 import { axiosInstance } from "../../configs/api/api"
+import { useTheme } from "@emotion/react"
+import { Typography } from "@mui/material"
 
 const columns = [
   { id: "no", label: "No", minWidth: "50px" },
@@ -28,6 +30,8 @@ const UsersPage = () => {
     message: "",
     severity: "success"
   })
+
+  const theme = useTheme()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -69,14 +73,21 @@ const UsersPage = () => {
             padding: "16px"
           }}
         >
-          <h2>Users</h2>
+          <Typography variant="h2">Users</Typography>
         </div>
         <TableContainer sx={{ maxHeight: 600 }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
                 {columns.map((column) => (
-                  <TableCell key={column.id} align="left" style={{ minWidth: column.minWidth }}>
+                  <TableCell
+                    key={column.id}
+                    align="left"
+                    sx={{
+                      backgroundColor: theme.palette.secondary.main
+                    }}
+                    style={{ minWidth: column.minWidth }}
+                  >
                     {column.label}
                   </TableCell>
                 ))}
