@@ -14,9 +14,13 @@ import {
 } from "@mui/material"
 import { VisibilityOutlined } from "@mui/icons-material"
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { currFormatter } from "../helper/formatter"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { axiosInstance } from "../configs/api/api"
+import { getUserData } from "../configs/store/slicer/userSlicer"
+import { statusOrder } from "../configs/constant/orderStatus"
+import { toast } from "react-toastify"
 
 const OrderUserTable = ({ status }) => {
   const [page, setPage] = useState(0)
@@ -24,7 +28,12 @@ const OrderUserTable = ({ status }) => {
   const [open, setOpen] = useState(false)
   const [orderDetail, setOrderDetail] = useState([])
   const [loadingDetail, setLoadingDetail] = useState(false)
+  const [statusUpdated, setStatusUpdated] = useState(false)
   const { userData, loading } = useSelector((state) => state.users)
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getUserData())
+  }, [statusUpdated])
 
   const columns = [
     { id: "orderId", label: "Order ID", minWidth: 60, align: "left" },
@@ -51,9 +60,29 @@ const OrderUserTable = ({ status }) => {
 
   const openModal = (orderId) => {
     setOpen(true)
-    const orderDetailById = allOrders.filter((order) => order.id === orderId)
+    const orderDetailById = allOrders?.filter((order) => order.id === orderId)
     setOrderDetail(orderDetailById[0])
     setLoadingDetail(false)
+  }
+
+  const handleUpdateStatus = async (orderId, status) => {
+    try {
+      const response = await axiosInstance.put(`orders/updateStatus`, {
+        orderId,
+        status
+      })
+
+      if (response.status !== 200) {
+        console.log(response.data.message)
+      }
+
+      setStatusUpdated(true)
+      toast.success("Success update order status", {
+        position: "bottom-center"
+      })
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   return (
@@ -107,16 +136,18 @@ const OrderUserTable = ({ status }) => {
                           title="Detail Order"
                           onClick={() => openModal(order.id)}
                         >
-                          <VisibilityOutlined />
+                          <VisibilityOutlined fontSize="small" />
                         </Button>
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          title="Terima Barang"
-                          //   onClick={}
-                        >
-                          <CheckCircleOutlineOutlinedIcon />
-                        </Button>
+                        {order?.status === statusOrder.DELIVERED ? (
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            title="Terima Barang"
+                            onClick={() => handleUpdateStatus(order.id, statusOrder.COMPLETED)}
+                          >
+                            <CheckCircleOutlineOutlinedIcon fontSize="small" />
+                          </Button>
+                        ) : null}
                       </TableCell>
                     </TableRow>
                   )
