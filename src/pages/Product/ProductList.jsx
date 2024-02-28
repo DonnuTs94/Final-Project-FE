@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react"
 import { axiosInstance } from "../../configs/api/api"
-import Buttons from "../../components/Button/ButtonTest"
-import { Typography } from "@mui/material"
-import ProductDetail from "./ProductDetail"
+import { Typography, Pagination } from "@mui/material"
+import { Link } from "react-router-dom"
 import { Box } from "@mui/system"
 import { BASE_URL } from "../../configs/constant/baseUrl"
 import ProductCard from "../../components/Card/CardNew"
@@ -13,8 +12,6 @@ const ProductList = () => {
   const [productData, setProductData] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
-  const [selectedProduct, setSelectedProduct] = useState(null)
-  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     const getAllProduct = async (page) => {
@@ -29,6 +26,7 @@ const ProductList = () => {
         setProductData(data)
         setCurrentPage(currentPage)
         setTotalPages(totalPages)
+        console.log(data)
       } catch (error) {
         console.error("Error fetching product data:", error)
       }
@@ -37,64 +35,51 @@ const ProductList = () => {
     getAllProduct(currentPage)
   }, [currentPage])
 
-  const handleProductClick = (product) => {
-    setSelectedProduct(product)
-    setOpen(true)
-  }
-
-  const handleCloseModal = () => {
-    setOpen(false)
-  }
-
   return (
-    <>
-      <Typography variant="h2" mt={"40px"}>
-        All Product List
-      </Typography>
+    <Box
+      sx={{
+        display: "grid",
+        gridTemplateColumns: "repeat(5, 1fr)",
+        justifyContent: "center"
+      }}
+    >
+      {productData.map((product) => (
+        <Link to={`/product/${product.id}`} key={product.id}>
+          <ProductCard
+            key={product.id}
+            onClick={() => handleProductClick(product)}
+            image={product.productImages?.[0] && BASE_URL + product.productImages[0].imageUrl}
+            alt={product.name}
+            price={convertPriceWithCommas(product.price)}
+            quantity={product.quantity}
+            productId={product.id}
+            category={product.categoryId && product.Category.name}
+          >
+            <Link key={product.id} onClick={() => handleProductClick(product)}>
+              <Box>
+                <Typography>{product.name}</Typography>
+              </Box>
+            </Link>
+          </ProductCard>
+        </Link>
+      ))}
       <Box
         sx={{
-          display: "grid",
-          gridTemplateColumns: "repeat(5, 1fr)",
-          gap: "10px",
-          mt: "20px"
+          gridColumn: "span 5",
+          textAlign: "center",
+          marginTop: 2,
+          justifyContent: "center",
+          display: "flex"
         }}
       >
-        {productData.map((product) => (
-          <>
-            <ProductCard
-              key={product.id}
-              onClick={() => handleProductClick(product)}
-              image={product.productImages?.[0] && BASE_URL + product.productImages[0].imageUrl}
-              alt={product.name}
-              price={convertPriceWithCommas(product.price)}
-              quantity={product.quantity}
-              productId={product.id}
-            />
-          </>
-        ))}
-        <Box>
-          <Buttons
-            onClick={() => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))}
-            disabled={currentPage === 1}
-          >
-            Previous
-          </Buttons>
-          <span>
-            {" "}
-            Page {currentPage} of {totalPages}{" "}
-          </span>
-          <Buttons
-            onClick={() => setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages))}
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </Buttons>
-        </Box>
-        {selectedProduct && (
-          <ProductDetail product={selectedProduct} onClose={handleCloseModal} open={open} />
-        )}
+        <Pagination
+          count={totalPages}
+          page={currentPage}
+          color="primary"
+          onChange={(event, value) => setCurrentPage(value)}
+        />
       </Box>
-    </>
+    </Box>
   )
 }
 
