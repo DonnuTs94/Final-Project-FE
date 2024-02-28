@@ -91,27 +91,15 @@ const SearchResultsPage = () => {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            alignContent: "center",
-            height: "100vh"
+            height: "70vh"
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              alignContent: "center",
-              margin: "auto"
-            }}
-          >
-            <Typography variant="h1" alignItems="center">
-              No products found.
-            </Typography>
-            <Button variant="contained" component={Link} to="/" sx={{ marginTop: 2 }}>
-              Back to Home
-            </Button>
-          </Box>
+          <Typography variant="h1" alignItems="center">
+            No products found.
+          </Typography>
+          <Button variant="contained" component={Link} to="/" sx={{ marginTop: 2 }}>
+            Back to Home
+          </Button>
         </Box>
       )}
       <Box
