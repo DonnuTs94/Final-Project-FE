@@ -32,6 +32,7 @@ import { useTheme } from "@emotion/react"
 import SelectCategory from "../../components/admin/SelectCategory"
 import RefreshIcon from "@mui/icons-material/Refresh"
 import "react-toastify/dist/ReactToastify.css"
+import { convertPriceWithCommas } from "../../helper/formatter"
 
 const ProductsPage = () => {
   const [page, setPage] = useState(0)
@@ -296,7 +297,7 @@ const ProductsPage = () => {
                         </>
                       ) : (
                         <>
-                          <TableCell>{row.price}</TableCell>
+                          <TableCell>{convertPriceWithCommas(row.price)}</TableCell>
                           <TableCell>{row.quantity}</TableCell>
                         </>
                       )}
