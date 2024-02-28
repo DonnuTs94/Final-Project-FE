@@ -45,22 +45,24 @@ const ProductList = () => {
       }}
     >
       {productData.map((product) => (
-        <ProductCard
-          key={product.id}
-          onClick={() => handleProductClick(product)}
-          image={product.productImages?.[0] && BASE_URL + product.productImages[0].imageUrl}
-          alt={product.name}
-          price={convertPriceWithCommas(product.price)}
-          quantity={product.quantity}
-          productId={product.id}
-          category={product.categoryId && product.Category.name}
-        >
-          <Link key={product.id} onClick={() => handleProductClick(product)}>
-            <Box>
-              <Typography>{product.name}</Typography>
-            </Box>
-          </Link>
-        </ProductCard>
+        <Link to={`/product/${product.id}`} key={product.id}>
+          <ProductCard
+            key={product.id}
+            onClick={() => handleProductClick(product)}
+            image={product.productImages?.[0] && BASE_URL + product.productImages[0].imageUrl}
+            alt={product.name}
+            price={convertPriceWithCommas(product.price)}
+            quantity={product.quantity}
+            productId={product.id}
+            category={product.categoryId && product.Category.name}
+          >
+            <Link key={product.id} onClick={() => handleProductClick(product)}>
+              <Box>
+                <Typography>{product.name}</Typography>
+              </Box>
+            </Link>
+          </ProductCard>
+        </Link>
       ))}
       <Box
         sx={{
