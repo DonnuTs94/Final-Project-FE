@@ -63,7 +63,7 @@ const CardProductHome = () => {
               height: "10%",
               overflowX: "auto",
               "@media (min-width: 200px)": {
-                gridTemplateColumns: "repeat(5, minmax(50%, 1fr))"
+                gridTemplateColumns: "repeat(5, minmax(100%, 1fr))"
               },
               "@media (min-width: 1080px)": {
                 gridTemplateColumns: "repeat(5, minmax(20%, 1fr))"
