@@ -14,7 +14,7 @@ const OrderUser = () => {
   }
   return (
     <>
-      <Paper sx={{ height: "70vh", margin: 2, padding: 2 }}>
+      <Paper sx={{ minHeight: "70vh", margin: 2, padding: 2 }}>
         <Typography variant="h3" marginBottom={2}>
           My Orders
         </Typography>

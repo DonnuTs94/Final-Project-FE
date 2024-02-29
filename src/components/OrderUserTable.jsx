@@ -46,7 +46,7 @@ const OrderUserTable = ({ status }) => {
     { id: "status", label: "Order Status", minWidth: 120, align: "left" },
     { id: "action", label: "Action", minWidth: 120, align: "left" }
   ]
-  const allOrders = userData.orders
+  const allOrders = !loading && userData?.orders
   const filteredOrder =
     status === "ALL" ? allOrders : allOrders.filter((order) => order.status === status)
   const handleChangePage = (newPage) => {
@@ -160,7 +160,7 @@ const OrderUserTable = ({ status }) => {
         sx={{ position: "sticky", bottom: 0 }}
         rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
         component="div"
-        count={filteredOrder.length}
+        count={filteredOrder?.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
