@@ -56,7 +56,7 @@ const Navbar = () => {
         >
           <Box marginRight={{ xs: 4, sm: 0 }}>
             <Link to={"/"}>
-              <Box component={"img"} src="/Logo.png" sx={{ height: "50px", objectFit: "cover" }} />
+              <Box component={"img"} src="/Logo1.png" sx={{ height: "50px", objectFit: "cover" }} />
             </Link>
           </Box>
           {/* search */}
