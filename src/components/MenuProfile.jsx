@@ -23,6 +23,7 @@ const MenuProfile = ({ handleLogout }) => {
   const handleClose = () => {
     setAnchorEl(null)
   }
+
   return (
     <>
       <Tooltip title="Account settings">
@@ -78,7 +79,9 @@ const MenuProfile = ({ handleLogout }) => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={handleClose}>Edit Profile</MenuItem>
+        <Link to={"user/edit"}>
+          <MenuItem onClick={handleClose}>Edit Profile</MenuItem>
+        </Link>
         <MenuItem onClick={handleClose}>
           <Link to={"/myorder"}>My Order</Link>
         </MenuItem>
