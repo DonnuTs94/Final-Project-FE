@@ -5,6 +5,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material"
 import { useDispatch } from "react-redux"
 import { useEffect } from "react"
 import { getUserData } from "./configs/store/slicer/userSlicer"
+import "react-toastify/dist/ReactToastify.css"
 
 const App = () => {
   const [theme, colorMode] = useMode()
