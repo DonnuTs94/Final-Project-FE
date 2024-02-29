@@ -34,14 +34,6 @@ const ProductCard = ({ children, category, image, alt, price, quantity, productI
             <Typography variant="body2">
               (Only <b>{quantity}</b> left in stock!)
             </Typography>
-            {/* <Buttons
-              variant="contained"
-              color="error"
-              size="large"
-              sx={{ mt: 2, width: "100%" }}
-            >
-              Add to cart
-            </Buttons> */}
           </Box>
         </CardContent>
       </Box>
