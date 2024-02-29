@@ -1,6 +1,7 @@
-import { Card, CardContent, CardMedia, Link, Typography, Box, Chip } from "@mui/material"
+import { Card, CardContent, CardMedia, Typography, Box, Chip } from "@mui/material"
 import ArrowOutwardIcon from "@mui/icons-material/ArrowForward"
 import Buttons from "../Button/ButtonTest"
+import { Link } from "react-router-dom"
 
 const ProductCard = ({ children, category, image, alt, price, quantity, productId }) => {
   return (
