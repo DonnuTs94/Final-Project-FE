@@ -56,7 +56,11 @@ const Navbar = () => {
         >
           <Box marginRight={{ xs: 4, sm: 0 }}>
             <Link to={"/"}>
-              <Box component={"img"} src="/Logo1.png" sx={{ height: "50px", objectFit: "cover" }} />
+              <Box
+                component={"img"}
+                src="/Logo1.png"
+                sx={{ height: { xs: "25px", md: "50px" }, objectFit: "contain" }}
+              />
             </Link>
           </Box>
           {/* search */}
@@ -68,7 +72,9 @@ const Navbar = () => {
             borderRadius={2}
             sx={{
               border: "1px solid #ccc",
-              width: "fit-content"
+              width: { xs: "50%", md: "fit-content" },
+              marginRight: 2,
+              marginLeft: { xs: 0, sm: 2 }
             }}
           >
             <Select
@@ -82,10 +88,11 @@ const Navbar = () => {
                 height: "36px",
                 backgroundColor: "#f0f0f0",
                 borderTopLeftRadius: "5px",
-                borderBottomLeftRadius: "5px"
+                borderBottomLeftRadius: "5px",
+                width: { xs: "fit-content", md: "100px" }
               }}
             >
-              <MenuItem value="all">All Category</MenuItem>
+              <MenuItem value="all">All</MenuItem>
               {category.map((category) => (
                 <MenuItem key={category.id} value={category.id}>
                   {category.name}
