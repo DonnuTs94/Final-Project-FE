@@ -72,7 +72,9 @@ const SearchResultsPage = () => {
     <Box>
       {searchResults.length > 0 ? (
         <Box>
-          <Typography variant="h4">Search Results for product "{name}"</Typography>
+          <Typography variant="h4" sx={{ marginTop: 3, marginLeft: 4 }}>
+            Search Results : <b>"{name}"</b>
+          </Typography>
           <Box
             sx={{
               display: "grid",
