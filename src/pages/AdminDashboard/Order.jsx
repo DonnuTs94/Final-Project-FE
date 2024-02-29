@@ -19,7 +19,7 @@ import { axiosInstance } from "../../configs/api/api"
 import { VisibilityOutlined } from "@mui/icons-material"
 import RocketLaunchOutlinedIcon from "@mui/icons-material/RocketLaunchOutlined"
 import { currFormatter } from "../../helper/formatter"
-import { toast } from "react-toastify"
+import { ToastContainer, toast } from "react-toastify"
 import { statusOrder } from "../../configs/constant/orderStatus"
 
 const OrderPage = () => {
@@ -66,7 +66,7 @@ const OrderPage = () => {
 
   const handleUpdateStatus = async (orderId, status) => {
     try {
-      const response = await axiosInstance.put(`orders/updateStatus`, {
+      const response = await axiosInstance.put(`orders/admin/updateStatus`, {
         orderId,
         status
       })
@@ -278,6 +278,7 @@ const OrderPage = () => {
           )}
         </Box>
       </Modal>
+      <ToastContainer />
     </Box>
   )
 }
