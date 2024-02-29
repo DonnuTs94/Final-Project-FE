@@ -44,12 +44,11 @@ const SearchResultsPage = () => {
         price={product.price}
         quantity={product.quantity}
         category={product.categoryId && product.Category.name}
+        productId={product.id}
       >
-        <Link to={`/product/${product.id}`} key={product.id}>
-          <Box>
-            <Typography>{product.name}</Typography>
-          </Box>
-        </Link>
+        <Typography variant="h6" fontWeight={"bold"} sx={{ mt: "10px" }}>
+          {product.name}
+        </Typography>
       </ProductCard>
     ))
   }
