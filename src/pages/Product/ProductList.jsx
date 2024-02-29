@@ -26,7 +26,6 @@ const ProductList = () => {
         setProductData(data)
         setCurrentPage(currentPage)
         setTotalPages(totalPages)
-        console.log(data)
       } catch (error) {
         console.error("Error fetching product data:", error)
       }
@@ -47,7 +46,6 @@ const ProductList = () => {
         <Link to={`/product/${product.id}`} key={product.id}>
           <ProductCard
             key={product.id}
-            onClick={() => handleProductClick(product)}
             image={product.productImages?.[0] && BASE_URL + product.productImages[0].imageUrl}
             alt={product.name}
             price={convertPriceWithCommas(product.price)}
@@ -55,11 +53,9 @@ const ProductList = () => {
             productId={product.id}
             category={product.categoryId && product.Category.name}
           >
-            <Link key={product.id} onClick={() => handleProductClick(product)}>
-              <Box>
-                <Typography>{product.name}</Typography>
-              </Box>
-            </Link>
+            <Box>
+              <Typography>{product.name}</Typography>
+            </Box>
           </ProductCard>
         </Link>
       ))}
